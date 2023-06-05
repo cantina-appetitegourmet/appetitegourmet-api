@@ -1,5 +1,7 @@
 package br.com.appetitegourmet.api.models;
 
+import java.math.BigDecimal;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -27,7 +29,7 @@ public class Desconto {
     private String descricao;
     
     @Column(nullable = false, precision = 12, scale = 2)
-    private Float percentual;
+    private BigDecimal percentual;
     
 	@ManyToOne
     @JoinColumn(name = "anoLetivo_id", nullable = false, referencedColumnName = "id")
