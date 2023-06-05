@@ -7,8 +7,16 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Unidade {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,6 +47,6 @@ public class Unidade {
     private String complemento;
     
     @ManyToOne
-    @JoinColumn(name = "colegio_id", nullable = false, referencedColumnName = "id")
+    @JoinColumn(name = "colegio_id", nullable = false)
     private Colegio colegio;
 }

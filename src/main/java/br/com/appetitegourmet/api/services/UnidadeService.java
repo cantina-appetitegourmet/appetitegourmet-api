@@ -2,6 +2,7 @@ package br.com.appetitegourmet.api.services;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -35,5 +36,16 @@ public class UnidadeService {
     
     public void excluirUnidade(Long id) {
         unidadeRepository.deleteById(id);
+    }
+
+    public Unidade editarUnidade(Long id, Unidade unidade) {
+        Optional<Unidade> optionalUnidade = unidadeRepository.findById(id);
+        if (optionalUnidade.isPresent()) {
+            Unidade novaUnidade = optionalUnidade.get();
+            novaUnidade.setNome(unidade.getNome());
+            return unidadeRepository.save(novaUnidade);
+        } else {
+            return null;
+        }
     }
 }
