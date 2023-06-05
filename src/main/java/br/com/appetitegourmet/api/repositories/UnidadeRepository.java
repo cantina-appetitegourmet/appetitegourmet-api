@@ -5,9 +5,9 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import br.com.appetitegourmet.api.models.Turma;
+import br.com.appetitegourmet.api.models.Unidade;
 
 @Repository
-public interface TurmaRepository extends JpaRepository<Turma, Long> {
-    List<Turma> findByColegioId(Long colegioId);
+public interface UnidadeRepository extends JpaRepository<Unidade, Long> {
+    List<Unidade> findByColegioId(Long colegioId);
 }
