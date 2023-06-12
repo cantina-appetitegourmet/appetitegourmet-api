@@ -5,6 +5,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,6 +18,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name="reponsaveis")
 public class Responsavel {
 
 	@Id
@@ -27,26 +31,9 @@ public class Responsavel {
 	@Column(nullable = false, unique=true, length=11)
     private String cpf;
 	
-	@Column(nullable = true, length=8)
-    private String cep;
-    
-    @Column(nullable = true, length=100)
-    private String logradouro;
-    
-    @Column(nullable = true, length=100)
-    private String bairro;
-    
-    @Column(nullable = true, length=100)
-    private String cidade;
-    
-    @Column(nullable = true, length=2)
-    private String uf;
-    
-    @Column(nullable = true)
-    private int numero;
-    
-    @Column(nullable = true, length=100)
-    private String complemento;
+	@OneToOne
+    @JoinColumn(name = "endereco_id", nullable = true)
+    private Endereco endereco;
     
     @Column(nullable = false, length=300)
     private String email;

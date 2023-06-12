@@ -6,7 +6,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -20,28 +19,36 @@ import utils.Colunas;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="unidades")
-public class Unidade {
-    @Id
+@Table(name="empresas")
+public class Empresa {
+
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    @Column(nullable = false, length=Colunas.NOME)
-    private String nome;
-    
-    @OneToOne
+	
+	@Column(nullable = false, length=Colunas.CNPJ)
+    private String cnpj;
+	
+	@Column(nullable = true, length=Colunas.INSCRICAO_ESTADUAL)
+    private String inscricaoEstadual;
+	
+	@Column(nullable = true, length=Colunas.INSCRICAO_MUNICIPAL)
+    private String inscricaoMunicipal;
+	
+	@Column(nullable = false, length=Colunas.NOME)
+    private String razaoSocial;
+	
+	@Column(nullable = false, length=Colunas.NOME)
+    private String nomeFantasia;
+	
+	@Column(nullable = false, length=Colunas.NOME)
+    private String nomeUnidade;
+	
+	@OneToOne
     @JoinColumn(name = "endereco_id", nullable = true)
     private Endereco endereco;
-    
-    @ManyToOne
-    @JoinColumn(name = "colegio_id", nullable = false)
-    private Colegio colegio;
-    
-    @ManyToOne
-    @JoinColumn(name = "empresa_id", nullable = false)
-    private Empresa empresa;
-    
-    @Builder.Default
-    @Column(nullable = false)
+	
+	@Builder.Default
+	@Column(nullable = false)
     private boolean ativo = true;
 }

@@ -2,6 +2,7 @@ package br.com.appetitegourmet.api.services;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -31,5 +32,16 @@ public class ParentescoService {
     
     public void excluirParentesco(Long id) {
         parentescoRepository.deleteById(id);
+    }
+    
+    public Parentesco editarParentesco(Long id, Parentesco parentesco) {
+        Optional<Parentesco> optionalParentesco = parentescoRepository.findById(id);
+        if (optionalParentesco.isPresent()) {
+            Parentesco novaParentesco = optionalParentesco.get();
+            novaParentesco.setDescricao(parentesco.getDescricao());
+            return parentescoRepository.save(novaParentesco);
+        } else {
+            return null;
+        }
     }
 }
