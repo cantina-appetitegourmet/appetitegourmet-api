@@ -36,6 +36,7 @@ INSERT INTO cantinas_empresa (cnpj, inscricaoEstadual, inscricaoMunicipal, razao
 CREATE TABLE unidades (
   id SERIAL PRIMARY KEY,
   nome VARCHAR(60) NOT NULL,
+  cantinaNome VARCHAR(60),
   colegio_id INTEGER REFERENCES colegios(id),
   cantina_empresa_id INTEGER REFERENCES cantinas_empresa(id),
   endereco_id INTEGER REFERENCES enderecos(id),
@@ -43,7 +44,7 @@ CREATE TABLE unidades (
   UNIQUE (nome, colegio_id)
 );
 -- Inserindo as unidades do Colégio GGE
-INSERT INTO unidades (nome, colegio_id, cantina_empresa_id, endereco_id) VALUES ('Boa Viagem', 1, 1, 1);
+INSERT INTO unidades (nome, cantinaNome, colegio_id, cantina_empresa_id, endereco_id) VALUES ('Boa Viagem', 'Appetite Gourme GGE Boa Viagem', 1, 1, 1);
 INSERT INTO unidades (nome, colegio_id) VALUES ('Parnamirim', 1);
 INSERT INTO unidades (nome, colegio_id) VALUES ('Benfica', 1);
 INSERT INTO unidades (nome, colegio_id) VALUES ('Caruaru', 1);
