@@ -1,9 +1,9 @@
-CREATE TABLE descontos (
+CREATE TABLE desconto (
   id SERIAL PRIMARY KEY,
   motivo VARCHAR(255),
   valor_percentual DECIMAL(5, 2) NOT NULL CHECK (valor_percentual >= 0 AND valor_percentual <= 100)
 );
-INSERT INTO descontos (motivo, valor_percentual) VALUES
+INSERT INTO desconto (motivo, valor_percentual) VALUES
   ('2 ou mais filhos', 5),
   ('Desconto concedido em negociação por serem 3 filhos', 7),
   ('Desconto especial por ter contratado pacote completo', 10),
@@ -14,9 +14,9 @@ INSERT INTO descontos (motivo, valor_percentual) VALUES
  
 CREATE TABLE contrato (
   id SERIAL PRIMARY KEY,
-  aluno_responsavel_id INTEGER REFERENCES responsaveis_alunos(id),
+  aluno_responsavel_id INTEGER REFERENCES responsavel_aluno(id),
   turma_anos_letivos_id INTEGER REFERENCES turma_anos_letivos(id),
-  desconto_id INTEGER REFERENCES descontos(id),
+  desconto_id INTEGER REFERENCES desconto(id),
   valor_percentual DECIMAL(4, 2) CHECK (valor_percentual >= 0 AND valor_percentual <= 100),
   data_adesao DATE DEFAULT CURRENT_DATE,
   ativo BOOLEAN NOT NULL DEFAULT TRUE
@@ -29,7 +29,7 @@ $$
 BEGIN
   NEW.turma_anos_letivos_id := (
     SELECT turma_anos_letivos_id
-    FROM responsaveis_alunos
+    FROM responsavel_aluno
     WHERE id = NEW.aluno_responsavel_id
   );
   RETURN NEW;
@@ -44,7 +44,7 @@ FOR EACH ROW
 EXECUTE FUNCTION set_turma_anos_letivos_id();
 
 
-CREATE TABLE contrato_planos (
+CREATE TABLE contrato_plano (
   id SERIAL PRIMARY KEY,
   contrato_id INTEGER REFERENCES contrato(id),
   planos_alimentares_precos_id INTEGER REFERENCES planos_alimentares_precos(id),
@@ -70,6 +70,6 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER trigger_calcular_preco_dia
-BEFORE INSERT ON contrato_planos
+BEFORE INSERT ON contrato_plano
 FOR EACH ROW
 EXECUTE FUNCTION calcular_preco_dia();
