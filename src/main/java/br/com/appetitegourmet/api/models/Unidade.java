@@ -26,8 +26,11 @@ public class Unidade {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Column(nullable = false, length=Colunas.NOME)
-    private String nome;
+    @Column(name = "nome", nullable = false, length=Colunas.NOME)
+    private String nome_unidade_escolar;
+    
+    @Column(name = "cantinaNome", nullable = false, length=Colunas.NOME)
+    private String nome_unidade_negocio;
     
     @OneToOne
     @JoinColumn(name = "endereco_id", nullable = true)
@@ -43,5 +46,5 @@ public class Unidade {
     
     @Builder.Default
     @Column(nullable = false)
-    private boolean ativo = true;
+    private Boolean ativo = true;
 }

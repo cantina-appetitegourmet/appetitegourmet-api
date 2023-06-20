@@ -31,7 +31,8 @@ public class EmpresaService {
         return empresaRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Empresa não encontrada"));
     }
-
+    
+    @Transactional
     public Empresa salvarEmpresa(Empresa empresa) {
     	if(empresa.getEndereco() != null) {
     		Endereco retorno;
@@ -43,6 +44,7 @@ public class EmpresaService {
     	}
         return empresaRepository.save(empresa);
     }
+    
     @Transactional
     public void excluirEmpresa(Long id) {
     	Empresa retorno = empresaRepository.findById(id)

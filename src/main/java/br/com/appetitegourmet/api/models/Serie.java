@@ -17,15 +17,14 @@ import utils.Colunas;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="anos_letivos")
-public class AnoLetivo {
-
-	@Id
+@Table(name="series")
+public class Serie {
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Column(nullable = false, length=Colunas.ANO_LETIVO)
-    private String ano;
+    @Column(nullable = false, length=Colunas.NOME)
+    private String nome;
     
     @Builder.Default
     @Column(nullable = false)

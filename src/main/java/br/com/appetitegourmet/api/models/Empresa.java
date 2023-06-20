@@ -19,7 +19,7 @@ import utils.Colunas;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="empresas")
+@Table(name="cantinas_empresa")
 public class Empresa {
 
 	@Id
@@ -37,9 +37,6 @@ public class Empresa {
 	
 	@Column(nullable = false, length=Colunas.NOME)
     private String razaoSocial;
-	
-	@Column(nullable = false, length=Colunas.NOME)
-    private String nomeFantasia;
 	
 	@Column(nullable = false, length=Colunas.NOME)
     private String nomeUnidade;

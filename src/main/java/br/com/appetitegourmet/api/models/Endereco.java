@@ -40,7 +40,7 @@ public class Endereco {
     private String uf;
 	
 	@Column(nullable = true)
-    private int numero;
+    private Integer numero;
 	
 	@Column(nullable = true, length=Colunas.COMPLEMENTO)
     private String complemento;

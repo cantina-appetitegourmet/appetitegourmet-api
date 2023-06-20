@@ -33,6 +33,11 @@ public class UnidadeController {
         return unidadeService.listarUnidadesPorColegio(colegioId);
     }
     
+    @GetMapping("/empresa/{empresaId}")
+    public List<Unidade> listarUnidadesPorEmpresa(@PathVariable Long empresaId) {
+        return unidadeService.listarUnidadesPorEmpresa(empresaId);
+    }
+    
     @GetMapping("/{id}")
     public Unidade buscarUnidadePorId(@PathVariable Long id) {
         return unidadeService.buscarUnidadePorId(id);
@@ -44,7 +49,7 @@ public class UnidadeController {
     }
     
     @DeleteMapping("/{id}")
-    public void excluirTurma(@PathVariable Long id) {
+    public void excluirUnidade(@PathVariable Long id) {
         unidadeService.excluirUnidade(id);
     }
 

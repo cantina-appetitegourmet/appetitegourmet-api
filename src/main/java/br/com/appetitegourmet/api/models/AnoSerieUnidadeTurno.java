@@ -5,25 +5,30 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import utils.Turno_Enum;
 
 @Entity
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Cardapio {
-
-	@Id
+@Table(name="ano_serie_unidade_turnos")
+public class AnoSerieUnidadeTurno {
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Column(nullable = false, length=60)
-    private String descricao;
+    @Column(nullable = false)
+    private Turno_Enum turno;
     
-    @Column(nullable = true, length=300)
-    private String descritivo;
+    @ManyToOne
+    @JoinColumn(name = "ano_serie_unidade_id", nullable = false)
+    private AnoSerieUnidade anoSerieUnidade;
 }

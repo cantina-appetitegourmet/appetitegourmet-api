@@ -11,13 +11,16 @@ public final class Colunas {
 	public static final int COMPLEMENTO = 100;
 	
 	// Tamanhos de atributos de empresas
-	public static final int CNPJ = 15;
+	public static final int CNPJ = 18;
 	public static final int INSCRICAO_ESTADUAL = 45;
 	public static final int INSCRICAO_MUNICIPAL = 45;
 	
 	public static final int NOME = 60;
+	public static final int NOME_ANO_SERIE = 20;
 	public static final int DESCRICAO_PARENTESCO = 10;
 	public static final int DESCRICAO_TIPO_CONTATO = 20;
+	
+	public static final int ANO_LETIVO = 6;
 	
 	
 }

@@ -37,8 +37,29 @@ public class EnderecoService {
     public Endereco editarEndereco(Long id, Endereco endereco) {
         Optional<Endereco> optionalEndereco = enderecoRepository.findById(id);
         if (optionalEndereco.isPresent()) {
-            Endereco novaEndereco = optionalEndereco.get();
-            return enderecoRepository.save(novaEndereco);
+            Endereco novoEndereco = optionalEndereco.get();
+            if(endereco.getBairro() != null) {
+            	novoEndereco.setBairro(endereco.getBairro());
+            }
+            if(endereco.getCep() != null) {
+            	novoEndereco.setCep(endereco.getCep());
+            }
+            if(endereco.getCidade() != null) {
+            	novoEndereco.setCidade(endereco.getCidade());
+            }
+            if(endereco.getComplemento() != null) {
+            	novoEndereco.setComplemento(endereco.getComplemento());
+            }
+            if(endereco.getLogradouro() != null) {
+            	novoEndereco.setLogradouro(endereco.getLogradouro());
+            }
+            if(endereco.getNumero() != null) {
+            	novoEndereco.setNumero(endereco.getNumero());
+            }
+            if(endereco.getUf() != null) {
+            	novoEndereco.setUf(endereco.getUf());
+            }
+            return enderecoRepository.save(novoEndereco);
         } else {
             return null;
         }
