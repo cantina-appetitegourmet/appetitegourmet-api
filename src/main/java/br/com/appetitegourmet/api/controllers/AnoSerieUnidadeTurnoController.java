@@ -24,32 +24,32 @@ public class AnoSerieUnidadeTurnoController {
     }
     
     @GetMapping
-    public List<AnoSerieUnidadeTurno> listarAnoSeries() {
-        return anoSerieUnidadeTurnoService.listarAnoSeries();
+    public List<AnoSerieUnidadeTurno> listarAnoSerieUnidadeTurnos() {
+        return anoSerieUnidadeTurnoService.listarAnoSerieUnidadeTurnos();
     }
     
-    @GetMapping("/serie/{serieId}")
-    public List<AnoSerieUnidadeTurno> listarAnoSeriesPorSerie(@PathVariable Long serieId) {
-        return anoSerieUnidadeTurnoService.listarAnoSeriesPorSerie(serieId);
+    @GetMapping("/anoSerieUnidade/{anoSerieUnidadeId}")
+    public List<AnoSerieUnidadeTurno> listarAnoSerieUnidadeTurnosPorAnoSerieUnidade(@PathVariable Long anoSerieUnidadeId) {
+        return anoSerieUnidadeTurnoService.listarAnoSerieUnidadeTurnosPorAnoSerieUnidade(anoSerieUnidadeId);
     }
     
     @GetMapping("/{id}")
-    public AnoSerieUnidadeTurno buscarAnoSeriePorId(@PathVariable Long id) {
-        return anoSerieUnidadeTurnoService.buscarAnoSeriePorId(id);
+    public AnoSerieUnidadeTurno buscarAnoSerieUnidadeTurnoPorId(@PathVariable Long id) {
+        return anoSerieUnidadeTurnoService.buscarAnoSerieUnidadeTurnoPorId(id);
     }
     
     @PostMapping
-    public AnoSerieUnidadeTurno salvarAnoSerie(@RequestBody AnoSerieUnidadeTurno anoSerie) {
-        return anoSerieUnidadeTurnoService.salvarAnoSerie(anoSerie);
+    public AnoSerieUnidadeTurno salvarAnoSerieUnidadeTurno(@RequestBody AnoSerieUnidadeTurno anoSerieUnidadeTurno) {
+        return anoSerieUnidadeTurnoService.salvarAnoSerieUnidadeTurno(anoSerieUnidadeTurno);
     }
     
     @DeleteMapping("/{id}")
-    public void excluirAnoSerie(@PathVariable Long id) {
-    	anoSerieUnidadeTurnoService.excluirAnoSerie(id);
+    public void excluirAnoSerieUnidadeTurno(@PathVariable Long id) {
+    	anoSerieUnidadeTurnoService.excluirAnoSerieUnidadeTurno(id);
     }
 
     @PutMapping("/{id}")
-    public void editarAnoSerie(@PathVariable Long id, @RequestBody AnoSerieUnidadeTurno anoSerie) {
-    	anoSerieUnidadeTurnoService.editarAnoSerie(id, anoSerie);
+    public void editarAnoSerieUnidadeTurno(@PathVariable Long id, @RequestBody AnoSerieUnidadeTurno anoSerieUnidadeTurno) {
+    	anoSerieUnidadeTurnoService.editarAnoSerieUnidadeTurno(id, anoSerieUnidadeTurno);
     }
 }
