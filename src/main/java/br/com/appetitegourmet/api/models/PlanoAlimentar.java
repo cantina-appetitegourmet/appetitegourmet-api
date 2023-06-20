@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,6 +16,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name="planos_alimentares")
 public class PlanoAlimentar {
 
 	@Id
@@ -26,4 +28,8 @@ public class PlanoAlimentar {
     
     @Column(nullable = true, length=300)
     private String descritivo;
+    
+    @Builder.Default
+    @Column(nullable = false)
+    private Boolean ativo = true;
 }

@@ -7,26 +7,29 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import utils.Turma_Enum;
+
 
 @Entity
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name="turmas")
 public class Turma {
-
-	@Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Column(nullable = false, length=60)
-    private String nome;
+    @Column(nullable = false)
+    private Turma_Enum turma;
     
     @ManyToOne
-    @JoinColumn(name = "categoriaTurma_id", nullable = false, referencedColumnName = "id")
-    private CategoriaTurma categoriaTurma;
+    @JoinColumn(name = "ano_serie_unidade_turno_id", nullable = false)
+    private AnoSerieUnidadeTurno anoSerieUnidadeTurno;
 }

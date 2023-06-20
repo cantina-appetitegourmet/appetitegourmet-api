@@ -37,11 +37,16 @@ public class ColegioService {
     public Colegio editarColegio(Long id, Colegio colegio) {
         Optional<Colegio> optionalColegio = colegioRepository.findById(id);
         if (optionalColegio.isPresent()) {
-            Colegio novaColegio = optionalColegio.get();
-            novaColegio.setNome(colegio.getNome());
-            return colegioRepository.save(novaColegio);
+            Colegio novoColegio = optionalColegio.get();
+            if(colegio.getNome() != null) {
+            	novoColegio.setNome(colegio.getNome());
+            }
+            if(colegio.getAtivo() != null) {
+            	novoColegio.setAtivo(colegio.getAtivo());
+            }
+            return colegioRepository.save(novoColegio);
         } else {
-            return null;
+        	throw new NoSuchElementException("Colegio não encontrado");
         }
     }
 }

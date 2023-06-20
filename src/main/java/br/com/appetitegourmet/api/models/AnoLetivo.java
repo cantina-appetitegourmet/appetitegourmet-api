@@ -29,5 +29,5 @@ public class AnoLetivo {
     
     @Builder.Default
     @Column(nullable = false)
-    private boolean ativo = true;
+    private Boolean ativo = true;
 }

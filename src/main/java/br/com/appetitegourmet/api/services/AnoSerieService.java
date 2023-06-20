@@ -66,7 +66,7 @@ public class AnoSerieService {
     		}
     		return anoSerieRepository.save(novoAnoSerie);
     	} else {
-    		return null;
+    		throw new NoSuchElementException("Ano Série não encontrado");
     	}
     }
 }
