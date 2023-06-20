@@ -44,7 +44,7 @@ CREATE TABLE unidades (
   UNIQUE (nome, colegio_id)
 );
 -- Inserindo as unidades do Colégio GGE
-INSERT INTO unidades (nome, cantinaNome, colegio_id, cantina_empresa_id, endereco_id) VALUES ('Boa Viagem', 'Appetite Gourme GGE Boa Viagem', 1, 1, 1);
+INSERT INTO unidades (nome, cantinaNome, colegio_id, cantina_empresa_id, endereco_id) VALUES ('Boa Viagem', 'Appetite Gourmet GGE Boa Viagem', 1, 1, 1);
 INSERT INTO unidades (nome, colegio_id) VALUES ('Parnamirim', 1);
 INSERT INTO unidades (nome, colegio_id) VALUES ('Benfica', 1);
 INSERT INTO unidades (nome, colegio_id) VALUES ('Caruaru', 1);
