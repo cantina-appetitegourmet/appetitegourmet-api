@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.WebRequest;
+
 import br.com.appetitegourmet.api.dto.PessoaResponse;
 import br.com.appetitegourmet.api.exception.dto.ErrorResponse;
 import br.com.appetitegourmet.api.mapper.PessoaMapper;
@@ -30,17 +32,5 @@ public class PessoaController {
         Pessoa pessoaSalva = pessoaService.salvarPessoa(pessoa);
         PessoaResponse pessoaResponse = PessoaMapper.INSTANCE.pessoaToPessoaResponse(pessoaSalva);
         return ResponseEntity.status(HttpStatus.CREATED).body(pessoaResponse);
-    }
-
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<ErrorResponse> handlePessoaInvalidaException(HttpMessageNotReadableException ex) {
-        String errorMessage = "Erro de desserialização: o valor do campo booleano é inválido.";
-        ErrorResponse errorResponse = new ErrorResponse(
-                LocalDateTime.now(),
-                HttpStatus.BAD_REQUEST.value(),
-                HttpStatus.BAD_REQUEST.getReasonPhrase(),
-                errorMessage,
-                ex.getMessage());
-        return ResponseEntity.badRequest().body(errorResponse);
     }
 }
