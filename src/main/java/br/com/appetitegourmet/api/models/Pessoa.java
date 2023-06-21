@@ -2,16 +2,17 @@ package br.com.appetitegourmet.api.models;
 
 import java.sql.Date;
 
+import org.hibernate.validator.constraints.br.CPF;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-import utils.ExpressoesRegulares;
 import utils.ValidacaoConstantes;
 
 @Entity
@@ -25,7 +26,7 @@ public class Pessoa {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
+    @NotBlank(message = "{campo.nomeCompleto.obrigatorio}")
     @Size(max = ValidacaoConstantes.TAMANHO_MAXIMO_NOME_COMPLETO)
     private String nomeCompleto;
 
@@ -33,13 +34,14 @@ public class Pessoa {
 
     private Date nascimento;
 
-    @Pattern(regexp = ExpressoesRegulares.REGEX_CPF)
+    @CPF
     private String cpf;
 
     @Size(max = ValidacaoConstantes.TAMANHO_MAXIMO_TELEFONE)
     private String telefone;
 
     @Email
+    @NotEmpty(message = "{email.notempty}")
     @Size(max = ValidacaoConstantes.TAMANHO_MAXIMO_EMAIL)
     private String email;
 
