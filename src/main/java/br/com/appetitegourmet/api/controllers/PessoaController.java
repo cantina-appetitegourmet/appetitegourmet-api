@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.appetitegourmet.api.dto.PessoaResponse;
+import br.com.appetitegourmet.api.mapper.PessoaMapper;
 import br.com.appetitegourmet.api.models.Pessoa;
 import br.com.appetitegourmet.api.services.PessoaService;
 import lombok.AllArgsConstructor;
@@ -18,8 +20,9 @@ public class PessoaController {
     private final PessoaService pessoaService;
 
     @PostMapping
-    public ResponseEntity<Pessoa> criarPessoa(@RequestBody Pessoa pessoa) {
+    public ResponseEntity<PessoaResponse> criarPessoa(@RequestBody Pessoa pessoa) {
         Pessoa pessoaSalva = pessoaService.salvarPessoa(pessoa);
-        return ResponseEntity.status(HttpStatus.CREATED).body(pessoaSalva);
+        PessoaResponse pessoaResponse = PessoaMapper.INSTANCE.pessoaToPessoaResponse(pessoaSalva);
+        return ResponseEntity.status(HttpStatus.CREATED).body(pessoaResponse);
     }
 }
