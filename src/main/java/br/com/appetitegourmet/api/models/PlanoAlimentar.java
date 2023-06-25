@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import utils.Colunas;
 
 @Entity
 @Data
@@ -23,10 +24,10 @@ public class PlanoAlimentar {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Column(nullable = false, length=60)
+    @Column(nullable = false, length=Colunas.NOME)
     private String descricao;
     
-    @Column(nullable = true, length=300)
+    @Column(nullable = true, length=Colunas.DESCRITIVO)
     private String descritivo;
     
     @Builder.Default

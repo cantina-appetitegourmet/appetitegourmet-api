@@ -1,9 +1,9 @@
 CREATE TABLE desconto (
   id SERIAL PRIMARY KEY,
-  motivo VARCHAR(255),
+  motivo VARCHAR(255) NOT NULL,
   valor_percentual DECIMAL(5, 2) NOT NULL CHECK (valor_percentual >= 0 AND valor_percentual <= 100)
 );
-INSERT INTO desconto (motivo, valor_percentual) VALUES
+INSERT INTO desconto (motivo_id, valor_percentual) VALUES
   ('2 ou mais filhos', 5),
   ('Desconto concedido em negociação por serem 3 filhos', 7),
   ('Desconto especial por ter contratado pacote completo', 10),
@@ -11,15 +11,13 @@ INSERT INTO desconto (motivo, valor_percentual) VALUES
   ('Desconto especial para familiar', 50),
   ('Desconto concedido em negociação', 7);
 
+
  
 CREATE TABLE contrato (
   id SERIAL PRIMARY KEY,
-  aluno_responsavel_id INTEGER REFERENCES responsavel_aluno(id),
+  responsavel_aluno_id INTEGER REFERENCES responsavel_aluno(id),
   turma_anos_letivos_id INTEGER REFERENCES turma_anos_letivos(id),
-  desconto_id INTEGER REFERENCES desconto(id),
-  valor_percentual DECIMAL(4, 2) CHECK (valor_percentual >= 0 AND valor_percentual <= 100),
-  data_adesao DATE DEFAULT CURRENT_DATE,
-  ativo BOOLEAN NOT NULL DEFAULT TRUE
+  data_adesao DATE DEFAULT CURRENT_DATE
 );
 
 -- Criação da trigger para preencher turma_anos_letivos_id
@@ -43,6 +41,14 @@ BEFORE INSERT ON contrato
 FOR EACH ROW
 EXECUTE FUNCTION set_turma_anos_letivos_id();
 
+CREATE TABLE contrato_desconto (
+  id SERIAL PRIMARY KEY,
+  contrato_id INTEGER REFERENCES contrato(id),
+  desconto_id INTEGER REFERENCES desconto(id),
+  data_inicio DATE DEFAULT CURRENT_DATE,
+  data_fim DATE
+);
+
 
 CREATE TABLE contrato_plano (
   id SERIAL PRIMARY KEY,
@@ -56,6 +62,8 @@ CREATE TABLE contrato_plano (
   sabado BOOLEAN,
   domingo BOOLEAN,
   preco_dia DECIMAL(10, 2)
+  data_inicio DATE DEFAULT CURRENT_DATE,
+  data_fim DATE
 );
 
 CREATE OR REPLACE FUNCTION calcular_preco_dia()

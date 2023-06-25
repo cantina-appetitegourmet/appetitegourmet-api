@@ -17,13 +17,13 @@ import utils.Colunas;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="parentescos")
+@Table(name="grau_parentesco")
 public class Parentesco {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Column(nullable = false, length=Colunas.DESCRICAO_PARENTESCO)
+    @Column(name="nome", nullable = false, length=Colunas.DESCRICAO_PARENTESCO)
     private String descricao;
 }

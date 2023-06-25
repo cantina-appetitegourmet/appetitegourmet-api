@@ -23,7 +23,12 @@ public final class Colunas {
 	public static final int DESCRICAO_PARENTESCO = 10;
 	public static final int DESCRICAO_TIPO_CONTATO = 20;
 	
+	//Desconto
+	public static final int MOTIVO = 255;
+	
 	public static final int ANO_LETIVO = 6;
 	
+	//Plano
+	public static final int DESCRITIVO = 300;
 	
 }

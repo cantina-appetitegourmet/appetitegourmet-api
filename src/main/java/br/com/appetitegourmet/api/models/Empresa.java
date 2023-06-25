@@ -39,7 +39,7 @@ public class Empresa {
     private String razaoSocial;
 	
 	@Column(nullable = false, length=Colunas.NOME)
-    private String nomeUnidade;
+    private String nomeFantasia;
 	
 	@OneToOne
     @JoinColumn(name = "endereco_id", nullable = true)

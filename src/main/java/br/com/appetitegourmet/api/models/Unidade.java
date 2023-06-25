@@ -41,7 +41,7 @@ public class Unidade {
     private Colegio colegio;
     
     @ManyToOne
-    @JoinColumn(name = "empresa_id", nullable = false)
+    @JoinColumn(name = "cantina_empresa_id", nullable = false)
     private Empresa empresa;
     
     @Builder.Default

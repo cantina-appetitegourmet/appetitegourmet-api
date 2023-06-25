@@ -155,7 +155,8 @@ FROM turmas t, anos_letivos a;
 
 CREATE TABLE planos_alimentares (
   id SERIAL PRIMARY KEY,
-  nome VARCHAR(50) NOT NULL UNIQUE,
+  descricao VARCHAR(60) NOT NULL UNIQUE,
+  descritivo VARCHAR(300) NOT NULL,
   ativo BOOLEAN DEFAULT true
 );
 INSERT INTO planos_alimentares (nome) VALUES ('Lanche regular');

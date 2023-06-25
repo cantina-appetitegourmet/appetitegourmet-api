@@ -7,12 +7,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import utils.Colunas;
 
 @Entity
 @Data
@@ -25,13 +24,10 @@ public class Desconto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Column(nullable = false, length=60)
-    private String descricao;
+    @Column(nullable = false, length=Colunas.MOTIVO)
+    private String motivo;
     
-    @Column(nullable = false, precision = 12, scale = 2)
-    private BigDecimal percentual;
+    @Column(nullable = false)
+    private BigDecimal valor_percentual;
     
-	@ManyToOne
-    @JoinColumn(name = "anoLetivo_id", nullable = false, referencedColumnName = "id")
-    private AnoLetivo anoLetivo;
 }

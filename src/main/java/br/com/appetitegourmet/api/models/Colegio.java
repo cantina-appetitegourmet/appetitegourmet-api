@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,6 +27,10 @@ public class Colegio {
     
     @Column(nullable = false, length=Colunas.NOME)
     private String nome;
+    
+    @OneToOne
+    @JoinColumn(name = "endereco_id")
+    private Endereco endereco;
     
     @Builder.Default
     @Column(nullable = false)

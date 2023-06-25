@@ -1,10 +1,14 @@
 package br.com.appetitegourmet.api.models;
 
+import java.sql.Date;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,15 +19,23 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Opcao {
+public class ContratoDesconto {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Column(nullable = false, length=60)
-    private String descricao;
+    @ManyToOne
+    @JoinColumn(name = "contrato_id", nullable = false)
+    private Contrato contrato;
     
-    @Column(nullable = true, length=300)
-    private String observacao;
+    @ManyToOne
+    @JoinColumn(name = "desconto_id", nullable = false)
+    private Desconto desconto;
+    
+    @Column(name="data_inicio", nullable = true)
+    private Date dataInicio;
+    
+    @Column(name="data_fim", nullable = true)
+    private Date dataFim;
 }
