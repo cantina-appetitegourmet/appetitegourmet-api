@@ -10,6 +10,7 @@ import br.com.appetitegourmet.api.models.AnoSerieUnidade;
 import br.com.appetitegourmet.api.models.AnoSerieUnidadeTurno;
 import br.com.appetitegourmet.api.repositories.AnoSerieUnidadeRepository;
 import br.com.appetitegourmet.api.repositories.AnoSerieUnidadeTurnoRepository;
+import utils.Turno_Enum;
 
 @Service
 public class AnoSerieUnidadeTurnoService {

@@ -7,14 +7,18 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import br.com.appetitegourmet.api.models.Colegio;
+import br.com.appetitegourmet.api.models.Endereco;
 import br.com.appetitegourmet.api.repositories.ColegioRepository;
+import br.com.appetitegourmet.api.repositories.EnderecoRepository;
 
 @Service
 public class ColegioService {
     private final ColegioRepository colegioRepository;
+    private final EnderecoRepository enderecoRepository;
 
-    public ColegioService(ColegioRepository colegioRepository) {
+    public ColegioService(ColegioRepository colegioRepository, EnderecoRepository enderecoRepository) {
         this.colegioRepository = colegioRepository;
+		this.enderecoRepository = enderecoRepository;
     }
 
     public List<Colegio> listarColegios() {
@@ -27,6 +31,14 @@ public class ColegioService {
     }
 
     public Colegio salvarColegio(Colegio colegio) {
+    	if(colegio.getEndereco() != null) {
+    		Endereco retorno;
+    		retorno = enderecoRepository.save(colegio.getEndereco());
+    		if(retorno == null) {
+    			new Exception("Falha ao inserir o endereço");
+    		}
+    		colegio.setEndereco(retorno);
+    	}
         return colegioRepository.save(colegio);
     }
 

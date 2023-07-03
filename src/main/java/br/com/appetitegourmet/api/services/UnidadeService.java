@@ -54,6 +54,14 @@ public class UnidadeService {
     }
     
     public Unidade salvarUnidade(Unidade unidade) {
+    	if(unidade.getEndereco() != null) {
+    		Endereco retorno;
+    		retorno = enderecoRepository.save(unidade.getEndereco());
+    		if(retorno == null) {
+    			new Exception("Falha ao inserir o endereço");
+    		}
+    		unidade.setEndereco(retorno);
+    	}
         return unidadeRepository.save(unidade);
     }
     

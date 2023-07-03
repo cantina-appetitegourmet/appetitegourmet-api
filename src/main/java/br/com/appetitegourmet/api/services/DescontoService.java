@@ -20,10 +20,6 @@ public class DescontoService {
         return descontoRepository.findAll();
     }
     
-    public List<Desconto> listarUnidadesPorColegio(Long anoLetivoId) {
-        return descontoRepository.findByAnoLetivoId(anoLetivoId);
-    }
-    
     public Desconto buscarDescontoPorId(Long id) {
         return descontoRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Desconto não encontrado"));

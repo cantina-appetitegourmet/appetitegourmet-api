@@ -24,14 +24,14 @@ INSERT INTO colegios (nome) VALUES ('Colégio Diocesano');
 CREATE TABLE cantinas_empresa (
   id SERIAL PRIMARY KEY,
   cnpj VARCHAR(18) NOT NULL UNIQUE,
-  inscricaoEstadual VARCHAR(45) UNIQUE,
-  inscricaoMunicipal VARCHAR(45) UNIQUE,
-  razaoSocial VARCHAR(60) NOT NULL UNIQUE,
-  nomeFantasia VARCHAR(60) NOT NULL,
+  inscricao_estadual VARCHAR(45) UNIQUE,
+  inscricao_municipal VARCHAR(45) UNIQUE,
+  razao_social VARCHAR(60) NOT NULL UNIQUE,
+  nome_fantasia VARCHAR(60) NOT NULL,
   endereco_id INTEGER REFERENCES enderecos(id),
   ativo BOOLEAN DEFAULT true
 );
-INSERT INTO cantinas_empresa (cnpj, inscricaoEstadual, inscricaoMunicipal, razaoSocial, nomeFantasia, endereco_id) VALUES ('24.687.382/0001-31', '0670910-91', NULL, 'Mgd Servicos de Alimentacao LTDA', 'Appetite Gourmet', 1);
+INSERT INTO cantinas_empresa (cnpj, inscricao_estadual, inscricao_municipal, razao_social, nome_fantasia, endereco_id) VALUES ('24.687.382/0001-31', '0670910-91', NULL, 'Mgd Servicos de Alimentacao LTDA', 'Appetite Gourmet', 1);
 
 CREATE TABLE unidades (
   id SERIAL PRIMARY KEY,
@@ -159,9 +159,9 @@ CREATE TABLE planos_alimentares (
   descritivo VARCHAR(300) NOT NULL,
   ativo BOOLEAN DEFAULT true
 );
-INSERT INTO planos_alimentares (nome) VALUES ('Lanche regular');
-INSERT INTO planos_alimentares (nome) VALUES ('Lanche complementar');
-INSERT INTO planos_alimentares (nome) VALUES ('Almoço');
+INSERT INTO planos_alimentares (descricao, descritivo) VALUES ('Lanche regular', 'Uma fruta, um suco');
+INSERT INTO planos_alimentares (descricao, descritivo) VALUES ('Lanche complementar', 'Uma fruta, um suco');
+INSERT INTO planos_alimentares (descricao, descritivo) VALUES ('Almoço', 'Uma proteina, um carboidrato, um suco');
 
 CREATE TABLE planos_alimentares_precos (
   id SERIAL PRIMARY KEY,

@@ -24,7 +24,7 @@ public class AnoSerieUnidade {
     private Long id;
     
     @ManyToOne
-    @JoinColumn(name = "serie_id", nullable = false)
+    @JoinColumn(name = "ano_serie_id", nullable = false)
     private AnoSerie anoSerie;
     
     @ManyToOne

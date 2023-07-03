@@ -3,7 +3,7 @@ CREATE TABLE desconto (
   motivo VARCHAR(255) NOT NULL,
   valor_percentual DECIMAL(5, 2) NOT NULL CHECK (valor_percentual >= 0 AND valor_percentual <= 100)
 );
-INSERT INTO desconto (motivo_id, valor_percentual) VALUES
+INSERT INTO desconto (motivo, valor_percentual) VALUES
   ('2 ou mais filhos', 5),
   ('Desconto concedido em negociação por serem 3 filhos', 7),
   ('Desconto especial por ter contratado pacote completo', 10),
@@ -61,7 +61,7 @@ CREATE TABLE contrato_plano (
   sexta BOOLEAN,
   sabado BOOLEAN,
   domingo BOOLEAN,
-  preco_dia DECIMAL(10, 2)
+  preco_dia DECIMAL(10, 2),
   data_inicio DATE DEFAULT CURRENT_DATE,
   data_fim DATE
 );

@@ -29,7 +29,7 @@ public class Unidade {
     @Column(name = "nome", nullable = false, length=Colunas.NOME)
     private String nome_unidade_escolar;
     
-    @Column(name = "cantinaNome", nullable = false, length=Colunas.NOME)
+    @Column(name = "cantinanome", nullable = false, length=Colunas.NOME)
     private String nome_unidade_negocio;
     
     @OneToOne
