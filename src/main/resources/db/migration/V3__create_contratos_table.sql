@@ -20,26 +20,26 @@ CREATE TABLE contrato (
   data_adesao DATE DEFAULT CURRENT_DATE
 );
 
--- Criação da trigger para preencher turma_anos_letivos_id
-CREATE OR REPLACE FUNCTION set_turma_anos_letivos_id()
-  RETURNS TRIGGER AS
-$$
-BEGIN
-  NEW.turma_anos_letivos_id := (
-    SELECT turma_anos_letivos_id
-    FROM responsavel_aluno
-    WHERE id = NEW.aluno_responsavel_id
-  );
-  RETURN NEW;
-END;
-$$
-LANGUAGE plpgsql;
+-- -- Criação da trigger para preencher turma_anos_letivos_id
+-- CREATE OR REPLACE FUNCTION set_turma_anos_letivos_id()
+--   RETURNS TRIGGER AS
+-- $$
+-- BEGIN
+--   NEW.turma_anos_letivos_id := (
+--     SELECT turma_anos_letivos_id
+--     FROM aluno_turma_anos_letivos, 
+--     WHERE id = NEW.aluno_responsavel_id
+--   );
+--   RETURN NEW;
+-- END;
+-- $$
+-- LANGUAGE plpgsql;
 
--- Criação da trigger que chama a função set_turma_anos_letivos_id
-CREATE TRIGGER fill_turma_anos_letivos_id
-BEFORE INSERT ON contrato
-FOR EACH ROW
-EXECUTE FUNCTION set_turma_anos_letivos_id();
+-- -- Criação da trigger que chama a função set_turma_anos_letivos_id
+-- CREATE TRIGGER fill_turma_anos_letivos_id
+-- BEFORE INSERT ON contrato
+-- FOR EACH ROW
+-- EXECUTE FUNCTION set_turma_anos_letivos_id();
 
 CREATE TABLE contrato_desconto (
   id SERIAL PRIMARY KEY,

@@ -113,7 +113,7 @@ CREATE TYPE turnos_enum AS ENUM (
 CREATE TABLE ano_serie_unidade_turnos (
   id SERIAL PRIMARY KEY,
   ano_serie_unidade_id INTEGER REFERENCES anos_serie_unidade(id),
-  turno turnos_enum,
+  turno CHAR(1) CHECK (turno IN ('M', 'T', 'N')) NOT NULL,
   UNIQUE (ano_serie_unidade_id, turno)
 );
 INSERT INTO ano_serie_unidade_turnos (ano_serie_unidade_id, turno)
@@ -126,7 +126,7 @@ CREATE TYPE turmas_enum AS ENUM ('A', 'B', 'C', 'D', 'E', 'F');
 CREATE TABLE turmas (
   id SERIAL PRIMARY KEY,
   ano_serie_unidade_turno_id INTEGER REFERENCES ano_serie_unidade_turnos(id),
-  turma turmas_enum,
+  turma CHAR(1) NOT NULL,
   UNIQUE (ano_serie_unidade_turno_id, turma)
 );
 INSERT INTO turmas (ano_serie_unidade_turno_id, turma)

@@ -26,7 +26,7 @@ public class AnoSerieUnidadeTurno {
     private Long id;
     
     @Column(nullable = false)
-    private Turno_Enum turno;
+    private String turno;
     
     @ManyToOne
     @JoinColumn(name = "ano_serie_unidade_id", nullable = false)

@@ -27,7 +27,7 @@ public class Turma {
     private Long id;
     
     @Column(nullable = false)
-    private Turma_Enum turma;
+    private String turma;
     
     @ManyToOne
     @JoinColumn(name = "ano_serie_unidade_turno_id", nullable = false)
