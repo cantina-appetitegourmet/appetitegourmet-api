@@ -4,6 +4,7 @@ import java.sql.Date;
 
 import org.hibernate.validator.constraints.br.CPF;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -45,7 +46,7 @@ public class Pessoa {
     @Size(max = ValidacaoConstantes.TAMANHO_MAXIMO_EMAIL)
     private String email;
 
-    @OneToOne
+    @OneToOne(cascade=CascadeType.PERSIST)
     @JoinColumn(name = "endereco_id")
     private Endereco endereco;
 }

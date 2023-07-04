@@ -32,4 +32,7 @@ public class Contrato {
     @ManyToOne
     @JoinColumn(name = "turma_anos_letivos_id", nullable = false)
     private TurmaAnoLetivo turmaAnoLetivo;
+    
+    @Column(name="data_adesao", nullable = true)
+    private Date dataAdesao;
 }

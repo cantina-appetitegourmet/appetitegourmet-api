@@ -21,6 +21,6 @@ public interface PessoaMapper {
     List<PessoaResponse> pessoasToPessoaResponses(List<Pessoa> pessoas);
 
     @Mapping(target = "id", ignore = true)
-    void atualizarPessoaFromRequest(PessoaRequest request, @MappingTarget Pessoa pessoa);
+    void atualizarPessoaFromRequest(PessoaRequest pessoaRequest, @MappingTarget Pessoa pessoa);
 
 }

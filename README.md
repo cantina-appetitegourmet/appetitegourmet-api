@@ -5,7 +5,7 @@
 * Spring Boot 3.1.0
 * Java 17
 * Maven 3.9.2
-* PostgreSQL 14
+* PostgreSQL 14.7
 * Lombok
 * JPA / Hibernate
 * Bean Validation
