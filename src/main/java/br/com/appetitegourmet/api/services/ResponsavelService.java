@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import br.com.appetitegourmet.api.models.Responsavel;
+import br.com.appetitegourmet.api.exception.PessoaNaoEncontradaException;
 import br.com.appetitegourmet.api.models.Endereco;
 import br.com.appetitegourmet.api.models.Pessoa;
 import br.com.appetitegourmet.api.repositories.EnderecoRepository;
@@ -76,7 +77,7 @@ public class ResponsavelService {
     				Pessoa novaPessoa = optionalPessoa.get();
     				novoResponsavel.setPessoa(novaPessoa);
     			} else {
-    				throw new NoSuchElementException("Pessoa não encontrada");
+    				throw new PessoaNaoEncontradaException("Pessoa não encontrada");
     			}
     		}
     		return responsavelRepository.save(novoResponsavel);

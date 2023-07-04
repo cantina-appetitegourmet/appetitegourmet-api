@@ -36,7 +36,7 @@ CREATE TABLE responsavel (
 CREATE TABLE responsavel_aluno (
   id SERIAL PRIMARY KEY,
   aluno_id INTEGER REFERENCES aluno(id),
-  responsavel_id INTEGER REFERENCES pessoa(id),
+  responsavel_id INTEGER REFERENCES responsavel(id),
   grau_parentesco_id INTEGER REFERENCES grau_parentesco(id),
   ativo BOOLEAN NOT NULL DEFAULT TRUE,
   UNIQUE (responsavel_id, aluno_id)
