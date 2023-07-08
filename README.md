@@ -27,3 +27,6 @@
 
 # Rodar projeto
 `mvn spring-boot:run`
+
+# Documentação da API
+https://appetitegourmetapi.azurewebsites.net/swagger-ui/index.html
