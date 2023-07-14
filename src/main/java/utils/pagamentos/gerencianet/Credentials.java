@@ -1,4 +1,4 @@
-package utils;
+package utils.pagamentos.gerencianet;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,7 +14,7 @@ public class Credentials {
 
 	public Credentials() {
 		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-		InputStream credentialsFile = classLoader.getResourceAsStream("credentials.json");
+		InputStream credentialsFile = classLoader.getResourceAsStream("pagamentos/gerencianet/credentials.json");
 		JSONTokener tokener = new JSONTokener(credentialsFile);
 		JSONObject credentials = new JSONObject(tokener);
 		try {

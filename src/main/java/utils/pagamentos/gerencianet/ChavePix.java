@@ -7,8 +7,6 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.List;
 
-import utils.Credentials;
-
 public class ChavePix {
 	
 	private String erro;
