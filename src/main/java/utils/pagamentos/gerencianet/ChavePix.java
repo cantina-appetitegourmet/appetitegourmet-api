@@ -70,7 +70,7 @@ public class ChavePix {
 		return retorno;
 	}
 	
-	public boolean listar(List<String> chave) {
+	public boolean listar(String dados) {
 		
 		boolean retorno = false;
 		
@@ -85,7 +85,7 @@ public class ChavePix {
 		try {
 			Gerencianet gn = new Gerencianet(options);
 			JSONObject response = gn.call("pixListEvp", new HashMap<String, String>(), new JSONObject());
-			System.out.println(response);
+			dados.concat(response.toString());
 		}catch (GerencianetException e){
 			erro = e.getError();
 			erro += " - " + e.getErrorDescription();
