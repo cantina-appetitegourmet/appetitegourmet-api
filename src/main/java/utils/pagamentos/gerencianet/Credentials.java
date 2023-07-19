@@ -11,10 +11,17 @@ public class Credentials {
 	private String certificate;
 	private boolean sandbox;
 	private boolean debug;
+	public static final int PRODUCAO = 1;
+	public static final int HOMOLOGACAO = 2;
 
-	public Credentials() {
+	public Credentials(int tipo) {
 		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-		InputStream credentialsFile = classLoader.getResourceAsStream("pagamentos/gerencianet/credentials.json");
+		InputStream credentialsFile;
+		if(tipo == PRODUCAO) {
+			credentialsFile = classLoader.getResourceAsStream("pagamentos/gerencianet/credentialsProducao.json");
+		} else {
+			credentialsFile = classLoader.getResourceAsStream("pagamentos/gerencianet/credentialsHomologacao.json");
+		}
 		JSONTokener tokener = new JSONTokener(credentialsFile);
 		JSONObject credentials = new JSONObject(tokener);
 		try {

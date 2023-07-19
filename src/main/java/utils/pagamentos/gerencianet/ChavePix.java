@@ -1,11 +1,11 @@
 package utils.pagamentos.gerencianet;
 
 import br.com.gerencianet.gnsdk.Gerencianet;
-import br.com.gerencianet.gnsdk.exceptions.*;
+import br.com.gerencianet.gnsdk.exceptions.GerencianetException;
+import utils.RetornoString;
 
 import org.json.JSONObject;
 import java.util.HashMap;
-import java.util.List;
 
 public class ChavePix {
 	
@@ -15,11 +15,11 @@ public class ChavePix {
 		erro = "";
 	}
 	
-	public boolean criar(String dados) {
+	public boolean criar(RetornoString dados) {
 		
 		boolean retorno = false;
-		
-		Credentials credentials = new Credentials();
+		JSONObject response = null;
+		Credentials credentials = new Credentials(Credentials.PRODUCAO);
 
 		JSONObject options = new JSONObject();
 		options.put("client_id", credentials.getClientId());
@@ -29,8 +29,9 @@ public class ChavePix {
 		
 		try {
 			Gerencianet gn = new Gerencianet(options);
-			JSONObject response = gn.call("pixCreateEvp", new HashMap<String,String>(), new JSONObject());
-			dados.concat(response.toString());
+			response = gn.call("pixCreateEvp", new HashMap<String,String>(), new JSONObject());
+			dados.setRetornoString(response.toString());;
+			retorno = true;
 		}catch (GerencianetException e){
 			erro = e.getError();
 			erro += " - " + e.getErrorDescription();
@@ -41,11 +42,11 @@ public class ChavePix {
 		return retorno;
 	}
 	
-	public boolean remover(String chave) {
+	public boolean remover(RetornoString dados, String chave) {
 		
 		boolean retorno = false;
-		
-		Credentials credentials = new Credentials();
+		JSONObject response = null;
+		Credentials credentials = new Credentials(Credentials.PRODUCAO);
 
 		JSONObject options = new JSONObject();
 		options.put("client_id", credentials.getClientId());
@@ -58,23 +59,33 @@ public class ChavePix {
 		
 		try {
 			Gerencianet gn = new Gerencianet(options);
-			JSONObject response = gn.call("pixDeleteEvp", params, new JSONObject());
-			System.out.println(response);
+			response = gn.call("pixDeleteEvp", params, new JSONObject());
+			
+			if(response == null)
+			{
+				dados.setRetornoString("Chave : " + chave + " - excluida com sucesso");
+			}
+			retorno = true;
 		}catch (GerencianetException e){
 			erro = e.getError();
 			erro += " - " + e.getErrorDescription();
 		}
 		catch (Exception e) {
 			erro = e.getMessage();
+			if(erro.compareTo("A JSONObject text must begin with '{' at 1 [character 2 line 1]") == 0)
+			{
+				dados.setRetornoString("Chave : " + chave + " - excluida com sucesso");
+				retorno = true;
+			}
 		}
 		return retorno;
 	}
 	
-	public boolean listar(String dados) {
+	public boolean listar(RetornoString dados) {
 		
 		boolean retorno = false;
-		
-		Credentials credentials = new Credentials();
+		JSONObject response = null;
+		Credentials credentials = new Credentials(Credentials.PRODUCAO);
 
 		JSONObject options = new JSONObject();
 		options.put("client_id", credentials.getClientId());
@@ -84,8 +95,9 @@ public class ChavePix {
 		
 		try {
 			Gerencianet gn = new Gerencianet(options);
-			JSONObject response = gn.call("pixListEvp", new HashMap<String, String>(), new JSONObject());
-			dados.concat(response.toString());
+			response = gn.call("pixListEvp", new HashMap<String, String>(), new JSONObject());
+			dados.setRetornoString(response.toString());;
+			retorno = true;
 		}catch (GerencianetException e){
 			erro = e.getError();
 			erro += " - " + e.getErrorDescription();
