@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.appetitegourmet.api.dto.BoletoGerarBoletoRequest;
 import br.com.appetitegourmet.api.dto.PixCobrancaImediataSemTxidRequest;
 import br.com.appetitegourmet.api.services.PagamentoService;
 
@@ -118,5 +119,17 @@ public class PagamentoController {
 		
 		
         return pagamentoService.pixExibirCobranca(txid);
+    }
+	
+	@PostMapping
+	@RequestMapping("/pagamentos/boletoGerarBoleto")
+    public String boletoGerarBoleto(@RequestBody BoletoGerarBoletoRequest request) {
+        return pagamentoService.boletogerarBoleto(request);
+    }
+	
+	@DeleteMapping
+	@RequestMapping("/pagamentos/boletoCancelarBoleto/{id}")
+    public String boletoCancelarBoleto(@PathVariable String id) {
+        return pagamentoService.boletocancelarBoleto(id);
     }
 }

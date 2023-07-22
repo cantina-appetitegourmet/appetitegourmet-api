@@ -1,13 +1,47 @@
 package br.com.appetitegourmet.api.services;
 
-import org.springframework.stereotype.Service;
+import java.util.List;
+import java.util.Optional;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.text.SimpleDateFormat;
 
+import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+
+import br.com.appetitegourmet.api.models.ConfiguracaoUnidade;
+import br.com.appetitegourmet.api.models.Responsavel;
+
+import br.com.appetitegourmet.api.dto.BoletoGerarBoletoRequest;
 import br.com.appetitegourmet.api.exception.ErroCriacaoChavePixException;
+import br.com.appetitegourmet.api.repositories.ConfiguracaoUnidadeRepository;
+import br.com.appetitegourmet.api.repositories.ResponsavelRepository;
 import utils.RetornoString;
+import utils.ValidacaoConstantes;
+import utils.pagamentos.gerencianet.Cliente;
+import utils.pagamentos.gerencianet.Desconto;
+import utils.pagamentos.gerencianet.DescontoCondicional;
+import utils.pagamentos.gerencianet.ItemPedido;
+import utils.pagamentos.gerencianet.Metadata;
+import utils.pagamentos.gerencianet.Multa;
+import utils.pagamentos.gerencianet.OperacoesBoleto;
 import utils.pagamentos.gerencianet.OperacoesPix;
 
 @Service
 public class PagamentoService {
+	
+	private final ResponsavelRepository responsavelRepository;
+	private final ConfiguracaoUnidadeRepository configuracaoUnidadeRepository;
+	@Autowired
+    private Environment env;
+	
+	public PagamentoService(ResponsavelRepository responsavelRepository, 
+			                ConfiguracaoUnidadeRepository configuracaoUnidadeRepository) {
+		this.responsavelRepository = responsavelRepository;
+		this.configuracaoUnidadeRepository = configuracaoUnidadeRepository;
+		
+	}
 
 	public String listarChavesPix() {
 		RetornoString dados = new RetornoString();
@@ -121,6 +155,148 @@ public class PagamentoService {
 							   				  txid);  
 		if(!retorno) {
 			throw new ErroCriacaoChavePixException(operacoesPix.getErro());
+		}
+		return dados.getRetornoString();
+	}
+	
+	public String boletogerarBoleto(BoletoGerarBoletoRequest request) {
+		RetornoString dados = new RetornoString();
+		boolean retorno;
+		OperacoesBoleto operacoesBoleto;
+		ItemPedido item;
+		List<ItemPedido> itens;
+        Cliente cliente;
+        String dataExpiracao;
+        Metadata metadata;
+        Desconto desconto;
+        DescontoCondicional condicional;
+        Multa multa;
+        String mensagem;
+        BigDecimal valorItem;
+        
+        Responsavel responsavel = null;
+        Optional<Responsavel> optResponsavel = responsavelRepository.findById(request.getIdResonsavel());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        
+        String urlNotification;
+        boolean metadataPresente = false;
+        ConfiguracaoUnidade configuracaoUnidade = null;
+        Optional<ConfiguracaoUnidade> optConfig;
+        String tipoDesconto;
+        String tipoDescontoCondicional;
+        BigDecimal valorDesconto;
+        BigDecimal valorDescontoCondicional;
+        BigDecimal valorMulta;
+        BigDecimal valorJurosDias;
+                
+        itens = new ArrayList<ItemPedido>();
+        item = new ItemPedido();
+        item.setDescricao(request.getDescricao());
+        item.setQuantidade(1);
+        valorItem = request.getValor().multiply(new BigDecimal("100.0"));
+        item.setValor(valorItem.longValue());
+        itens.add(item);
+        
+        if(optResponsavel.isPresent()) {
+        	responsavel = optResponsavel.get(); 
+        } else {
+        	// @todo levantar excessao
+        }
+        cliente = new Cliente();
+        cliente.setTipoPessoa(Cliente.PESSOA_FISICA);
+        cliente.setBairro(responsavel.getPessoa().getEndereco().getBairro());
+        cliente.setCep(responsavel.getPessoa().getEndereco().getCep());
+        cliente.setCidade(responsavel.getPessoa().getEndereco().getCidade());
+        cliente.setComplemento(responsavel.getPessoa().getEndereco().getComplemento());
+        cliente.setCpf(responsavel.getPessoa().getCpf());
+        if(responsavel.getPessoa().getNascimento() != null) {
+        	cliente.setDataNascimento(simpleDateFormat.format(responsavel.getPessoa().getNascimento()));
+        }
+        cliente.setEmail(responsavel.getPessoa().getEmail());
+        cliente.setEstado(responsavel.getPessoa().getEndereco().getUf());
+        cliente.setNome(responsavel.getPessoa().getNomeCompleto());
+        cliente.setNumero(responsavel.getPessoa().getEndereco().getNumero().toString());
+        cliente.setRua(responsavel.getPessoa().getEndereco().getLogradouro());
+        cliente.setTelefone(responsavel.getPessoa().getTelefone());
+        
+        dataExpiracao = simpleDateFormat.format(request.getDataExpiracao());
+        
+        metadata = new Metadata();
+        if(request.getIdPagamento() != null) {
+        	metadata.setIdBoleto(request.getIdPagamento().toString());
+        	metadataPresente = true;
+        }
+        urlNotification = env.getProperty("urlNotification");
+        if(urlNotification != null) {
+        	metadata.setUrlNotificacao(urlNotification);
+        	metadataPresente = true;
+        }        
+        if(!metadataPresente) {
+        	metadata = null;
+        }
+        
+        optConfig = configuracaoUnidadeRepository.findById(request.getIdUnidade());
+        if(optConfig.isPresent()) {
+        	configuracaoUnidade = optConfig.get();
+        } else {
+        	// @todo throw 
+        }
+        
+        desconto = new Desconto();
+        if(configuracaoUnidade.getTipoDescontoBoleto()==ValidacaoConstantes.TP_DESCONTO_VALOR) {
+        	tipoDesconto = "currency";
+        } else {
+        	tipoDesconto = "percentage";
+        }
+        desconto.setTipo(tipoDesconto);
+        valorDesconto = configuracaoUnidade.getValorDescontoBoleto().multiply(new BigDecimal("100.0"));
+        desconto.setValor(valorDesconto.longValue());
+        
+        condicional = new DescontoCondicional();
+        if(configuracaoUnidade.getTipoDescontoBoleto()==ValidacaoConstantes.TP_DESCONTO_VALOR) {
+        	tipoDescontoCondicional = "currency";
+        } else {
+        	tipoDescontoCondicional = "percentage";
+        }
+        condicional.setTipo(tipoDescontoCondicional);
+        valorDescontoCondicional = configuracaoUnidade.getValorDescontoCondicionalBoleto().multiply(new BigDecimal("100.0"));
+        condicional.setValor(valorDescontoCondicional.longValue());
+        condicional.setDataMaxima(simpleDateFormat.format(request.getDataMaximaDescontoCondicionalBoleto()));
+        
+        multa = new Multa();
+        valorMulta = configuracaoUnidade.getValorMultaBoleto().multiply(new BigDecimal("100.0"));
+        multa.setMulta(valorMulta.longValue());
+        valorJurosDias = configuracaoUnidade.getValorJurosDiaBoleto().multiply(new BigDecimal("100.0"));
+        multa.setJurosDia(valorJurosDias.longValue());
+        
+        mensagem = request.getMensagem();
+		
+		operacoesBoleto = new OperacoesBoleto();
+		retorno = operacoesBoleto.gerarBoleto(dados, 
+											  itens,
+								              cliente,
+								              dataExpiracao,
+								              metadata,
+								              desconto,
+								              condicional,
+								              multa,
+								              mensagem);
+		if(!retorno) {
+			throw new ErroCriacaoChavePixException(operacoesBoleto.getErro());
+		}
+		return dados.getRetornoString();
+	}
+	
+	public String boletocancelarBoleto(String idBoleto) {
+		RetornoString dados = new RetornoString();
+		boolean retorno;
+		OperacoesBoleto operacoesBoleto;
+		
+		operacoesBoleto = new OperacoesBoleto();
+		retorno = operacoesBoleto.cancelarBoleto(dados, 
+												 idBoleto);  
+		if(!retorno) {
+			throw new ErroCriacaoChavePixException(operacoesBoleto.getErro());
 		}
 		return dados.getRetornoString();
 	}

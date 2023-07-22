@@ -6,6 +6,9 @@ public final class ValidacaoConstantes {
     public static final int TAMANHO_MAXIMO_TELEFONE = 20;
     public static final int TAMANHO_MAXIMO_EMAIL = 255;
     public static final int TAMANHO_MAXIMO_GRAU_PARENTESCO = 20;
+    
+    public static final int TP_DESCONTO_VALOR = 1;
+    public static final int TP_DESCONTO_PERCENTUAL = 2;
 
     private ValidacaoConstantes() {
     }

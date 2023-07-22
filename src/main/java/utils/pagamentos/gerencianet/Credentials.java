@@ -13,14 +13,24 @@ public class Credentials {
 	private boolean debug;
 	public static final int PRODUCAO = 1;
 	public static final int HOMOLOGACAO = 2;
+	public static final int PIX = 3;
+	public static final int PAGAMENTOS = 4;
 
-	public Credentials(int tipo) {
+	public Credentials(int tipo, int ambiente) {
 		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 		InputStream credentialsFile;
-		if(tipo == PRODUCAO) {
-			credentialsFile = classLoader.getResourceAsStream("pagamentos/gerencianet/credentialsProducao.json");
+		if(PIX == tipo) {
+			if(tipo == PRODUCAO) {
+				credentialsFile = classLoader.getResourceAsStream("pagamentos/gerencianet/credentialsPixProducao.json");
+			} else {
+				credentialsFile = classLoader.getResourceAsStream("pagamentos/gerencianet/credentialsPixHomologacao.json");
+			}
 		} else {
-			credentialsFile = classLoader.getResourceAsStream("pagamentos/gerencianet/credentialsHomologacao.json");
+			if(tipo == PRODUCAO) {
+				credentialsFile = classLoader.getResourceAsStream("pagamentos/gerencianet/credentialsPagamentosProducao.json");
+			} else {
+				credentialsFile = classLoader.getResourceAsStream("pagamentos/gerencianet/credentialsPagamentosHomologacao.json");
+			}
 		}
 		JSONTokener tokener = new JSONTokener(credentialsFile);
 		JSONObject credentials = new JSONObject(tokener);

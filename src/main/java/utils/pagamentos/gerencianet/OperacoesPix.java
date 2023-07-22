@@ -28,11 +28,19 @@ public class OperacoesPix {
 		erro = "";
 	}
 	
+	public void limparErro() {
+		erro = "";
+	}
+	
+	public String getErro() {
+		return erro;
+	}
+	
 	public boolean criarChave(RetornoString dados) {
 		
 		boolean retorno = false;
 		JSONObject response = null;
-		Credentials credentials = new Credentials(Credentials.PRODUCAO);
+		Credentials credentials = new Credentials(Credentials.PIX, Credentials.PRODUCAO);
 
 		JSONObject options = new JSONObject();
 		options.put("client_id", credentials.getClientId());
@@ -59,7 +67,7 @@ public class OperacoesPix {
 		
 		boolean retorno = false;
 		JSONObject response = null;
-		Credentials credentials = new Credentials(Credentials.PRODUCAO);
+		Credentials credentials = new Credentials(Credentials.PIX, Credentials.PRODUCAO);
 
 		JSONObject options = new JSONObject();
 		options.put("client_id", credentials.getClientId());
@@ -98,7 +106,7 @@ public class OperacoesPix {
 		
 		boolean retorno = false;
 		JSONObject response = null;
-		Credentials credentials = new Credentials(Credentials.PRODUCAO);
+		Credentials credentials = new Credentials(Credentials.PIX, Credentials.PRODUCAO);
 
 		JSONObject options = new JSONObject();
 		options.put("client_id", credentials.getClientId());
@@ -121,14 +129,6 @@ public class OperacoesPix {
 		return retorno;
 	}
 	
-	public void limparErro() {
-		erro = "";
-	}
-	
-	public String getErro() {
-		return erro;
-	}
-	
 	public boolean criarCobrancaImediataSemTxid(RetornoString dados, 
 												int expiracao,
 												String cpf,
@@ -139,7 +139,7 @@ public class OperacoesPix {
 		
 		boolean retorno = false;
 		JSONObject response = null;
-		Credentials credentials = new Credentials(Credentials.PRODUCAO);
+		Credentials credentials = new Credentials(Credentials.PIX, Credentials.PRODUCAO);
 
 		JSONObject options = new JSONObject();
 		options.put("client_id", credentials.getClientId());
@@ -179,7 +179,7 @@ public class OperacoesPix {
 
 		boolean retorno = false;
 		Map<String, Object> response;
-		Credentials credentials = new Credentials(Credentials.PRODUCAO);
+		Credentials credentials = new Credentials(Credentials.PIX, Credentials.PRODUCAO);
 
 		JSONObject options = new JSONObject();
 		options.put("client_id", credentials.getClientId());
@@ -220,7 +220,7 @@ public class OperacoesPix {
 	
 		boolean retorno = false;
 		JSONObject response;
-		Credentials credentials = new Credentials(Credentials.PRODUCAO);
+		Credentials credentials = new Credentials(Credentials.PIX, Credentials.PRODUCAO);
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
 		String complemento = "T00:00:00Z";
 		Date dtInicial = null; 
@@ -284,7 +284,7 @@ public class OperacoesPix {
 
 		boolean retorno = false;
 		JSONObject response;
-		Credentials credentials = new Credentials(Credentials.PRODUCAO);
+		Credentials credentials = new Credentials(Credentials.PIX, Credentials.PRODUCAO);
 		
 		JSONObject options = new JSONObject();
 		options.put("client_id", credentials.getClientId());
