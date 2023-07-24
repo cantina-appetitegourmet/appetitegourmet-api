@@ -141,7 +141,7 @@ public class OperacoesBoleto {
 			                   Multa multa,
 			                   String mensagem) {
 		boolean retorno = false;
-		Credentials credentials = new Credentials(Credentials.PAGAMENTOS, Credentials.HOMOLOGACAO);
+		Credentials credentials = new Credentials(Credentials.PAGAMENTOS, Credentials.PRODUCAO);
 		JSONArray jItems = new JSONArray();
 		JSONObject jCustomer = new JSONObject();
 		boolean metadataPresente = false;
@@ -207,7 +207,7 @@ public class OperacoesBoleto {
 	public boolean cancelarBoleto(RetornoString dados,
             					  String idBoleto) {
 		boolean retorno = false;
-		Credentials credentials = new Credentials(Credentials.PAGAMENTOS, Credentials.HOMOLOGACAO);
+		Credentials credentials = new Credentials(Credentials.PAGAMENTOS, Credentials.PRODUCAO);
 		HashMap<String, String> params = new HashMap<String, String>();
 		JSONObject options = new JSONObject();
 		
@@ -231,5 +231,36 @@ public class OperacoesBoleto {
 		}
 		return retorno;
 	}
+
+	
+	public boolean exibirBoleto(RetornoString dados,
+            					  String idBoleto) {
+		boolean retorno = false;
+		Credentials credentials = new Credentials(Credentials.PAGAMENTOS, Credentials.PRODUCAO);
+		HashMap<String, String> params = new HashMap<String, String>();
+		JSONObject options = new JSONObject();
+		
+		options.put("client_id", credentials.getClientId());
+		options.put("client_secret", credentials.getClientSecret());
+		options.put("sandbox", credentials.isSandbox());
+		
+		params.put("id", idBoleto);
+		
+		try {
+			Gerencianet gn = new Gerencianet(options);
+			JSONObject response = gn.call("detailCharge", params, new JSONObject());
+			dados.setRetornoString(response.toString());
+			retorno = true;
+		}catch (GerencianetException e){
+			erro = Integer.toString(e.getCode());
+			erro += " - " + e.getError();
+			erro += " - " + e.getErrorDescription();
+		}
+		catch (Exception e) {
+			erro = e.getMessage();
+		}
+		return retorno;
+	}
+
 
 }

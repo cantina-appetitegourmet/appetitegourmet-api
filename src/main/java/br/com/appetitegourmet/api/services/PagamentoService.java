@@ -10,12 +10,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 
-import br.com.appetitegourmet.api.models.ConfiguracaoUnidade;
+import br.com.appetitegourmet.api.models.Unidade;
 import br.com.appetitegourmet.api.models.Responsavel;
 
 import br.com.appetitegourmet.api.dto.BoletoGerarBoletoRequest;
 import br.com.appetitegourmet.api.exception.ErroCriacaoChavePixException;
-import br.com.appetitegourmet.api.repositories.ConfiguracaoUnidadeRepository;
+import br.com.appetitegourmet.api.repositories.UnidadeRepository;
 import br.com.appetitegourmet.api.repositories.ResponsavelRepository;
 import utils.RetornoString;
 import utils.ValidacaoConstantes;
@@ -32,14 +32,14 @@ import utils.pagamentos.gerencianet.OperacoesPix;
 public class PagamentoService {
 	
 	private final ResponsavelRepository responsavelRepository;
-	private final ConfiguracaoUnidadeRepository configuracaoUnidadeRepository;
+	private final UnidadeRepository unidadeRepository;
 	@Autowired
     private Environment env;
 	
 	public PagamentoService(ResponsavelRepository responsavelRepository, 
-			                ConfiguracaoUnidadeRepository configuracaoUnidadeRepository) {
+			                UnidadeRepository unidadeRepository) {
 		this.responsavelRepository = responsavelRepository;
-		this.configuracaoUnidadeRepository = configuracaoUnidadeRepository;
+		this.unidadeRepository = unidadeRepository;
 		
 	}
 
@@ -159,7 +159,7 @@ public class PagamentoService {
 		return dados.getRetornoString();
 	}
 	
-	public String boletogerarBoleto(BoletoGerarBoletoRequest request) {
+	public String boletoGerarBoleto(BoletoGerarBoletoRequest request) {
 		RetornoString dados = new RetornoString();
 		boolean retorno;
 		OperacoesBoleto operacoesBoleto;
@@ -180,8 +180,8 @@ public class PagamentoService {
         
         String urlNotification;
         boolean metadataPresente = false;
-        ConfiguracaoUnidade configuracaoUnidade = null;
-        Optional<ConfiguracaoUnidade> optConfig;
+        Unidade unidade = null;
+        Optional<Unidade> optUnidade;
         String tipoDesconto;
         String tipoDescontoCondicional;
         BigDecimal valorDesconto;
@@ -235,38 +235,38 @@ public class PagamentoService {
         	metadata = null;
         }
         
-        optConfig = configuracaoUnidadeRepository.findById(request.getIdUnidade());
-        if(optConfig.isPresent()) {
-        	configuracaoUnidade = optConfig.get();
+        optUnidade = unidadeRepository.findById(request.getIdUnidade());
+        if(optUnidade.isPresent()) {
+        	unidade = optUnidade.get();
         } else {
         	// @todo throw 
         }
         
         desconto = new Desconto();
-        if(configuracaoUnidade.getTipoDescontoBoleto()==ValidacaoConstantes.TP_DESCONTO_VALOR) {
+        if(unidade.getTipoDescontoBoleto()==ValidacaoConstantes.TP_DESCONTO_VALOR) {
         	tipoDesconto = "currency";
         } else {
         	tipoDesconto = "percentage";
         }
         desconto.setTipo(tipoDesconto);
-        valorDesconto = configuracaoUnidade.getValorDescontoBoleto().multiply(new BigDecimal("100.0"));
+        valorDesconto = unidade.getValorDescontoBoleto().multiply(new BigDecimal("100.0"));
         desconto.setValor(valorDesconto.longValue());
         
         condicional = new DescontoCondicional();
-        if(configuracaoUnidade.getTipoDescontoBoleto()==ValidacaoConstantes.TP_DESCONTO_VALOR) {
+        if(unidade.getTipoDescontoBoleto()==ValidacaoConstantes.TP_DESCONTO_VALOR) {
         	tipoDescontoCondicional = "currency";
         } else {
         	tipoDescontoCondicional = "percentage";
         }
         condicional.setTipo(tipoDescontoCondicional);
-        valorDescontoCondicional = configuracaoUnidade.getValorDescontoCondicionalBoleto().multiply(new BigDecimal("100.0"));
+        valorDescontoCondicional = unidade.getValorDescontoCondicionalBoleto().multiply(new BigDecimal("100.0"));
         condicional.setValor(valorDescontoCondicional.longValue());
         condicional.setDataMaxima(simpleDateFormat.format(request.getDataMaximaDescontoCondicionalBoleto()));
         
         multa = new Multa();
-        valorMulta = configuracaoUnidade.getValorMultaBoleto().multiply(new BigDecimal("100.0"));
+        valorMulta = unidade.getValorMultaBoleto().multiply(new BigDecimal("100.0"));
         multa.setMulta(valorMulta.longValue());
-        valorJurosDias = configuracaoUnidade.getValorJurosDiaBoleto().multiply(new BigDecimal("100.0"));
+        valorJurosDias = unidade.getValorJurosDiaBoleto().multiply(new BigDecimal("100.0"));
         multa.setJurosDia(valorJurosDias.longValue());
         
         mensagem = request.getMensagem();
@@ -287,7 +287,7 @@ public class PagamentoService {
 		return dados.getRetornoString();
 	}
 	
-	public String boletocancelarBoleto(String idBoleto) {
+	public String boletoCancelarBoleto(String idBoleto) {
 		RetornoString dados = new RetornoString();
 		boolean retorno;
 		OperacoesBoleto operacoesBoleto;
@@ -300,4 +300,20 @@ public class PagamentoService {
 		}
 		return dados.getRetornoString();
 	}
+	
+	
+	public String boletoExibirBoleto(String idBoleto) {
+		RetornoString dados = new RetornoString();
+		boolean retorno;
+		OperacoesBoleto operacoesBoleto;
+		
+		operacoesBoleto = new OperacoesBoleto();
+		retorno = operacoesBoleto.exibirBoleto(dados, 
+											   idBoleto);  
+		if(!retorno) {
+			throw new ErroCriacaoChavePixException(operacoesBoleto.getErro());
+		}
+		return dados.getRetornoString();
+	}
+
 }

@@ -20,13 +20,13 @@ public class Credentials {
 		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 		InputStream credentialsFile;
 		if(PIX == tipo) {
-			if(tipo == PRODUCAO) {
+			if(PRODUCAO == ambiente) {
 				credentialsFile = classLoader.getResourceAsStream("pagamentos/gerencianet/credentialsPixProducao.json");
 			} else {
 				credentialsFile = classLoader.getResourceAsStream("pagamentos/gerencianet/credentialsPixHomologacao.json");
 			}
 		} else {
-			if(tipo == PRODUCAO) {
+			if(PRODUCAO == ambiente) {
 				credentialsFile = classLoader.getResourceAsStream("pagamentos/gerencianet/credentialsPagamentosProducao.json");
 			} else {
 				credentialsFile = classLoader.getResourceAsStream("pagamentos/gerencianet/credentialsPagamentosHomologacao.json");

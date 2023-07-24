@@ -37,6 +37,12 @@ CREATE TABLE unidades (
   id SERIAL PRIMARY KEY,
   nome VARCHAR(60) NOT NULL,
   cantinaNome VARCHAR(60),
+  tipo_desconto_boleto INTEGER NOT NULL,
+  valor_desconto_boleto DECIMAL(10, 2) NOT NULL,
+  tipo_desconto_condicional_boleto INTEGER NOT NULL,
+  valor_desconto_condicional_boleto DECIMAL(10, 2) NOT NULL,
+  valor_multa_boleto DECIMAL(10, 2) NOT NULL,
+  valor_juros_dia_boleto DECIMAL(10, 2) NOT NULL,
   colegio_id INTEGER REFERENCES colegios(id),
   cantina_empresa_id INTEGER REFERENCES cantinas_empresa(id),
   endereco_id INTEGER REFERENCES enderecos(id),
@@ -44,17 +50,17 @@ CREATE TABLE unidades (
   UNIQUE (nome, colegio_id)
 );
 -- Inserindo as unidades do Colégio GGE
-INSERT INTO unidades (nome, cantinaNome, colegio_id, cantina_empresa_id, endereco_id) VALUES ('Boa Viagem', 'Appetite Gourmet GGE Boa Viagem', 1, 1, 1);
-INSERT INTO unidades (nome, colegio_id) VALUES ('Parnamirim', 1);
-INSERT INTO unidades (nome, colegio_id) VALUES ('Benfica', 1);
-INSERT INTO unidades (nome, colegio_id) VALUES ('Caruaru', 1);
+INSERT INTO unidades (nome, cantinaNome, tipo_desconto_boleto, valor_desconto_boleto, tipo_desconto_condicional_boleto, valor_desconto_condicional_boleto, valor_multa_boleto, valor_juros_dia_boleto, colegio_id, cantina_empresa_id, endereco_id) VALUES ('Boa Viagem', 'Appetite Gourmet GGE Boa Viagem', 2, 10.00, 2, 10.00, 2.00, 0.15, 1, 1, 1);
+INSERT INTO unidades (nome, tipo_desconto_boleto, valor_desconto_boleto, tipo_desconto_condicional_boleto, valor_desconto_condicional_boleto, valor_multa_boleto, valor_juros_dia_boleto, colegio_id) VALUES ('Parnamirim', 2, 10.00, 2, 10.00, 2.00, 0.15, 1);
+INSERT INTO unidades (nome, tipo_desconto_boleto, valor_desconto_boleto, tipo_desconto_condicional_boleto, valor_desconto_condicional_boleto, valor_multa_boleto, valor_juros_dia_boleto, colegio_id) VALUES ('Benfica', 2, 10.00, 2, 10.00, 2.00, 0.15, 1);
+INSERT INTO unidades (nome, tipo_desconto_boleto, valor_desconto_boleto, tipo_desconto_condicional_boleto, valor_desconto_condicional_boleto, valor_multa_boleto, valor_juros_dia_boleto, colegio_id) VALUES ('Caruaru', 2, 10.00, 2, 10.00, 2.00, 0.15, 1);
 -- Inserindo as unidades do Colégio CBV
-INSERT INTO unidades (nome, colegio_id) VALUES ('Boa Viagem', 2);
-INSERT INTO unidades (nome, colegio_id) VALUES ('Jaqueira', 2);
+INSERT INTO unidades (nome, tipo_desconto_boleto, valor_desconto_boleto, tipo_desconto_condicional_boleto, valor_desconto_condicional_boleto, valor_multa_boleto, valor_juros_dia_boleto, colegio_id) VALUES ('Boa Viagem', 2, 10.00, 2, 10.00, 2.00, 0.15, 2);
+INSERT INTO unidades (nome, tipo_desconto_boleto, valor_desconto_boleto, tipo_desconto_condicional_boleto, valor_desconto_condicional_boleto, valor_multa_boleto, valor_juros_dia_boleto, colegio_id) VALUES ('Jaqueira', 2, 10.00, 2, 10.00, 2.00, 0.15, 2);
 -- Inserindo as unidades do Colégio Equipe
-INSERT INTO unidades (nome, colegio_id) VALUES ('Recife', 3);
+INSERT INTO unidades (nome, tipo_desconto_boleto, valor_desconto_boleto, tipo_desconto_condicional_boleto, valor_desconto_condicional_boleto, valor_multa_boleto, valor_juros_dia_boleto, colegio_id) VALUES ('Recife', 2, 10.00, 2, 10.00, 2.00, 0.15, 3);
 -- Inserindo as unidades do Colégio Diocesano
-INSERT INTO unidades (nome, colegio_id) VALUES ('Caruaru', 4);
+INSERT INTO unidades (nome, tipo_desconto_boleto, valor_desconto_boleto, tipo_desconto_condicional_boleto, valor_desconto_condicional_boleto, valor_multa_boleto, valor_juros_dia_boleto, colegio_id) VALUES ('Caruaru', 2, 10.00, 2, 10.00, 2.00, 0.15, 4);
 
 
 CREATE TABLE series (
@@ -102,6 +108,7 @@ INSERT INTO anos_serie_unidade (ano_serie_id, unidade_id)
 SELECT anos_serie.id, unidades.id
 FROM anos_serie, unidades;
 
+/*
 CREATE TYPE turnos_enum AS ENUM (
   -- 'M' Manhã
   'M',
@@ -110,19 +117,36 @@ CREATE TYPE turnos_enum AS ENUM (
   -- 'N' Noite
   'N'
 );
+
 CREATE TABLE ano_serie_unidade_turnos (
   id SERIAL PRIMARY KEY,
   ano_serie_unidade_id INTEGER REFERENCES anos_serie_unidade(id),
   turno CHAR(1) CHECK (turno IN ('M', 'T', 'N')) NOT NULL,
   UNIQUE (ano_serie_unidade_id, turno)
 );
+*/
+CREATE TABLE ano_serie_unidade_turnos (
+  id SERIAL PRIMARY KEY,
+  ano_serie_unidade_id INTEGER REFERENCES anos_serie_unidade(id),
+  turno CHAR(1) NOT NULL,
+  UNIQUE (ano_serie_unidade_id, turno)
+);
+INSERT INTO ano_serie_unidade_turnos (ano_serie_unidade_id, turno)
+SELECT a.id, 'M' FROM anos_serie_unidade a;
+INSERT INTO ano_serie_unidade_turnos (ano_serie_unidade_id, turno)
+SELECT a.id, 'T' FROM anos_serie_unidade a;
+INSERT INTO ano_serie_unidade_turnos (ano_serie_unidade_id, turno)
+SELECT a.id, 'N' FROM anos_serie_unidade a;
+/*
 INSERT INTO ano_serie_unidade_turnos (ano_serie_unidade_id, turno)
 SELECT a.id, t
 FROM anos_serie_unidade a
 CROSS JOIN unnest(enum_range(null::turnos_enum)) t;
+*/
 
-
+/*
 CREATE TYPE turmas_enum AS ENUM ('A', 'B', 'C', 'D', 'E', 'F');
+*/
 CREATE TABLE turmas (
   id SERIAL PRIMARY KEY,
   ano_serie_unidade_turno_id INTEGER REFERENCES ano_serie_unidade_turnos(id),
@@ -130,9 +154,23 @@ CREATE TABLE turmas (
   UNIQUE (ano_serie_unidade_turno_id, turma)
 );
 INSERT INTO turmas (ano_serie_unidade_turno_id, turma)
+SELECT ast.id, 'A' FROM ano_serie_unidade_turnos ast;
+INSERT INTO turmas (ano_serie_unidade_turno_id, turma)
+SELECT ast.id, 'B' FROM ano_serie_unidade_turnos ast;
+INSERT INTO turmas (ano_serie_unidade_turno_id, turma)
+SELECT ast.id, 'C' FROM ano_serie_unidade_turnos ast;
+INSERT INTO turmas (ano_serie_unidade_turno_id, turma)
+SELECT ast.id, 'D' FROM ano_serie_unidade_turnos ast;
+INSERT INTO turmas (ano_serie_unidade_turno_id, turma)
+SELECT ast.id, 'E' FROM ano_serie_unidade_turnos ast;
+INSERT INTO turmas (ano_serie_unidade_turno_id, turma)
+SELECT ast.id, 'F' FROM ano_serie_unidade_turnos ast;
+/*
+INSERT INTO turmas (ano_serie_unidade_turno_id, turma)
 SELECT ast.id, te
 FROM ano_serie_unidade_turnos ast
 CROSS JOIN unnest(enum_range(NULL::turmas_enum)) AS te;
+*/
 
 CREATE TABLE anos_letivos (
   id SERIAL PRIMARY KEY,

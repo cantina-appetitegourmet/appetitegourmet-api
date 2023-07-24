@@ -1,5 +1,7 @@
 package br.com.appetitegourmet.api.models;
 
+import java.math.BigDecimal;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -31,6 +33,24 @@ public class Unidade {
     
     @Column(name = "cantinanome", nullable = false, length=Colunas.NOME)
     private String nome_unidade_negocio;
+    
+    @Column(name = "tipo_desconto_boleto", nullable = false)
+	private Integer tipoDescontoBoleto;
+	
+	@Column(name = "valor_desconto_boleto", nullable = false)
+    private BigDecimal valorDescontoBoleto;
+	
+	@Column(name = "tipo_desconto_condicional_boleto", nullable = false)
+	private Integer tipoDescontoCondicionalBoleto;
+	
+	@Column(name = "valor_desconto_condicional_boleto", nullable = false)
+    private BigDecimal valorDescontoCondicionalBoleto;
+	
+	@Column(name = "valor_multa_boleto", nullable = false)
+    private BigDecimal valorMultaBoleto;
+	
+	@Column(name = "valor_juros_dia_boleto", nullable = false)
+    private BigDecimal valorJurosDiaBoleto;
     
     @OneToOne
     @JoinColumn(name = "endereco_id", nullable = true)

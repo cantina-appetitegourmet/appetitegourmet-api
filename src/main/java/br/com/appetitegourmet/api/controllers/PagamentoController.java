@@ -124,12 +124,18 @@ public class PagamentoController {
 	@PostMapping
 	@RequestMapping("/pagamentos/boletoGerarBoleto")
     public String boletoGerarBoleto(@RequestBody BoletoGerarBoletoRequest request) {
-        return pagamentoService.boletogerarBoleto(request);
+        return pagamentoService.boletoGerarBoleto(request);
     }
 	
 	@DeleteMapping
 	@RequestMapping("/pagamentos/boletoCancelarBoleto/{id}")
     public String boletoCancelarBoleto(@PathVariable String id) {
-        return pagamentoService.boletocancelarBoleto(id);
+        return pagamentoService.boletoCancelarBoleto(id);
+    }
+	
+	@GetMapping
+	@RequestMapping("/pagamentos/boletoExibirBoleto/{id}")
+    public String boletoExibirBoleto(@PathVariable String id) {
+        return pagamentoService.boletoExibirBoleto(id);
     }
 }
