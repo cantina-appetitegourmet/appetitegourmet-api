@@ -24,6 +24,10 @@ public class Contrato {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+	
+	@ManyToOne
+    @JoinColumn(name = "unidade_id", nullable = false)
+    private Unidade unidade;
     
     @ManyToOne
     @JoinColumn(name = "responsavel_aluno_id", nullable = false)

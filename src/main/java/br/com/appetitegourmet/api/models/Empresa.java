@@ -41,6 +41,21 @@ public class Empresa {
 	@Column(nullable = false, length=Colunas.NOME)
     private String nomeFantasia;
 	
+	@Column(name = "id_empresa_integracao_pix", nullable = true)
+    private Integer idEmpresaIntegracaoPix;
+	
+	@Column(nullable = true)
+    private String dadosIntegracaoPix;
+	
+	@Column(nullable = true)
+    private String chavePix;
+	
+	@Column(name = "id_empresa_integracao_boleto", nullable = true)
+    private Integer idEmpresaIntegracaoBoleto;
+	
+	@Column(nullable = true)
+    private String dadosIntegracaoBoleto;
+	
 	@OneToOne
     @JoinColumn(name = "endereco_id", nullable = true)
     private Endereco endereco;

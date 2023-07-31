@@ -2,7 +2,6 @@ package br.com.appetitegourmet.api.models;
 
 import java.math.BigDecimal;
 import java.sql.Date;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

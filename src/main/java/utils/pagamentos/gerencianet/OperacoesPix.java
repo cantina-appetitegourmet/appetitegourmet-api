@@ -162,7 +162,11 @@ public class OperacoesPix {
 		try {
 			Gerencianet gn = new Gerencianet(options);
 			response = gn.call("pixCreateImmediateCharge", new HashMap<String,String>(), body);
-			dados.setRetornoString(response.toString());
+			JSONObject loc = response.getJSONObject("loc");
+			String dadosRetorno = "";
+			dadosRetorno = "{ \"id\":" + loc.getString("id") + ",";
+			dadosRetorno += "\"txid\":\"" + response.getString("txid") + "\"}";
+			dados.setRetornoString(dadosRetorno);
 			retorno = true;
 		}catch (GerencianetException e){
 			erro = e.getError();
@@ -193,11 +197,7 @@ public class OperacoesPix {
 		try {
 			Gerencianet gn = new Gerencianet(options);
 			response = gn.call("pixGenerateQRCode", params, new HashMap<String, Object>());
-			File outputfile = new File("qrCodeImage.png");
-	        ImageIO.write(ImageIO.read(new ByteArrayInputStream(javax.xml.bind.DatatypeConverter.parseBase64Binary(((String) response.get("imagemQrcode")).split(",")[1]))), "png", outputfile);
-	        Desktop desktop = Desktop.getDesktop();
-			desktop.open(outputfile);
-			dados.setRetornoString("Sucesso");
+			dados.setRetornoString(response.toString());
 			retorno = true;
 		}catch (GerencianetException e){
 			erro = e.getError();

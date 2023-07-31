@@ -15,6 +15,7 @@ INSERT INTO desconto (motivo, valor_percentual) VALUES
  
 CREATE TABLE contrato (
   id SERIAL PRIMARY KEY,
+  unidade_id INTEGER REFERENCES unidades(id),
   responsavel_aluno_id INTEGER REFERENCES responsavel_aluno(id),
   turma_anos_letivos_id INTEGER REFERENCES turma_anos_letivos(id),
   data_adesao DATE DEFAULT CURRENT_DATE

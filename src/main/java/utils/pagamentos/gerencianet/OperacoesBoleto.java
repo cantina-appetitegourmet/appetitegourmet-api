@@ -164,18 +164,30 @@ public class OperacoesBoleto {
 		metadataPresente = adicionarMetadata(jMetadata, metadata);
 		//customer
 		adicionarCliente(jCustomer, cliente);
-		//discount		
-		adicionarDesconto(jDiscount, desconto);
-		//conditional discount
-		adicionarDescontoCondicional(jConditionalDiscount, condicional);
+		if(desconto != null) {
+			//discount		
+			adicionarDesconto(jDiscount, desconto);
+		}
+		if(condicional != null) {
+			//conditional discount
+			adicionarDescontoCondicional(jConditionalDiscount, condicional);
+		}
 		//configurations
 		adicionarMulta(jMulta, multa);
 		
 		jBoletoBancario.put("expire_at", dataExpiracao);
 		jBoletoBancario.put("customer", jCustomer);
-		jBoletoBancario.put("discount", jDiscount);
+		
+		if(desconto != null) {
+			jBoletoBancario.put("discount", jDiscount);
+		}
+		
 		jBoletoBancario.put("configurations", jMulta);
-		jBoletoBancario.put("conditional_discount", jConditionalDiscount);
+		
+		if(condicional != null) {
+			jBoletoBancario.put("conditional_discount", jConditionalDiscount);
+		}
+		
 		if(mensagem != null) {
 			jBoletoBancario.put("message", mensagem);
 		}

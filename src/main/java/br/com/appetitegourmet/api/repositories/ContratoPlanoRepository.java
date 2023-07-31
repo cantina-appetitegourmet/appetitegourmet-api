@@ -14,4 +14,5 @@ public interface ContratoPlanoRepository extends JpaRepository<ContratoPlano, Lo
 
 	List<Contrato> findByContratoId(Long responsavelAlunoId);
 	List<PlanoAlimentarPreco> findByPlanoAlimentarPrecoId(Long planoAlimentarPrecoId);
+	List<ContratoPlano> findByContrato(Contrato contrato);
 }

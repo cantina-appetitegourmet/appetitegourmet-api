@@ -5,23 +5,30 @@ import java.util.Optional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import org.springframework.stereotype.Service;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 
 import br.com.appetitegourmet.api.models.Unidade;
+import br.com.appetitegourmet.api.models.Contrato;
+import br.com.appetitegourmet.api.models.ContratoPlano;
+import br.com.appetitegourmet.api.models.Pagamento;
 import br.com.appetitegourmet.api.models.Responsavel;
-
-import br.com.appetitegourmet.api.dto.BoletoGerarBoletoRequest;
+import br.com.appetitegourmet.api.models.ResponsavelAluno;
 import br.com.appetitegourmet.api.exception.ErroCriacaoChavePixException;
 import br.com.appetitegourmet.api.repositories.UnidadeRepository;
+import br.com.appetitegourmet.api.repositories.ContratoPlanoRepository;
+import br.com.appetitegourmet.api.repositories.ContratoRepository;
+import br.com.appetitegourmet.api.repositories.PagamentoRepository;
+import br.com.appetitegourmet.api.repositories.ResponsavelAlunoRepository;
 import br.com.appetitegourmet.api.repositories.ResponsavelRepository;
 import utils.RetornoString;
 import utils.ValidacaoConstantes;
 import utils.pagamentos.gerencianet.Cliente;
-import utils.pagamentos.gerencianet.Desconto;
-import utils.pagamentos.gerencianet.DescontoCondicional;
 import utils.pagamentos.gerencianet.ItemPedido;
 import utils.pagamentos.gerencianet.Metadata;
 import utils.pagamentos.gerencianet.Multa;
@@ -32,14 +39,20 @@ import utils.pagamentos.gerencianet.OperacoesPix;
 public class PagamentoService {
 	
 	private final ResponsavelRepository responsavelRepository;
-	private final UnidadeRepository unidadeRepository;
+	private final ContratoRepository contratoRepository;
+	private final ContratoPlanoRepository contratoPlanoRepository;
+	private final PagamentoRepository pagamentoRepository;
+	private final ResponsavelAlunoRepository responsavelAlunoRepository;
 	@Autowired
     private Environment env;
 	
 	public PagamentoService(ResponsavelRepository responsavelRepository, 
-			                UnidadeRepository unidadeRepository) {
+			                UnidadeRepository unidadeRepository, ContratoRepository contratoRepository, ContratoPlanoRepository contratoPlanoRepository, PagamentoRepository pagamentoRepository, ResponsavelAlunoRepository responsavelAlunoRepository) {
 		this.responsavelRepository = responsavelRepository;
-		this.unidadeRepository = unidadeRepository;
+		this.contratoRepository = contratoRepository;
+		this.contratoPlanoRepository = contratoPlanoRepository;
+		this.pagamentoRepository = pagamentoRepository;
+		this.responsavelAlunoRepository = responsavelAlunoRepository;
 		
 	}
 
@@ -82,15 +95,69 @@ public class PagamentoService {
 		return dados.getRetornoString();
 	}
 	
-	public String pixCobrancaImediataSemTxid(String cpf, 
-											 String nome, 
-											 String valor, 
-											 String chave,
-											 String solicitacao) {
+	public String pixCobrancaImediataSemTxid(Long idContrato) {
 		RetornoString dados = new RetornoString();
 		boolean retorno;
 		OperacoesPix operacoesPix;
 		int expiracao = 3600*24*10;
+		String cpf = null; 
+		String nome = null;
+		String valor = null; 
+		String chave = null;
+		String solicitacao = null;
+		Contrato contrato;
+		Optional<Contrato> optContrato;
+		List<ContratoPlano> listaContratoPlano;
+		BigDecimal total;
+		Pagamento pagamento;
+		Integer idPix;
+		JSONObject dadosRetorno;
+		String retornoFinal;
+		ContratoPlano contratoPlano;
+		Optional<ResponsavelAluno> optRespAluno;
+		ResponsavelAluno respAluno;
+		
+		optContrato = contratoRepository.findById(idContrato);
+		if(!optContrato.isPresent()) {
+			// @todo levantar excessao
+		}
+		contrato = optContrato.get();
+		
+		
+		optRespAluno = responsavelAlunoRepository.findById(contrato.getResponsavelAluno().getId());
+		if(!optRespAluno.isPresent()) {
+			// @todo levanta excessao
+		}
+		
+		respAluno = optRespAluno.get();
+		
+		System.out.println("respAluno=" + respAluno.toString());
+		
+		cpf = respAluno.getResponsavel().getPessoa().getCpf();
+		nome = respAluno.getResponsavel().getPessoa().getNomeCompleto();
+		
+		listaContratoPlano = contratoPlanoRepository.findByContrato(contrato);
+		if(listaContratoPlano.isEmpty()) {
+			// @todo levantar excessao
+		}
+		
+		contratoPlano = new ContratoPlano();
+		total = ValidacaoConstantes.totalizaContratoPlano(listaContratoPlano);
+		
+		pagamento = new Pagamento();
+		pagamento.setContrato(contrato);
+		pagamento.setIdEmpresaIntegracao(ValidacaoConstantes.EMPRESA_GERENCIANET);
+		pagamento.setIdMeioPagamento(ValidacaoConstantes.PAGAMENTO_TIPO_PIX);		
+		pagamento.setIdStatus(ValidacaoConstantes.STATUS_GERADO);
+		pagamento.setValor(total);
+		
+		total = total.multiply(new BigDecimal("100"));
+		valor = Integer.toString(total.intValue());
+		
+		chave = contrato.getUnidade().getEmpresa().getChavePix();
+		
+		solicitacao = "Pagamento Adesão";
+		
 		
 		operacoesPix = new OperacoesPix();
 		retorno = operacoesPix.criarCobrancaImediataSemTxid(dados, 
@@ -99,14 +166,32 @@ public class PagamentoService {
 															nome, 
 															valor, 
 															chave, 
-															solicitacao);  
+															solicitacao); 
+		pagamento.setDados(dados.getRetornoString());
+		pagamentoRepository.save(pagamento);
+		
 		if(!retorno) {
 			throw new ErroCriacaoChavePixException(operacoesPix.getErro());
 		}
-		return dados.getRetornoString();
+		
+		dadosRetorno = new JSONObject(dados.getRetornoString());
+		
+		idPix = dadosRetorno.getInt("id");
+		
+		dados = new RetornoString();
+		operacoesPix = new OperacoesPix();
+		retorno = operacoesPix.criarQrCode(dados, idPix);
+		
+		if(!retorno) {
+			throw new ErroCriacaoChavePixException(operacoesPix.getErro());
+		}
+		
+		retornoFinal = dados.getRetornoString();
+		
+		return retornoFinal;
 	}
 	
-	public String criarQrCode(Integer id) {
+	public String pixCriarQrCode(Integer id) {
 		RetornoString dados = new RetornoString();
 		boolean retorno;
 		OperacoesPix operacoesPix;
@@ -159,7 +244,7 @@ public class PagamentoService {
 		return dados.getRetornoString();
 	}
 	
-	public String boletoGerarBoleto(BoletoGerarBoletoRequest request) {
+	public String boletoGerarBoleto(Long idContrato) {
 		RetornoString dados = new RetornoString();
 		boolean retorno;
 		OperacoesBoleto operacoesBoleto;
@@ -168,32 +253,49 @@ public class PagamentoService {
         Cliente cliente;
         String dataExpiracao;
         Metadata metadata;
-        Desconto desconto;
-        DescontoCondicional condicional;
         Multa multa;
         String mensagem;
         BigDecimal valorItem;
+        Contrato contrato;
+		Optional<Contrato> optContrato;
+		List<ContratoPlano> listaContratoPlano;
+		BigDecimal total;
+		Pagamento pagamento;
+		Pagamento pagamentoBD;
+		ContratoPlano contratoPlano;
+		JSONObject dadosRetorno;
+		JSONObject data;
+		
+		optContrato = contratoRepository.findById(idContrato);
+		if(!optContrato.isPresent()) {
+			// @todo levantar excessao
+		}
+		contrato = optContrato.get();
         
         Responsavel responsavel = null;
-        Optional<Responsavel> optResponsavel = responsavelRepository.findById(request.getIdResonsavel());
+        Optional<Responsavel> optResponsavel = responsavelRepository.findById(contrato.getResponsavelAluno().getResponsavel().getId());
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         
         String urlNotification;
         boolean metadataPresente = false;
         Unidade unidade = null;
-        Optional<Unidade> optUnidade;
-        String tipoDesconto;
-        String tipoDescontoCondicional;
-        BigDecimal valorDesconto;
-        BigDecimal valorDescontoCondicional;
         BigDecimal valorMulta;
         BigDecimal valorJurosDias;
                 
         itens = new ArrayList<ItemPedido>();
         item = new ItemPedido();
-        item.setDescricao(request.getDescricao());
+        item.setDescricao("Pagamento Adesão");
         item.setQuantidade(1);
-        valorItem = request.getValor().multiply(new BigDecimal("100.0"));
+        
+        listaContratoPlano = contratoPlanoRepository.findByContrato(contrato);
+		if(listaContratoPlano.isEmpty()) {
+			// @todo levantar excessao
+		}
+		
+		contratoPlano = new ContratoPlano();
+		total = ValidacaoConstantes.totalizaContratoPlano(listaContratoPlano);
+        
+        valorItem = total.multiply(new BigDecimal("100.0"));
         item.setValor(valorItem.longValue());
         itens.add(item);
         
@@ -219,11 +321,23 @@ public class PagamentoService {
         cliente.setRua(responsavel.getPessoa().getEndereco().getLogradouro());
         cliente.setTelefone(responsavel.getPessoa().getTelefone());
         
-        dataExpiracao = simpleDateFormat.format(request.getDataExpiracao());
+        LocalDate hoje = LocalDate.now();
+        LocalDate amanha = hoje.plusDays(15);
+        DateTimeFormatter formatters = DateTimeFormatter.ofPattern("uuuu-MM-dd");
+        dataExpiracao = amanha.format(formatters);
+        
+        pagamento = new Pagamento();
+		pagamento.setContrato(contrato);
+		pagamento.setIdEmpresaIntegracao(ValidacaoConstantes.EMPRESA_GERENCIANET);
+		pagamento.setIdMeioPagamento(ValidacaoConstantes.PAGAMENTO_TIPO_BOLETO);		
+		pagamento.setIdStatus(ValidacaoConstantes.STATUS_GERADO);
+		pagamento.setValor(total);
+		
+		pagamentoBD = pagamentoRepository.save(pagamento);
         
         metadata = new Metadata();
-        if(request.getIdPagamento() != null) {
-        	metadata.setIdBoleto(request.getIdPagamento().toString());
+        if(pagamentoBD.getId() != null) {
+        	metadata.setIdBoleto(pagamentoBD.getId().toString());
         	metadataPresente = true;
         }
         urlNotification = env.getProperty("urlNotification");
@@ -235,13 +349,8 @@ public class PagamentoService {
         	metadata = null;
         }
         
-        optUnidade = unidadeRepository.findById(request.getIdUnidade());
-        if(optUnidade.isPresent()) {
-        	unidade = optUnidade.get();
-        } else {
-        	// @todo throw 
-        }
-        
+        unidade = contrato.getUnidade();
+        /*
         desconto = new Desconto();
         if(unidade.getTipoDescontoBoleto()==ValidacaoConstantes.TP_DESCONTO_VALOR) {
         	tipoDesconto = "currency";
@@ -262,6 +371,7 @@ public class PagamentoService {
         valorDescontoCondicional = unidade.getValorDescontoCondicionalBoleto().multiply(new BigDecimal("100.0"));
         condicional.setValor(valorDescontoCondicional.longValue());
         condicional.setDataMaxima(simpleDateFormat.format(request.getDataMaximaDescontoCondicionalBoleto()));
+        */
         
         multa = new Multa();
         valorMulta = unidade.getValorMultaBoleto().multiply(new BigDecimal("100.0"));
@@ -269,7 +379,7 @@ public class PagamentoService {
         valorJurosDias = unidade.getValorJurosDiaBoleto().multiply(new BigDecimal("100.0"));
         multa.setJurosDia(valorJurosDias.longValue());
         
-        mensagem = request.getMensagem();
+        mensagem = "Pagamento Adesao";
 		
 		operacoesBoleto = new OperacoesBoleto();
 		retorno = operacoesBoleto.gerarBoleto(dados, 
@@ -277,13 +387,20 @@ public class PagamentoService {
 								              cliente,
 								              dataExpiracao,
 								              metadata,
-								              desconto,
-								              condicional,
+								              null,
+								              null,
 								              multa,
 								              mensagem);
 		if(!retorno) {
 			throw new ErroCriacaoChavePixException(operacoesBoleto.getErro());
 		}
+		
+		dadosRetorno = new JSONObject(dados.getRetornoString());
+		
+		data = dadosRetorno.getJSONObject("data");
+		
+		pagamento.setDados(data.getString("charge_id"));
+		
 		return dados.getRetornoString();
 	}
 	

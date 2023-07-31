@@ -28,10 +28,15 @@ CREATE TABLE cantinas_empresa (
   inscricao_municipal VARCHAR(45) UNIQUE,
   razao_social VARCHAR(60) NOT NULL UNIQUE,
   nome_fantasia VARCHAR(60) NOT NULL,
+  id_empresa_integracao_pix INTEGER NULL,
+  dados_integracao_pix VARCHAR(1000) NULL,
+  chave_pix VARCHAR(100) NULL,
+  id_empresa_integracao_boleto INTEGER NULL,
+  dados_integracao_boleto VARCHAR(1000) NULL,
   endereco_id INTEGER REFERENCES enderecos(id),
   ativo BOOLEAN DEFAULT true
 );
-INSERT INTO cantinas_empresa (cnpj, inscricao_estadual, inscricao_municipal, razao_social, nome_fantasia, endereco_id) VALUES ('24.687.382/0001-31', '0670910-91', NULL, 'Mgd Servicos de Alimentacao LTDA', 'Appetite Gourmet', 1);
+INSERT INTO cantinas_empresa (cnpj, inscricao_estadual, inscricao_municipal, razao_social, nome_fantasia, id_empresa_integracao_pix, dados_integracao_pix, chave_pix, id_empresa_integracao_boleto, dados_integracao_boleto, endereco_id) VALUES ('24.687.382/0001-31', '0670910-91', NULL, 'Mgd Servicos de Alimentacao LTDA', 'Appetite Gourmet', 1, '{ "client_id": "Client_Id_51ded938f2204f162606c18cd1d6f1416084ae94", "client_secret": "Client_Secret_166e8b066f546f1d67a92400019e18b80b0797d7", "certificate": "./certs/pagamentos/gerencianet/producao-461469-cantina-prod.p12", "sandbox": false, "debug": false }', '8cf064ef-cba8-4328-91db-eb411897f34f', 1, '{ "client_id": "Client_Id_27fc608a43dff1bf4bc81549c5ba7d0cdc3c8c2b", "client_secret": "Client_Secret_20cc5ccd32ce678fcf78863d7808cd5147d60da8", "certificate": "./certs/pagamentos/gerencianet/producao-461469-cantina-prod.p12", "sandbox": false, "debug": false', 1);
 
 CREATE TABLE unidades (
   id SERIAL PRIMARY KEY,
@@ -51,16 +56,16 @@ CREATE TABLE unidades (
 );
 -- Inserindo as unidades do Colégio GGE
 INSERT INTO unidades (nome, cantinaNome, tipo_desconto_boleto, valor_desconto_boleto, tipo_desconto_condicional_boleto, valor_desconto_condicional_boleto, valor_multa_boleto, valor_juros_dia_boleto, colegio_id, cantina_empresa_id, endereco_id) VALUES ('Boa Viagem', 'Appetite Gourmet GGE Boa Viagem', 2, 10.00, 2, 10.00, 2.00, 0.15, 1, 1, 1);
-INSERT INTO unidades (nome, tipo_desconto_boleto, valor_desconto_boleto, tipo_desconto_condicional_boleto, valor_desconto_condicional_boleto, valor_multa_boleto, valor_juros_dia_boleto, colegio_id) VALUES ('Parnamirim', 2, 10.00, 2, 10.00, 2.00, 0.15, 1);
-INSERT INTO unidades (nome, tipo_desconto_boleto, valor_desconto_boleto, tipo_desconto_condicional_boleto, valor_desconto_condicional_boleto, valor_multa_boleto, valor_juros_dia_boleto, colegio_id) VALUES ('Benfica', 2, 10.00, 2, 10.00, 2.00, 0.15, 1);
-INSERT INTO unidades (nome, tipo_desconto_boleto, valor_desconto_boleto, tipo_desconto_condicional_boleto, valor_desconto_condicional_boleto, valor_multa_boleto, valor_juros_dia_boleto, colegio_id) VALUES ('Caruaru', 2, 10.00, 2, 10.00, 2.00, 0.15, 1);
+INSERT INTO unidades (nome, cantinaNome, tipo_desconto_boleto, valor_desconto_boleto, tipo_desconto_condicional_boleto, valor_desconto_condicional_boleto, valor_multa_boleto, valor_juros_dia_boleto, colegio_id) VALUES ('Parnamirim', 'Appetite Gourmet GGE Parnamirim', 2, 10.00, 2, 10.00, 2.00, 0.15, 1);
+INSERT INTO unidades (nome, cantinaNome, tipo_desconto_boleto, valor_desconto_boleto, tipo_desconto_condicional_boleto, valor_desconto_condicional_boleto, valor_multa_boleto, valor_juros_dia_boleto, colegio_id) VALUES ('Benfica', 'Appetite Gourmet GGE Benfica', 2, 10.00, 2, 10.00, 2.00, 0.15, 1);
+INSERT INTO unidades (nome, cantinaNome, tipo_desconto_boleto, valor_desconto_boleto, tipo_desconto_condicional_boleto, valor_desconto_condicional_boleto, valor_multa_boleto, valor_juros_dia_boleto, colegio_id) VALUES ('Caruaru', 'Appetite Gourmet GGE Caruaru', 2, 10.00, 2, 10.00, 2.00, 0.15, 1);
 -- Inserindo as unidades do Colégio CBV
-INSERT INTO unidades (nome, tipo_desconto_boleto, valor_desconto_boleto, tipo_desconto_condicional_boleto, valor_desconto_condicional_boleto, valor_multa_boleto, valor_juros_dia_boleto, colegio_id) VALUES ('Boa Viagem', 2, 10.00, 2, 10.00, 2.00, 0.15, 2);
-INSERT INTO unidades (nome, tipo_desconto_boleto, valor_desconto_boleto, tipo_desconto_condicional_boleto, valor_desconto_condicional_boleto, valor_multa_boleto, valor_juros_dia_boleto, colegio_id) VALUES ('Jaqueira', 2, 10.00, 2, 10.00, 2.00, 0.15, 2);
+INSERT INTO unidades (nome, cantinaNome, tipo_desconto_boleto, valor_desconto_boleto, tipo_desconto_condicional_boleto, valor_desconto_condicional_boleto, valor_multa_boleto, valor_juros_dia_boleto, colegio_id) VALUES ('Boa Viagem', 'Appetite Gourmet CBV Boa Viagem', 2, 10.00, 2, 10.00, 2.00, 0.15, 2);
+INSERT INTO unidades (nome, cantinaNome, tipo_desconto_boleto, valor_desconto_boleto, tipo_desconto_condicional_boleto, valor_desconto_condicional_boleto, valor_multa_boleto, valor_juros_dia_boleto, colegio_id) VALUES ('Jaqueira', 'Appetite Gourmet CBV Jaqueira', 2, 10.00, 2, 10.00, 2.00, 0.15, 2);
 -- Inserindo as unidades do Colégio Equipe
-INSERT INTO unidades (nome, tipo_desconto_boleto, valor_desconto_boleto, tipo_desconto_condicional_boleto, valor_desconto_condicional_boleto, valor_multa_boleto, valor_juros_dia_boleto, colegio_id) VALUES ('Recife', 2, 10.00, 2, 10.00, 2.00, 0.15, 3);
+INSERT INTO unidades (nome, cantinaNome, tipo_desconto_boleto, valor_desconto_boleto, tipo_desconto_condicional_boleto, valor_desconto_condicional_boleto, valor_multa_boleto, valor_juros_dia_boleto, colegio_id) VALUES ('Recife', 'Appetite Gourmet Equipe Recife', 2, 10.00, 2, 10.00, 2.00, 0.15, 3);
 -- Inserindo as unidades do Colégio Diocesano
-INSERT INTO unidades (nome, tipo_desconto_boleto, valor_desconto_boleto, tipo_desconto_condicional_boleto, valor_desconto_condicional_boleto, valor_multa_boleto, valor_juros_dia_boleto, colegio_id) VALUES ('Caruaru', 2, 10.00, 2, 10.00, 2.00, 0.15, 4);
+INSERT INTO unidades (nome, cantinaNome, tipo_desconto_boleto, valor_desconto_boleto, tipo_desconto_condicional_boleto, valor_desconto_condicional_boleto, valor_multa_boleto, valor_juros_dia_boleto, colegio_id) VALUES ('Caruaru', 'Appetite Gourmet Diocesano Caruaru', 2, 10.00, 2, 10.00, 2.00, 0.15, 4);
 
 
 CREATE TABLE series (
