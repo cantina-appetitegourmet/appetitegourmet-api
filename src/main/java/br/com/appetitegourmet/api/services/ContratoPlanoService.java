@@ -41,18 +41,22 @@ public class ContratoPlanoService {
     public ContratoPlano salvarContratoPlano(ContratoPlano contratoPlano) {
     	if(contratoPlano.getContrato() != null) {
     		Contrato retorno;
-    		retorno = contratoRepository.save(contratoPlano.getContrato());
-    		if(retorno == null) {
-    			new Exception("Falha ao inserir o Contrato");
+    		Optional<Contrato> opt;
+    		opt = contratoRepository.findById(contratoPlano.getContrato().getId());
+    		if(!opt.isPresent()) {
+    			new Exception("Falha, Contrato(" + Long.toString(contratoPlano.getContrato().getId()) + ") inexistente");
     		}
+    		retorno = opt.get();
     		contratoPlano.setContrato(retorno);
     	}
     	if(contratoPlano.getPlanoAlimentarPreco() != null) {
     		PlanoAlimentarPreco retorno;
-    		retorno = planoAlimentarPrecoRepository.save(contratoPlano.getPlanoAlimentarPreco());
-    		if(retorno == null) {
-    			new Exception("Falha ao inserir o Plano Alimentar Preco");
+    		Optional<PlanoAlimentarPreco> opt;
+    		opt = planoAlimentarPrecoRepository.findById(contratoPlano.getPlanoAlimentarPreco().getId());
+    		if(!opt.isPresent()) {
+    			new Exception("Falha, Plano Alimentar Preço(" + Long.toString(contratoPlano.getContrato().getId()) + ") inexistente");
     		}
+    		retorno = opt.get();
     		contratoPlano.setPlanoAlimentarPreco(retorno);
     	}
         return contratoPlanoRepository.save(contratoPlano);

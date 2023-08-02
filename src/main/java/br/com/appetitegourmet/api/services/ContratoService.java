@@ -39,18 +39,22 @@ public class ContratoService {
     public Contrato salvarContrato(Contrato contrato) {
     	if(contrato.getResponsavelAluno() != null) {
     		ResponsavelAluno retorno;
-    		retorno = responsavelAlunoRepository.save(contrato.getResponsavelAluno());
-    		if(retorno == null) {
-    			new Exception("Falha ao inserir o responsavel_aluno");
+    		Optional<ResponsavelAluno> opt;
+    		opt = responsavelAlunoRepository.findById(contrato.getResponsavelAluno().getId());
+    		if(!opt.isPresent()) {
+    			new Exception("Falha ao consultar o responsavel_aluno");
     		}
+    		retorno = opt.get();
     		contrato.setResponsavelAluno(retorno);
     	}
     	if(contrato.getTurmaAnoLetivo() != null) {
     		TurmaAnoLetivo retorno;
-    		retorno = turmaAnoLetivoRepository.save(contrato.getTurmaAnoLetivo());
-    		if(retorno == null) {
-    			new Exception("Falha ao inserir o turma_ano_letivo");
+    		Optional<TurmaAnoLetivo> opt;
+    		opt = turmaAnoLetivoRepository.findById(contrato.getTurmaAnoLetivo().getId());
+    		if(!opt.isPresent()) {
+    			new Exception("Falha ao consultar o turma_ano_letivo");
     		}
+    		retorno = opt.get();
     		contrato.setTurmaAnoLetivo(retorno);
     	}
         return contratoRepository.save(contrato);

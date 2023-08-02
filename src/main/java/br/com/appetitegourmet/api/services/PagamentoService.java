@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -103,6 +104,7 @@ public class PagamentoService {
 		String cpf = null; 
 		String nome = null;
 		String valor = null; 
+		String val = null;
 		String chave = null;
 		String solicitacao = null;
 		Contrato contrato;
@@ -123,26 +125,17 @@ public class PagamentoService {
 		}
 		contrato = optContrato.get();
 		
+		cpf = contrato.getResponsavelAluno().getResponsavel().getPessoa().getCpf();
+		nome = contrato.getResponsavelAluno().getResponsavel().getPessoa().getNomeCompleto();
 		
-		optRespAluno = responsavelAlunoRepository.findById(contrato.getResponsavelAluno().getId());
-		if(!optRespAluno.isPresent()) {
-			// @todo levanta excessao
-		}
-		
-		respAluno = optRespAluno.get();
-		
-		System.out.println("respAluno=" + respAluno.toString());
-		
-		cpf = respAluno.getResponsavel().getPessoa().getCpf();
-		nome = respAluno.getResponsavel().getPessoa().getNomeCompleto();
-		
-		listaContratoPlano = contratoPlanoRepository.findByContrato(contrato);
+		listaContratoPlano = contratoPlanoRepository.findByContratoId(contrato.getId());
 		if(listaContratoPlano.isEmpty()) {
 			// @todo levantar excessao
+			return "NOK";
 		}
 		
-		contratoPlano = new ContratoPlano();
 		total = ValidacaoConstantes.totalizaContratoPlano(listaContratoPlano);
+		
 		
 		pagamento = new Pagamento();
 		pagamento.setContrato(contrato);
@@ -152,7 +145,11 @@ public class PagamentoService {
 		pagamento.setValor(total);
 		
 		total = total.multiply(new BigDecimal("100"));
-		valor = Integer.toString(total.intValue());
+		val = Integer.toString(total.intValue());
+		
+		System.out.println("Total = " + val);
+		
+		valor = val.substring(0, val.length() - 2) + "." + val.substring(val.length() - 2, val.length()); 
 		
 		chave = contrato.getUnidade().getEmpresa().getChavePix();
 		
@@ -166,13 +163,14 @@ public class PagamentoService {
 															nome, 
 															valor, 
 															chave, 
-															solicitacao); 
-		pagamento.setDados(dados.getRetornoString());
-		pagamentoRepository.save(pagamento);
-		
+															solicitacao);
 		if(!retorno) {
 			throw new ErroCriacaoChavePixException(operacoesPix.getErro());
 		}
+		
+		System.out.println("Retorno = " + dados.getRetornoString());
+		pagamento.setDados(dados.getRetornoString());
+		pagamentoRepository.save(pagamento);
 		
 		dadosRetorno = new JSONObject(dados.getRetornoString());
 		
@@ -188,7 +186,7 @@ public class PagamentoService {
 		
 		retornoFinal = dados.getRetornoString();
 		
-		return retornoFinal;
+		return retornoFinal; 
 	}
 	
 	public String pixCriarQrCode(Integer id) {
@@ -287,7 +285,7 @@ public class PagamentoService {
         item.setDescricao("Pagamento Adesão");
         item.setQuantidade(1);
         
-        listaContratoPlano = contratoPlanoRepository.findByContrato(contrato);
+        listaContratoPlano = contratoPlanoRepository.findByContratoId(contrato.getId());
 		if(listaContratoPlano.isEmpty()) {
 			// @todo levantar excessao
 		}
@@ -332,7 +330,7 @@ public class PagamentoService {
 		pagamento.setIdMeioPagamento(ValidacaoConstantes.PAGAMENTO_TIPO_BOLETO);		
 		pagamento.setIdStatus(ValidacaoConstantes.STATUS_GERADO);
 		pagamento.setValor(total);
-		
+		pagamento.setDados(" ");		
 		pagamentoBD = pagamentoRepository.save(pagamento);
         
         metadata = new Metadata();
@@ -399,7 +397,8 @@ public class PagamentoService {
 		
 		data = dadosRetorno.getJSONObject("data");
 		
-		pagamento.setDados(data.getString("charge_id"));
+		pagamentoBD.setDados(Long.toString(data.getLong("charge_id")));
+		pagamentoBD = pagamentoRepository.save(pagamentoBD);
 		
 		return dados.getRetornoString();
 	}

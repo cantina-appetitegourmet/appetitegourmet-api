@@ -12,7 +12,7 @@ import br.com.appetitegourmet.api.models.PlanoAlimentarPreco;
 @Repository
 public interface ContratoPlanoRepository extends JpaRepository<ContratoPlano, Long> {
 
-	List<Contrato> findByContratoId(Long responsavelAlunoId);
+	//List<Contrato> findByContratoId(Long responsavelAlunoId);
 	List<PlanoAlimentarPreco> findByPlanoAlimentarPrecoId(Long planoAlimentarPrecoId);
-	List<ContratoPlano> findByContrato(Contrato contrato);
+	List<ContratoPlano> findByContratoId(Long contratoId);
 }

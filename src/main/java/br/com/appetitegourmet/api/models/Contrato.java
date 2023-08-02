@@ -37,6 +37,6 @@ public class Contrato {
     @JoinColumn(name = "turma_anos_letivos_id", nullable = false)
     private TurmaAnoLetivo turmaAnoLetivo;
     
-    @Column(name="data_adesao", nullable = true)
+    @Column(name="data_adesao", nullable = false)
     private Date dataAdesao;
 }

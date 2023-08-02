@@ -153,6 +153,8 @@ public class OperacoesPix {
         body.put("valor", new JSONObject().put("original", valor));
         body.put("chave", chave);
         body.put("solicitacaoPagador", solicitacao);
+        
+        System.out.println("body = " + body.toString());
 
         //JSONArray infoAdicionais = new JSONArray();
         //infoAdicionais.put(new JSONObject().put("nome", "Campo 1").put("valor", "Informação Adicional1 do PSP-Recebedor"));
@@ -162,11 +164,15 @@ public class OperacoesPix {
 		try {
 			Gerencianet gn = new Gerencianet(options);
 			response = gn.call("pixCreateImmediateCharge", new HashMap<String,String>(), body);
+			System.out.println("Response = " + response.toString());
+			
 			JSONObject loc = response.getJSONObject("loc");
+			System.out.println("Loc = " + loc.toString());
 			String dadosRetorno = "";
-			dadosRetorno = "{ \"id\":" + loc.getString("id") + ",";
+			dadosRetorno = "{ \"id\":" + Integer.toString(loc.getInt("id")) + ",";
 			dadosRetorno += "\"txid\":\"" + response.getString("txid") + "\"}";
 			dados.setRetornoString(dadosRetorno);
+			
 			retorno = true;
 		}catch (GerencianetException e){
 			erro = e.getError();
