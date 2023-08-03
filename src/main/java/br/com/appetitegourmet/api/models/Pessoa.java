@@ -45,6 +45,10 @@ public class Pessoa {
     @Email
     @Size(max = ValidacaoConstantes.TAMANHO_MAXIMO_EMAIL)
     private String email;
+    
+    @Email
+    @Size(max = ValidacaoConstantes.TAMANHO_MAXIMO_EMAIL)
+    private String emailSecundario;
 
     @OneToOne(cascade=CascadeType.PERSIST)
     @JoinColumn(name = "endereco_id")
