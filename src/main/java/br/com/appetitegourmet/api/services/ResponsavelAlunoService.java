@@ -10,10 +10,12 @@ import br.com.appetitegourmet.api.exception.EntidadeObrigatoriaException;
 import br.com.appetitegourmet.api.exception.OperacaoInvalidaException;
 import br.com.appetitegourmet.api.models.Aluno;
 import br.com.appetitegourmet.api.models.Parentesco;
+import br.com.appetitegourmet.api.models.Pessoa;
 import br.com.appetitegourmet.api.models.Responsavel;
 import br.com.appetitegourmet.api.models.ResponsavelAluno;
 import br.com.appetitegourmet.api.repositories.AlunoRepository;
 import br.com.appetitegourmet.api.repositories.ParentescoRepository;
+import br.com.appetitegourmet.api.repositories.PessoaRepository;
 import br.com.appetitegourmet.api.repositories.ResponsavelAlunoRepository;
 import br.com.appetitegourmet.api.repositories.ResponsavelRepository;
 
@@ -22,12 +24,14 @@ public class ResponsavelAlunoService {
 	private final ResponsavelAlunoRepository responsavelAlunoRepository;
 	private final ResponsavelRepository responsavelRepository;
 	private final AlunoRepository alunoRepository;
+	private final PessoaRepository pessoaRepository;
 	private final ParentescoRepository parentescoRepository;
 
-	public ResponsavelAlunoService(ResponsavelAlunoRepository responsavelAlunoRepository, ResponsavelRepository responsavelRepository, AlunoRepository alunoRepository, ParentescoRepository parentescoRepository) {
+	public ResponsavelAlunoService(ResponsavelAlunoRepository responsavelAlunoRepository, ResponsavelRepository responsavelRepository, AlunoRepository alunoRepository, ParentescoRepository parentescoRepository, PessoaRepository pessoaRepository) {
 		this.responsavelAlunoRepository = responsavelAlunoRepository;
 		this.responsavelRepository = responsavelRepository;
 		this.alunoRepository = alunoRepository;
+		this.pessoaRepository = pessoaRepository;
 		this.parentescoRepository = parentescoRepository;
 		
 	}
@@ -47,7 +51,17 @@ public class ResponsavelAlunoService {
 			throw new EntidadeObrigatoriaException("Obrigatório ter o aluno na relação");
 		} else {
 			if(responsavelAluno.getAluno().getId() == null) {
-				throw new OperacaoInvalidaException("Não é possível criar Aluno a partir deste endpoint");
+				if(responsavelAluno.getAluno().getPessoa().getNomeCompleto() == null) {
+					throw new OperacaoInvalidaException("Não é possível criar Aluno a partir deste endpoint");
+				} else {
+					if(responsavelAluno.getAluno().getPessoa() != null) {
+			    		if(responsavelAluno.getAluno().getPessoa().getId() == null) {
+			    			Pessoa novaPessoa = pessoaRepository.save(responsavelAluno.getAluno().getPessoa());
+			    			responsavelAluno.getAluno().setPessoa(novaPessoa);
+			    		}
+					}
+			        alunoRepository.save(responsavelAluno.getAluno());
+				}
 			} else {
 				Optional<Aluno> optional = alunoRepository.findById(responsavelAluno.getAluno().getId());
 				if(optional.isPresent()) {
