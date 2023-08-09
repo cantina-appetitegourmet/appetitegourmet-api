@@ -46,7 +46,7 @@ public class PagamentoController {
 	
 	@PostMapping
 	@RequestMapping("/pagamentos/pixCobrancaImediataSemTxid")
-    public JSONObject pixCobrancaImediataSemTxid(@RequestBody RequestPagamento pagamento) {
+    public String pixCobrancaImediataSemTxid(@RequestBody RequestPagamento pagamento) {
         return pagamentoService.pixCobrancaImediataSemTxid(pagamento.getIdContrato());
     }
 	

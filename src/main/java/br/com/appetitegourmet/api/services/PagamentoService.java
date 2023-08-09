@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -19,7 +18,6 @@ import br.com.appetitegourmet.api.models.Contrato;
 import br.com.appetitegourmet.api.models.ContratoPlano;
 import br.com.appetitegourmet.api.models.Pagamento;
 import br.com.appetitegourmet.api.models.Responsavel;
-import br.com.appetitegourmet.api.models.ResponsavelAluno;
 import br.com.appetitegourmet.api.exception.ErroCriacaoChavePixException;
 import br.com.appetitegourmet.api.repositories.UnidadeRepository;
 import br.com.appetitegourmet.api.repositories.ContratoPlanoRepository;
@@ -94,7 +92,7 @@ public class PagamentoService {
 		return dados.getRetornoString();
 	}
 	
-	public JSONObject pixCobrancaImediataSemTxid(Long idContrato) {
+	public String pixCobrancaImediataSemTxid(Long idContrato) {
 		Retorno dados = new Retorno();
 		boolean retorno;
 		OperacoesPix operacoesPix;
@@ -176,8 +174,11 @@ public class PagamentoService {
 		if(!retorno) {
 			throw new ErroCriacaoChavePixException(operacoesPix.getErro());
 		}
-		
-		return dados.getRetornoJson(); 
+
+		System.out.println("Dados JSON = " + dados.getRetornoJson());
+		System.out.println("Dados String = " + dados.getRetornoString());
+//		return dados.getRetornoJson();
+		return dados.getRetornoJson().toString();
 	}
 	
 	public String pixCriarQrCode(Integer id) {
@@ -216,6 +217,7 @@ public class PagamentoService {
 		if(!retorno) {
 			throw new ErroCriacaoChavePixException(operacoesPix.getErro());
 		}
+		System.out.println("Dados = " + dados.getRetornoString());
 		return dados.getRetornoString();
 	}
 	
