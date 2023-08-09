@@ -27,7 +27,7 @@ import br.com.appetitegourmet.api.repositories.ContratoRepository;
 import br.com.appetitegourmet.api.repositories.PagamentoRepository;
 import br.com.appetitegourmet.api.repositories.ResponsavelAlunoRepository;
 import br.com.appetitegourmet.api.repositories.ResponsavelRepository;
-import utils.RetornoString;
+import utils.Retorno;
 import utils.ValidacaoConstantes;
 import utils.pagamentos.gerencianet.Cliente;
 import utils.pagamentos.gerencianet.ItemPedido;
@@ -43,7 +43,6 @@ public class PagamentoService {
 	private final ContratoRepository contratoRepository;
 	private final ContratoPlanoRepository contratoPlanoRepository;
 	private final PagamentoRepository pagamentoRepository;
-	private final ResponsavelAlunoRepository responsavelAlunoRepository;
 	@Autowired
     private Environment env;
 	
@@ -53,12 +52,11 @@ public class PagamentoService {
 		this.contratoRepository = contratoRepository;
 		this.contratoPlanoRepository = contratoPlanoRepository;
 		this.pagamentoRepository = pagamentoRepository;
-		this.responsavelAlunoRepository = responsavelAlunoRepository;
 		
 	}
 
 	public String listarChavesPix() {
-		RetornoString dados = new RetornoString();
+		Retorno dados = new Retorno();
 		boolean retorno;
 		OperacoesPix operacoesPix;
 		
@@ -71,7 +69,7 @@ public class PagamentoService {
 	}
 	
 	public String criarChavePix() {
-		RetornoString dados = new RetornoString();
+		Retorno dados = new Retorno();
 		boolean retorno;
 		OperacoesPix operacoesPix;
 		
@@ -84,7 +82,7 @@ public class PagamentoService {
 	}
 	
 	public String removerChavePix(String chave) {
-		RetornoString dados = new RetornoString();
+		Retorno dados = new Retorno();
 		boolean retorno;
 		OperacoesPix operacoesPix;
 		
@@ -96,8 +94,8 @@ public class PagamentoService {
 		return dados.getRetornoString();
 	}
 	
-	public String pixCobrancaImediataSemTxid(Long idContrato) {
-		RetornoString dados = new RetornoString();
+	public JSONObject pixCobrancaImediataSemTxid(Long idContrato) {
+		Retorno dados = new Retorno();
 		boolean retorno;
 		OperacoesPix operacoesPix;
 		int expiracao = 3600*24*10;
@@ -114,11 +112,6 @@ public class PagamentoService {
 		Pagamento pagamento;
 		Integer idPix;
 		JSONObject dadosRetorno;
-		String retornoFinal;
-		ContratoPlano contratoPlano;
-		Optional<ResponsavelAluno> optRespAluno;
-		ResponsavelAluno respAluno;
-		
 		optContrato = contratoRepository.findById(idContrato);
 		if(!optContrato.isPresent()) {
 			// @todo levantar excessao
@@ -131,7 +124,7 @@ public class PagamentoService {
 		listaContratoPlano = contratoPlanoRepository.findByContratoId(contrato.getId());
 		if(listaContratoPlano.isEmpty()) {
 			// @todo levantar excessao
-			return "NOK";
+			throw new ErroCriacaoChavePixException("Contrato invalido");
 		}
 		
 		total = ValidacaoConstantes.totalizaContratoPlano(listaContratoPlano);
@@ -176,7 +169,7 @@ public class PagamentoService {
 		
 		idPix = dadosRetorno.getInt("id");
 		
-		dados = new RetornoString();
+		dados = new Retorno();
 		operacoesPix = new OperacoesPix();
 		retorno = operacoesPix.criarQrCode(dados, idPix);
 		
@@ -184,13 +177,11 @@ public class PagamentoService {
 			throw new ErroCriacaoChavePixException(operacoesPix.getErro());
 		}
 		
-		retornoFinal = dados.getRetornoString();
-		
-		return retornoFinal; 
+		return dados.getRetornoJson(); 
 	}
 	
 	public String pixCriarQrCode(Integer id) {
-		RetornoString dados = new RetornoString();
+		Retorno dados = new Retorno();
 		boolean retorno;
 		OperacoesPix operacoesPix;
 		
@@ -209,7 +200,7 @@ public class PagamentoService {
 									 String status,
 									 Integer paginaAtual,
 									 Integer itensPorPagina) {
-		RetornoString dados = new RetornoString();
+		Retorno dados = new Retorno();
 		boolean retorno;
 		OperacoesPix operacoesPix;
 		
@@ -229,7 +220,7 @@ public class PagamentoService {
 	}
 	
 	public String pixExibirCobranca(String txid) {
-		RetornoString dados = new RetornoString();
+		Retorno dados = new Retorno();
 		boolean retorno;
 		OperacoesPix operacoesPix;
 		
@@ -242,8 +233,8 @@ public class PagamentoService {
 		return dados.getRetornoString();
 	}
 	
-	public String boletoGerarBoleto(Long idContrato) {
-		RetornoString dados = new RetornoString();
+	public JSONObject boletoGerarBoleto(Long idContrato) {
+		Retorno dados = new Retorno();
 		boolean retorno;
 		OperacoesBoleto operacoesBoleto;
 		ItemPedido item;
@@ -400,11 +391,11 @@ public class PagamentoService {
 		pagamentoBD.setDados(Long.toString(data.getLong("charge_id")));
 		pagamentoBD = pagamentoRepository.save(pagamentoBD);
 		
-		return dados.getRetornoString();
+		return dadosRetorno;
 	}
 	
 	public String boletoCancelarBoleto(String idBoleto) {
-		RetornoString dados = new RetornoString();
+		Retorno dados = new Retorno();
 		boolean retorno;
 		OperacoesBoleto operacoesBoleto;
 		
@@ -419,7 +410,7 @@ public class PagamentoService {
 	
 	
 	public String boletoExibirBoleto(String idBoleto) {
-		RetornoString dados = new RetornoString();
+		Retorno dados = new Retorno();
 		boolean retorno;
 		OperacoesBoleto operacoesBoleto;
 		

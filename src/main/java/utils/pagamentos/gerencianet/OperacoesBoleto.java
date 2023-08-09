@@ -8,7 +8,7 @@ import org.json.JSONObject;
 
 import br.com.gerencianet.gnsdk.Gerencianet;
 import br.com.gerencianet.gnsdk.exceptions.GerencianetException;
-import utils.RetornoString;
+import utils.Retorno;
 
 public class OperacoesBoleto {
 	
@@ -131,7 +131,7 @@ public class OperacoesBoleto {
 		jMulta.put("interest", multa.getJurosDia());
 	}
 	
-	public boolean gerarBoleto(RetornoString dados,
+	public boolean gerarBoleto(Retorno dados,
 			                   List<ItemPedido> itens,
 			                   Cliente cliente,
 			                   String dataExpiracao,
@@ -216,7 +216,7 @@ public class OperacoesBoleto {
 		return retorno;
 	}
 	
-	public boolean cancelarBoleto(RetornoString dados,
+	public boolean cancelarBoleto(Retorno dados,
             					  String idBoleto) {
 		boolean retorno = false;
 		Credentials credentials = new Credentials(Credentials.PAGAMENTOS, Credentials.PRODUCAO);
@@ -245,7 +245,7 @@ public class OperacoesBoleto {
 	}
 
 	
-	public boolean exibirBoleto(RetornoString dados,
+	public boolean exibirBoleto(Retorno dados,
             					  String idBoleto) {
 		boolean retorno = false;
 		Credentials credentials = new Credentials(Credentials.PAGAMENTOS, Credentials.PRODUCAO);

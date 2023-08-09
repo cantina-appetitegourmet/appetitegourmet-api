@@ -2,13 +2,10 @@ package utils.pagamentos.gerencianet;
 
 import br.com.gerencianet.gnsdk.Gerencianet;
 import br.com.gerencianet.gnsdk.exceptions.GerencianetException;
-import utils.RetornoString;
+import utils.Retorno;
 
 import org.json.JSONObject;
 
-import java.awt.Desktop;
-import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
@@ -17,8 +14,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import br.com.appetitegourmet.api.exception.ErroFormatacaoDataException;
-
-import javax.imageio.ImageIO;
 
 public class OperacoesPix {
 	
@@ -36,7 +31,7 @@ public class OperacoesPix {
 		return erro;
 	}
 	
-	public boolean criarChave(RetornoString dados) {
+	public boolean criarChave(Retorno dados) {
 		
 		boolean retorno = false;
 		JSONObject response = null;
@@ -63,7 +58,7 @@ public class OperacoesPix {
 		return retorno;
 	}
 	
-	public boolean removerChave(RetornoString dados, String chave) {
+	public boolean removerChave(Retorno dados, String chave) {
 		
 		boolean retorno = false;
 		JSONObject response = null;
@@ -102,7 +97,7 @@ public class OperacoesPix {
 		return retorno;
 	}
 	
-	public boolean listarChaves(RetornoString dados) {
+	public boolean listarChaves(Retorno dados) {
 		
 		boolean retorno = false;
 		JSONObject response = null;
@@ -129,7 +124,7 @@ public class OperacoesPix {
 		return retorno;
 	}
 	
-	public boolean criarCobrancaImediataSemTxid(RetornoString dados, 
+	public boolean criarCobrancaImediataSemTxid(Retorno dados, 
 												int expiracao,
 												String cpf,
 												String nome,
@@ -184,7 +179,7 @@ public class OperacoesPix {
 		return retorno;
 	}
 	
-	public boolean criarQrCode(RetornoString dados, 
+	public boolean criarQrCode(Retorno dados, 
 							   Integer id) {
 
 		boolean retorno = false;
@@ -203,19 +198,18 @@ public class OperacoesPix {
 		try {
 			Gerencianet gn = new Gerencianet(options);
 			response = gn.call("pixGenerateQRCode", params, new HashMap<String, Object>());
-			dados.setRetornoString(response.toString());
+			dados.setRetornoJson(new JSONObject(response));
 			retorno = true;
-		}catch (GerencianetException e){
+		} catch (GerencianetException e){
 			erro = e.getError();
 			erro += " - " + e.getErrorDescription();
-		}
-		catch (Exception e) {
+	    } catch (Exception e) {
 			erro = e.getMessage();
 		}
 		return retorno;
 	}
 	
-	public boolean listarCobrancas(RetornoString dados, 
+	public boolean listarCobrancas(Retorno dados, 
 				   			       String sDtIncio,
 				   			       String sDtFim,
 				   			       String cpf,
@@ -285,7 +279,7 @@ public class OperacoesPix {
 	
 	
 	
-	public boolean exibirCobranca(RetornoString dados, 
+	public boolean exibirCobranca(Retorno dados, 
 		       					  String txid) {
 
 		boolean retorno = false;
