@@ -56,7 +56,11 @@ public class ResponsavelAlunoService {
 				} else {
 					if(responsavelAluno.getAluno().getPessoa() != null) {
 			    		if(responsavelAluno.getAluno().getPessoa().getId() == null) {
-			    			Pessoa novaPessoa = pessoaRepository.save(responsavelAluno.getAluno().getPessoa());
+			    			Pessoa novaPessoa = responsavelAluno.getAluno().getPessoa();
+			    			if((novaPessoa.getCpf() != null) && (novaPessoa.getCpf().trim() == "")) {
+			    				novaPessoa.setCpf(null);
+			    			}
+			    			novaPessoa = pessoaRepository.save(novaPessoa);
 			    			responsavelAluno.getAluno().setPessoa(novaPessoa);
 			    		}
 					}
