@@ -139,9 +139,10 @@ public class OperacoesBoleto {
 			                   Desconto desconto,
 			                   DescontoCondicional condicional,
 			                   Multa multa,
-			                   String mensagem) {
+			                   String mensagem,
+			                   String dadosIntegracaoBoleto) {
 		boolean retorno = false;
-		Credentials credentials = new Credentials(Credentials.PAGAMENTOS, Credentials.PRODUCAO);
+		//Credentials credentials = new Credentials(Credentials.PAGAMENTOS, Credentials.PRODUCAO);
 		JSONArray jItems = new JSONArray();
 		JSONObject jCustomer = new JSONObject();
 		boolean metadataPresente = false;
@@ -153,10 +154,10 @@ public class OperacoesBoleto {
 		JSONObject jPayment = new JSONObject();
 		JSONObject jBody = new JSONObject();
 
-		JSONObject options = new JSONObject();
-		options.put("client_id", credentials.getClientId());
-		options.put("client_secret", credentials.getClientSecret());
-		options.put("sandbox", credentials.isSandbox());
+		JSONObject options = new JSONObject(dadosIntegracaoBoleto);
+		//options.put("client_id", credentials.getClientId());
+		//options.put("client_secret", credentials.getClientSecret());
+		//options.put("sandbox", credentials.isSandbox());
 
 		// items
 		adicionarItens(jItems, itens);

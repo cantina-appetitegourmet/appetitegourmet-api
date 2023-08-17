@@ -101,7 +101,6 @@ public class PagamentoService {
 		String nome = null;
 		String valor = null; 
 		String val = null;
-		String chave = null;
 		String solicitacao = null;
 		Contrato contrato;
 		Optional<Contrato> optContrato;
@@ -142,8 +141,6 @@ public class PagamentoService {
 		
 		valor = val.substring(0, val.length() - 2) + "." + val.substring(val.length() - 2, val.length()); 
 		
-		chave = contrato.getUnidade().getEmpresa().getChavePix();
-		
 		solicitacao = "Pagamento Adesão";
 		
 		
@@ -153,7 +150,8 @@ public class PagamentoService {
 															cpf, 
 															nome, 
 															valor, 
-															chave, 
+															contrato.getUnidade().getEmpresa().getChavePix(),
+															contrato.getUnidade().getEmpresa().getDadosIntegracaoPix(),
 															solicitacao);
 		if(!retorno) {
 			throw new ErroCriacaoChavePixException(operacoesPix.getErro());
@@ -235,7 +233,7 @@ public class PagamentoService {
 		return dados.getRetornoString();
 	}
 	
-	public JSONObject boletoGerarBoleto(Long idContrato) {
+	public String boletoGerarBoleto(Long idContrato) {
 		Retorno dados = new Retorno();
 		boolean retorno;
 		OperacoesBoleto operacoesBoleto;
@@ -253,7 +251,6 @@ public class PagamentoService {
 		BigDecimal total;
 		Pagamento pagamento;
 		Pagamento pagamentoBD;
-		ContratoPlano contratoPlano;
 		JSONObject dadosRetorno;
 		JSONObject data;
 		
@@ -283,7 +280,6 @@ public class PagamentoService {
 			// @todo levantar excessao
 		}
 		
-		contratoPlano = new ContratoPlano();
 		total = ValidacaoConstantes.totalizaContratoPlano(listaContratoPlano);
         
         valorItem = total.multiply(new BigDecimal("100.0"));
@@ -381,7 +377,8 @@ public class PagamentoService {
 								              null,
 								              null,
 								              multa,
-								              mensagem);
+								              mensagem,
+								              unidade.getEmpresa().getDadosIntegracaoBoleto());
 		if(!retorno) {
 			throw new ErroCriacaoChavePixException(operacoesBoleto.getErro());
 		}
@@ -393,7 +390,7 @@ public class PagamentoService {
 		pagamentoBD.setDados(Long.toString(data.getLong("charge_id")));
 		pagamentoBD = pagamentoRepository.save(pagamentoBD);
 		
-		return dadosRetorno;
+		return dadosRetorno.toString();
 	}
 	
 	public String boletoCancelarBoleto(String idBoleto) {

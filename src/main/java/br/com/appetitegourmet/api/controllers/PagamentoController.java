@@ -125,7 +125,7 @@ public class PagamentoController {
 	
 	@PostMapping
 	@RequestMapping("/pagamentos/boletoGerarBoleto")
-    public JSONObject boletoGerarBoleto(@RequestBody RequestPagamento pagamento) {
+    public String boletoGerarBoleto(@RequestBody RequestPagamento pagamento) {
         return pagamentoService.boletoGerarBoleto(pagamento.getIdContrato());
     }
 	

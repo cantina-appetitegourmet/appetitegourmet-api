@@ -31,4 +31,7 @@ public final class Colunas {
 	//Plano
 	public static final int DESCRITIVO = 300;
 	
+	//Aluno
+	public static final int RESTRICAO_ALIMENTAR = 300;
+	
 }

@@ -130,17 +130,18 @@ public class OperacoesPix {
 												String nome,
 												String valor,
 												String chave,
+												String dadosItegracaoPix,
 												String solicitacao) {
 		
 		boolean retorno = false;
 		JSONObject response = null;
-		Credentials credentials = new Credentials(Credentials.PIX, Credentials.PRODUCAO);
+		//Credentials credentials = new Credentials(Credentials.PIX, Credentials.PRODUCAO);
 
-		JSONObject options = new JSONObject();
-		options.put("client_id", credentials.getClientId());
-		options.put("client_secret", credentials.getClientSecret());
-		options.put("certificate", credentials.getCertificate());
-		options.put("sandbox", credentials.isSandbox());
+		JSONObject options = new JSONObject(dadosItegracaoPix);
+		//options.put("client_id", credentials.getClientId());
+		//options.put("client_secret", credentials.getClientSecret());
+		//options.put("certificate", credentials.getCertificate());
+		//options.put("sandbox", credentials.isSandbox());
 		
 		JSONObject body = new JSONObject();
         body.put("calendario", new JSONObject().put("expiracao", expiracao));
