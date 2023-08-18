@@ -12,6 +12,7 @@ import br.com.appetitegourmet.api.models.Desconto;
 @Repository
 public interface ContratoDescontoRepository extends JpaRepository<ContratoDesconto, Long> {
 
-	List<Contrato> findByContratoId(Long contratoId);
+	//List<Contrato> findByContratoId(Long contratoId);
 	List<Desconto> findByDescontoId(Long descontoId);
+	List<ContratoDesconto> findByContratoId(Long contratoId);
 }

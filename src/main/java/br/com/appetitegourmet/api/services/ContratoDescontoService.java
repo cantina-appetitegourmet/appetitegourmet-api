@@ -40,21 +40,37 @@ public class ContratoDescontoService {
 
     public ContratoDesconto salvarContratoDesconto(ContratoDesconto contratoDesconto) {
     	if(contratoDesconto.getContrato() != null) {
-    		Contrato retorno;
-    		retorno = contratoRepository.save(contratoDesconto.getContrato());
-    		if(retorno == null) {
-    			new Exception("Falha ao inserir o Contrato");
-    		}
-    		contratoDesconto.setContrato(retorno);
+    		if(contratoDesconto.getContrato().getId() != null) {
+    			Optional<Contrato> opt;
+    			opt = contratoRepository.findById(contratoDesconto.getContrato().getId());
+    			if(opt.isPresent()) {
+		    		contratoDesconto.setContrato(opt.get());
+    			} else {
+            		new Exception("Contrato inválido");
+            	}
+    		} else {
+        		new Exception("Contrato inválido");
+        	}
+    	} else {
+    		new Exception("Contrato inválido");
     	}
+    	
     	if(contratoDesconto.getDesconto() != null) {
-    		Desconto retorno;
-    		retorno = descontoRepository.save(contratoDesconto.getDesconto());
-    		if(retorno == null) {
-    			new Exception("Falha ao inserir o Desconto");
-    		}
-    		contratoDesconto.setDesconto(retorno);
+    		if(contratoDesconto.getDesconto().getId() != null) {
+    			Optional<Desconto> opt;
+    			opt = descontoRepository.findById(contratoDesconto.getDesconto().getId());
+    			if(opt.isPresent()) {
+		    		contratoDesconto.setDesconto(opt.get());
+    			} else {
+            		new Exception("Desconto inválido");
+            	}
+    		} else {
+        		new Exception("Desconto inválido");
+        	}
+    	} else {
+    		new Exception("Desconto inválido");
     	}
+    	
         return contratoDescontoRepository.save(contratoDesconto);
     }
 

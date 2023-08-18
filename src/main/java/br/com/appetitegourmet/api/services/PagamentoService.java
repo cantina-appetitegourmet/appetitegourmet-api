@@ -15,11 +15,13 @@ import org.springframework.core.env.Environment;
 
 import br.com.appetitegourmet.api.models.Unidade;
 import br.com.appetitegourmet.api.models.Contrato;
+import br.com.appetitegourmet.api.models.ContratoDesconto;
 import br.com.appetitegourmet.api.models.ContratoPlano;
 import br.com.appetitegourmet.api.models.Pagamento;
 import br.com.appetitegourmet.api.models.Responsavel;
 import br.com.appetitegourmet.api.exception.ErroCriacaoChavePixException;
 import br.com.appetitegourmet.api.repositories.UnidadeRepository;
+import br.com.appetitegourmet.api.repositories.ContratoDescontoRepository;
 import br.com.appetitegourmet.api.repositories.ContratoPlanoRepository;
 import br.com.appetitegourmet.api.repositories.ContratoRepository;
 import br.com.appetitegourmet.api.repositories.PagamentoRepository;
@@ -40,15 +42,17 @@ public class PagamentoService {
 	private final ResponsavelRepository responsavelRepository;
 	private final ContratoRepository contratoRepository;
 	private final ContratoPlanoRepository contratoPlanoRepository;
+	private final ContratoDescontoRepository contratoDescontoRepository;
 	private final PagamentoRepository pagamentoRepository;
 	@Autowired
     private Environment env;
 	
 	public PagamentoService(ResponsavelRepository responsavelRepository, 
-			                UnidadeRepository unidadeRepository, ContratoRepository contratoRepository, ContratoPlanoRepository contratoPlanoRepository, PagamentoRepository pagamentoRepository, ResponsavelAlunoRepository responsavelAlunoRepository) {
+			                UnidadeRepository unidadeRepository, ContratoRepository contratoRepository, ContratoPlanoRepository contratoPlanoRepository, PagamentoRepository pagamentoRepository, ResponsavelAlunoRepository responsavelAlunoRepository, ContratoDescontoRepository contratoDescontoRepository) {
 		this.responsavelRepository = responsavelRepository;
 		this.contratoRepository = contratoRepository;
 		this.contratoPlanoRepository = contratoPlanoRepository;
+		this.contratoDescontoRepository = contratoDescontoRepository;
 		this.pagamentoRepository = pagamentoRepository;
 		
 	}
@@ -105,10 +109,15 @@ public class PagamentoService {
 		Contrato contrato;
 		Optional<Contrato> optContrato;
 		List<ContratoPlano> listaContratoPlano;
+		List<ContratoDesconto> listaContratoDesconto;
+		BigDecimal totalDescontos;
 		BigDecimal total;
 		Pagamento pagamento;
 		Integer idPix;
 		JSONObject dadosRetorno;
+		
+		solicitacao = "Pagamento Adesão";		
+		
 		optContrato = contratoRepository.findById(idContrato);
 		if(!optContrato.isPresent()) {
 			// @todo levantar excessao
@@ -124,8 +133,21 @@ public class PagamentoService {
 			throw new ErroCriacaoChavePixException("Contrato invalido");
 		}
 		
+		totalDescontos = BigDecimal.ZERO;
+		listaContratoDesconto = contratoDescontoRepository.findByContratoId(contrato.getId());
+		if(!listaContratoDesconto.isEmpty()) {
+			for(ContratoDesconto cd: listaContratoDesconto) {
+				totalDescontos = totalDescontos.add(cd.getDesconto().getValor_percentual());
+				solicitacao += "\n";
+				solicitacao += cd.getDesconto().getMotivo();
+			}
+		}
+		
 		total = ValidacaoConstantes.totalizaContratoPlano(listaContratoPlano);
 		
+		totalDescontos =  totalDescontos.divide(new BigDecimal("100.00"));
+		totalDescontos = totalDescontos.multiply(total);
+		total = total.subtract(totalDescontos);
 		
 		pagamento = new Pagamento();
 		pagamento.setContrato(contrato);
@@ -139,10 +161,7 @@ public class PagamentoService {
 		
 		System.out.println("Total = " + val);
 		
-		valor = val.substring(0, val.length() - 2) + "." + val.substring(val.length() - 2, val.length()); 
-		
-		solicitacao = "Pagamento Adesão";
-		
+		valor = val.substring(0, val.length() - 2) + "." + val.substring(val.length() - 2, val.length()); 	
 		
 		operacoesPix = new OperacoesPix();
 		retorno = operacoesPix.criarCobrancaImediataSemTxid(dados, 
@@ -253,6 +272,8 @@ public class PagamentoService {
 		Pagamento pagamentoBD;
 		JSONObject dadosRetorno;
 		JSONObject data;
+		List<ContratoDesconto> listaContratoDesconto;
+		BigDecimal totalDescontos;
 		
 		optContrato = contratoRepository.findById(idContrato);
 		if(!optContrato.isPresent()) {
@@ -269,6 +290,8 @@ public class PagamentoService {
         Unidade unidade = null;
         BigDecimal valorMulta;
         BigDecimal valorJurosDias;
+        
+        mensagem = "Pagamento Adesao";
                 
         itens = new ArrayList<ItemPedido>();
         item = new ItemPedido();
@@ -280,7 +303,21 @@ public class PagamentoService {
 			// @todo levantar excessao
 		}
 		
+		totalDescontos = BigDecimal.ZERO;
+		listaContratoDesconto = contratoDescontoRepository.findByContratoId(contrato.getId());
+		if(!listaContratoDesconto.isEmpty()) {
+			for(ContratoDesconto cd: listaContratoDesconto) {
+				totalDescontos = totalDescontos.add(cd.getDesconto().getValor_percentual());
+				mensagem += "\n";
+				mensagem += cd.getDesconto().getMotivo();
+			}
+		}
+		
 		total = ValidacaoConstantes.totalizaContratoPlano(listaContratoPlano);
+		
+		totalDescontos =  totalDescontos.divide(new BigDecimal("100.00"));
+		totalDescontos = totalDescontos.multiply(total);
+		total = total.subtract(totalDescontos);
         
         valorItem = total.multiply(new BigDecimal("100.0"));
         item.setValor(valorItem.longValue());
@@ -365,8 +402,6 @@ public class PagamentoService {
         multa.setMulta(valorMulta.longValue());
         valorJurosDias = unidade.getValorJurosDiaBoleto().multiply(new BigDecimal("100.0"));
         multa.setJurosDia(valorJurosDias.longValue());
-        
-        mensagem = "Pagamento Adesao";
 		
 		operacoesBoleto = new OperacoesBoleto();
 		retorno = operacoesBoleto.gerarBoleto(dados, 

@@ -6,7 +6,6 @@ import br.com.appetitegourmet.api.dto.RequestPagamento;
 import br.com.appetitegourmet.api.exception.ErroParametroObrigatorioException;
 import br.com.appetitegourmet.api.services.PagamentoService;
 
-import org.json.JSONObject;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
