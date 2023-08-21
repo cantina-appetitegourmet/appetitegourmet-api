@@ -37,6 +37,10 @@ public class ContratoPlanoService {
         return contratoPlanoRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Contrato Plano não encontrado"));
     }
+    
+    public List<ContratoPlano> buscarContratoPlanoPorResponsavelId(Long id) {
+        return contratoPlanoRepository.findAllContratoPlanoByResponsavelId(id);
+    }
 
     public ContratoPlano salvarContratoPlano(ContratoPlano contratoPlano) {
     	if(contratoPlano.getContrato() != null) {

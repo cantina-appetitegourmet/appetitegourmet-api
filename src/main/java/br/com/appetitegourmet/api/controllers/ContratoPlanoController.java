@@ -34,6 +34,11 @@ public class ContratoPlanoController {
         return contratoPlanoService.buscarContratoPlanoPorId(id);
     }
     
+    @GetMapping("/listaPorResponsavel/{id}")
+    public List<ContratoPlano> buscarContratoPlanoPorResponsavelId(Long id) {
+    	return contratoPlanoService.buscarContratoPlanoPorResponsavelId(id);
+    }
+    
     @PostMapping
     public ContratoPlano salvarContratoPlano(@RequestBody ContratoPlano contratoPlano) {
         return contratoPlanoService.salvarContratoPlano(contratoPlano);

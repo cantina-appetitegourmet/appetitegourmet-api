@@ -23,6 +23,8 @@ public final class ValidacaoConstantes {
     public static final int STATUS_GERADO = 1;
     public static final int STATUS_PAGO = 2;
     public static final int STATUS_CANCELADO = 3;
+    
+    public static final int DESCONTO_2_OU_MAIS_FILHOS = 1;
 
     private ValidacaoConstantes() {
     }
