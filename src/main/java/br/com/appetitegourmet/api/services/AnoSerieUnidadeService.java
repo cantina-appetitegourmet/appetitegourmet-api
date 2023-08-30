@@ -36,7 +36,7 @@ public class AnoSerieUnidadeService {
     }
     
     public List<AnoSerieUnidade> listarAnoSerieUnidadesPorUnidade(Long unidadeId) {
-        return anoSerieUnidadeRepository.findByAnoSerieId(unidadeId);
+        return anoSerieUnidadeRepository.findByUnidadeId(unidadeId);
     }
     
     public List<AnoSerieUnidade> listarAnoSerieUnidadesPorAnoSerieEUnidade(Long anoSerieId, Long unidadeId) {

@@ -25,6 +25,10 @@ public class AnoLetivoService {
                 .orElseThrow(() -> new NoSuchElementException("Ano Letivo não encontrado"));
     }
     
+    public List<AnoLetivo> buscarAnosLetivosAtivos() {
+        return anoLetivoRepository.queryByAtivoIsTrue();
+    }
+    
     public AnoLetivo salvarAnoLetivo(AnoLetivo anoLetivo) {
         return anoLetivoRepository.save(anoLetivo);
     }

@@ -43,6 +43,10 @@ public class TurmaAnoLetivoService {
         return turmaAnoLetivoRepository.findByTurmaIdAndAnoLetivoId(anoLetivoId, turmaId);
     }
     
+    public List<TurmaAnoLetivo> listarTurmaAnoLetivosPorUnidadeEAnoLetivo(Long unidadeId, Long anoLetivoId) {
+        return turmaAnoLetivoRepository.findByAnoSerieUnidadeId(unidadeId, anoLetivoId);
+    }
+    
     public TurmaAnoLetivo buscarTurmaAnoLetivoPorId(Long id) {
         return turmaAnoLetivoRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Turma Ano Letivo não encontrada"));

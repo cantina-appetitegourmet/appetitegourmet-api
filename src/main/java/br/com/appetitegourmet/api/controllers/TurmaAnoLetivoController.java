@@ -38,6 +38,11 @@ public class TurmaAnoLetivoController {
         return turmaAnoLetivoService.listarTurmaAnoLetivosPorAnoLetivo(anoLetivoId);
     }
     
+    @GetMapping("/anoSerieUnidade/{unidadeId}/anoLetivo/{anoLetivoId}")
+    public List<TurmaAnoLetivo> listarTurmaAnoLetivosPorUnidadeEAnoLetivo(@PathVariable Long unidadeId, @PathVariable Long anoLetivoId) {
+        return turmaAnoLetivoService.listarTurmaAnoLetivosPorUnidadeEAnoLetivo(unidadeId, anoLetivoId);
+    }
+    
     @GetMapping("/{id}")
     public TurmaAnoLetivo buscarTurmaAnoLetivoPorId(@PathVariable Long id) {
         return turmaAnoLetivoService.buscarTurmaAnoLetivoPorId(id);
