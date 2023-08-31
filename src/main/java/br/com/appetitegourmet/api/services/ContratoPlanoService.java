@@ -59,6 +59,7 @@ public class ContratoPlanoService {
     		retorno = opt.get();
     		contratoPlano.setPlanoAlimentarPreco(retorno);
     	}
+    	contratoPlano.setPrecoDia(contratoPlano.getPlanoAlimentarPreco().getPrecoDia());
         return contratoPlanoRepository.save(contratoPlano);
     }
 

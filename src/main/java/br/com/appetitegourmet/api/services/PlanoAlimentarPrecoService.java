@@ -36,7 +36,7 @@ public class PlanoAlimentarPrecoService {
     }
     
     public List<PlanoAlimentarPreco> listarPlanoAlimentarPrecosPorTurmaAnoLetivo(Long turmaAnoLetivoId) {
-        return planoAlimentarPrecoRepository.findByPlanoAlimentarId(turmaAnoLetivoId);
+        return planoAlimentarPrecoRepository.findByTurmaAnoLetivoId(turmaAnoLetivoId);
     }
     
     public List<PlanoAlimentarPreco> listarPlanoAlimentarPrecosPorPlanoAlimentarETurmaAnoLetivo(Long planoAlimentarId, Long turmaAnoLetivoId) {

@@ -34,8 +34,8 @@ public class PlanoAlimentarPrecoController {
     }
     
     @GetMapping("/turmaAnoLetivo/{turmaAnoLetivoId}")
-    public List<PlanoAlimentarPreco> listarPlanoAlimentarPrecosPorTurmaAnoLetivo(@PathVariable Long anoLetivoId) {
-        return planoAlimentarPrecoService.listarPlanoAlimentarPrecosPorTurmaAnoLetivo(anoLetivoId);
+    public List<PlanoAlimentarPreco> listarPlanoAlimentarPrecosPorTurmaAnoLetivo(@PathVariable Long turmaAnoLetivoId) {
+        return planoAlimentarPrecoService.listarPlanoAlimentarPrecosPorTurmaAnoLetivo(turmaAnoLetivoId);
     }
     
     @GetMapping("/{id}")
