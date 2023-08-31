@@ -7,11 +7,16 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import br.com.appetitegourmet.api.models.Contrato;
+import br.com.appetitegourmet.api.models.ContratoDesconto;
+import br.com.appetitegourmet.api.models.Desconto;
 import br.com.appetitegourmet.api.models.ResponsavelAluno;
 import br.com.appetitegourmet.api.models.TurmaAnoLetivo;
+import br.com.appetitegourmet.api.repositories.ContratoDescontoRepository;
 import br.com.appetitegourmet.api.repositories.ContratoRepository;
+import br.com.appetitegourmet.api.repositories.DescontoRepository;
 import br.com.appetitegourmet.api.repositories.ResponsavelAlunoRepository;
 import br.com.appetitegourmet.api.repositories.TurmaAnoLetivoRepository;
+import utils.ValidacaoConstantes;
 
 @Service
 public class ContratoService {
@@ -19,11 +24,15 @@ public class ContratoService {
 	private final ContratoRepository contratoRepository;
 	private final ResponsavelAlunoRepository responsavelAlunoRepository;
 	private final TurmaAnoLetivoRepository turmaAnoLetivoRepository;
+	private final ContratoDescontoRepository contratoDescontoRepository;
+	private final DescontoRepository descontoRepository;
 	
-	public ContratoService(TurmaAnoLetivoRepository turmaAnoLetivoRepository, ResponsavelAlunoRepository responsavelAlunoRepository, ContratoRepository contratoRepository) {
+	public ContratoService(TurmaAnoLetivoRepository turmaAnoLetivoRepository, ResponsavelAlunoRepository responsavelAlunoRepository, ContratoRepository contratoRepository, ContratoDescontoRepository contratoDescontoRepository, DescontoRepository descontoRepository) {
 		this.contratoRepository = contratoRepository;
 		this.responsavelAlunoRepository = responsavelAlunoRepository;
 		this.turmaAnoLetivoRepository = turmaAnoLetivoRepository;
+		this.contratoDescontoRepository = contratoDescontoRepository;
+		this.descontoRepository = descontoRepository;
 		
 	}
 	
