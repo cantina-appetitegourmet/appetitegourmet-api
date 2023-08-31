@@ -30,4 +30,7 @@ public class Desconto {
     @Column(nullable = false)
     private BigDecimal valor_percentual;
     
+    @Builder.Default
+    @Column(nullable = false)
+    private Integer tipo = 0;
 }
