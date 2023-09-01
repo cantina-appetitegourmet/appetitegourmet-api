@@ -1,5 +1,7 @@
 package utils;
 
+import java.util.NoSuchElementException;
+
 import org.json.JSONObject;
 import org.springframework.web.client.RestTemplate;
 
@@ -8,7 +10,7 @@ import br.com.appetitegourmet.api.models.Endereco;
 public class ConsultaEndereco {
 	
 	
-	public Endereco consultaEnderecoPorCep(String cep) {
+	public Endereco consultaEnderecoPorCep(String cep) throws Exception {
 		String uri = "https://viacep.com.br/ws/xxxxxxxx/json/";
 		RestTemplate restTemplate = new RestTemplate();
 		Endereco endereco = new Endereco();
@@ -21,11 +23,15 @@ public class ConsultaEndereco {
 		System.out.println("RESPOSTA = " + resposta);
 		json = new JSONObject(resposta);
 		System.out.println("JSON RESPOSTA = " + json.toString());
-		endereco.setBairro(json.getString("bairro"));
-		endereco.setCep(cep);
-		endereco.setCidade(json.getString("localidade"));
-		endereco.setLogradouro(json.getString("logradouro"));
-		endereco.setUf(json.getString("uf"));
+		if(json.getBoolean("erro")) {
+			throw new NoSuchElementException("Endereço inválido!");
+		} else {
+			endereco.setBairro(json.getString("bairro"));
+			endereco.setCep(cep);
+			endereco.setCidade(json.getString("localidade"));
+			endereco.setLogradouro(json.getString("logradouro"));
+			endereco.setUf(json.getString("uf"));
+		}
 		
 		return endereco;
 	}

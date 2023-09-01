@@ -13,7 +13,7 @@ public class UtilService {
 		
 	}
 	
-	public Endereco consultaEnderecoPorCep(String cep) {
+	public Endereco consultaEnderecoPorCep(String cep) throws Exception {
 		ConsultaEndereco consulta = new ConsultaEndereco(); 
         return consulta.consultaEnderecoPorCep(cep);
     }

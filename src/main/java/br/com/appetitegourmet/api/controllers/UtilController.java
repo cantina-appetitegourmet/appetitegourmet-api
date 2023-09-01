@@ -19,7 +19,7 @@ public class UtilController {
 	}
 
 	@GetMapping("/consultaEndereco/{cep}")
-    public Endereco consultaEnderecoPorCep(@PathVariable String cep) {
+    public Endereco consultaEnderecoPorCep(@PathVariable String cep) throws Exception {
         return utilService.consultaEnderecoPorCep(cep);
     }
 }

@@ -37,6 +37,10 @@ public class ContratoDescontoService {
         return contratoDescontoRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Contrato Desconto não encontrado"));
     }
+    
+    public List<ContratoDesconto> buscarContratoDescontoPorContratoId(Long id) {
+        return contratoDescontoRepository.findByContratoId(id);
+    }
 
     public ContratoDesconto salvarContratoDesconto(ContratoDesconto contratoDesconto) {
     	if(contratoDesconto.getContrato() != null) {
