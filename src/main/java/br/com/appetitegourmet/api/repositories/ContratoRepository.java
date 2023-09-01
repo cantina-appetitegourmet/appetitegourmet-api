@@ -17,10 +17,10 @@ public interface ContratoRepository extends JpaRepository<Contrato, Long> {
 	List<TurmaAnoLetivo> findByTurmaAnoLetivoId(Long turmaAnoLetivoId);
 	
 	@Query(value = "select con.* from Responsavel res, "
-			             + "ResponsavelAluno ra, "
+			             + "Responsavel_Aluno ra, "
 			             + "Contrato con "
 		 + "where res.id = ra.responsavel_id and "
-		    + "ra.id = con.responsavel_aluno.id and "
+		    + "ra.id = con.responsavel_aluno_id and "
 		    + "res.id = ?1", nativeQuery = true)
 	List<Contrato> findAllByResponsavelId(Long responsavelId);
 }
