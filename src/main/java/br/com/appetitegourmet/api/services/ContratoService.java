@@ -1,5 +1,6 @@
 package br.com.appetitegourmet.api.services;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -69,6 +70,7 @@ public class ContratoService {
     		retorno = opt.get();
     		contrato.setTurmaAnoLetivo(retorno);
     	}
+    	contrato.setDataAdesao(new Date(System.currentTimeMillis()));
     	retContrato = contratoRepository.save(contrato);
     	contratos = contratoRepository.findAllByResponsavelId(retContrato.getResponsavelAluno().getResponsavel().getId());
     	if(contratos != null && contratos.size() > 1) {
