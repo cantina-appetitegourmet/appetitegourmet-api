@@ -29,6 +29,11 @@ public class ContratoController {
         return contratoService.listarContratos();
     }
     
+    @GetMapping("/responsavel/{id}")
+    public List<Contrato> listarContratosDeUmResponsavel(@PathVariable Long id) {
+        return contratoService.listarContratosDeUmResponsavel(id);
+    }
+    
     @GetMapping("/{id}")
     public Contrato buscarContratoPorId(@PathVariable Long id) {
         return contratoService.buscarContratoPorId(id);

@@ -40,6 +40,10 @@ public class ContratoService {
 	public List<Contrato> listarContratos() {
         return contratoRepository.findAll();
     }
+	
+	public List<Contrato> listarContratosDeUmResponsavel(Long id) {
+        return contratoRepository.findAllByResponsavelId(id);
+    }
 
     public Contrato buscarContratoPorId(Long id) {
         return contratoRepository.findById(id)
