@@ -34,6 +34,11 @@ public class ContratoDescontoController {
         return contratoDescontoService.buscarContratoDescontoPorId(id);
     }
     
+    @GetMapping("/contrato/{id}")
+    public List<ContratoDesconto> buscarContratoDescontoPorContratoIds(@PathVariable Long id) {
+        return contratoDescontoService.buscarContratoDescontoPorContratoId(id);
+    }
+    
     @PostMapping
     public ContratoDesconto salvarContratoDesconto(@RequestBody ContratoDesconto contratoDesconto) {
         return contratoDescontoService.salvarContratoDesconto(contratoDesconto);

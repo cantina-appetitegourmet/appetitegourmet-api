@@ -1,9 +1,11 @@
 package br.com.appetitegourmet.api.controllers;
 
+import java.util.List;
 import java.util.Map;
 
 import br.com.appetitegourmet.api.dto.RequestPagamento;
 import br.com.appetitegourmet.api.exception.ErroParametroObrigatorioException;
+import br.com.appetitegourmet.api.models.Pagamento;
 import br.com.appetitegourmet.api.services.PagamentoService;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,6 +31,18 @@ public class PagamentoController {
 	@RequestMapping("/pagamentos/listarChavesPix")
     public String listarChavesPix() {
         return pagamentoService.listarChavesPix();
+    }
+	
+	@GetMapping
+	@RequestMapping("/pagamentos/{id}")
+    public Pagamento buscarPagamentoPorId(@PathVariable Long id) {
+        return pagamentoService.buscarPagamentoPorId(id);
+    }
+	
+	@GetMapping
+	@RequestMapping("/pagamentos/contrato/{id}")
+    public List<Pagamento> buscarPagamentoPorContratoId(@PathVariable Long id) {
+        return pagamentoService.buscarPagamentoPorContratoId(id);
     }
 	
 	@PostMapping

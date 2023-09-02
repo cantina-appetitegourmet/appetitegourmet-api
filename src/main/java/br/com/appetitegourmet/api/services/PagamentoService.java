@@ -1,6 +1,7 @@
 package br.com.appetitegourmet.api.services;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -55,6 +56,23 @@ public class PagamentoService {
 		this.contratoDescontoRepository = contratoDescontoRepository;
 		this.pagamentoRepository = pagamentoRepository;
 		
+	}
+	
+	public Pagamento buscarPagamentoPorId(Long id) {
+		Optional<Pagamento> opt;
+		Pagamento pag = new Pagamento();
+		
+		opt = pagamentoRepository.findById(id);
+		if(opt.isPresent()) {
+			pag = opt.get();
+		} else {
+			throw new NoSuchElementException("Pagamento não encontrato");
+		}		
+		return pag;
+	}
+	
+	public List<Pagamento> buscarPagamentoPorContratoId(Long id) {
+		return pagamentoRepository.findByContratoId(id);
 	}
 
 	public String listarChavesPix() {
