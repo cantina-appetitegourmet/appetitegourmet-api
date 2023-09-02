@@ -23,7 +23,7 @@ public class ConsultaEndereco {
 		System.out.println("RESPOSTA = " + resposta);
 		json = new JSONObject(resposta);
 		System.out.println("JSON RESPOSTA = " + json.toString());
-		if(json.getBoolean("erro")) {
+		if(!json.isNull("erro")) {
 			throw new NoSuchElementException("Endereço inválido!");
 		} else {
 			endereco.setBairro(json.getString("bairro"));
