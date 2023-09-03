@@ -195,10 +195,13 @@ public class PagamentoService {
 		}
 		
 		System.out.println("Retorno = " + dados.getRetornoString());
-		pagamento.setDados(dados.getRetornoString());
-		pagamentoRepository.save(pagamento);
 		
 		dadosRetorno = new JSONObject(dados.getRetornoString());
+		
+		dadosRetorno.put("tipo", "PIX");
+		
+		pagamento.setDados(dadosRetorno.toString());
+		pagamentoRepository.save(pagamento);
 		
 		idPix = dadosRetorno.getInt("id");
 		
@@ -440,7 +443,12 @@ public class PagamentoService {
 		
 		data = dadosRetorno.getJSONObject("data");
 		
-		pagamentoBD.setDados(Long.toString(data.getLong("charge_id")));
+		JSONObject dadosBD = new JSONObject();
+		
+		dadosBD.put("tipo", "BOLETO");
+		dadosBD.put("id", Long.toString(data.getLong("charge_id")));
+		
+		pagamentoBD.setDados(dadosBD.toString());
 		pagamentoBD = pagamentoRepository.save(pagamentoBD);
 		
 		return dadosRetorno.toString();

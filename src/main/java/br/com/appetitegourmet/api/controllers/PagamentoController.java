@@ -136,6 +136,19 @@ public class PagamentoController {
         return pagamentoService.pixExibirCobranca(txid);
     }
 	
+	@GetMapping
+	@RequestMapping("/pagamentos/pixExibirQrCode")
+    public String pixExibirQrCode(@RequestParam Map<String, String> query) {
+		Integer id = null; 
+		
+		if(query.containsKey("id")) {
+			id = Integer.parseInt(query.get("id"));
+		} else {
+			throw new ErroParametroObrigatorioException("Cobrança sem id");
+		}
+        return pagamentoService.pixCriarQrCode(id);
+    }
+	
 	@PostMapping
 	@RequestMapping("/pagamentos/boletoGerarBoleto")
     public String boletoGerarBoleto(@RequestBody RequestPagamento pagamento) {
@@ -149,8 +162,11 @@ public class PagamentoController {
     }
 	
 	@GetMapping
-	@RequestMapping("/pagamentos/boletoExibirBoleto/{id}")
-    public String boletoExibirBoleto(@PathVariable String id) {
-        return pagamentoService.boletoExibirBoleto(id);
+	@RequestMapping("/pagamentos/boletoExibirBoleto")
+    public String boletoExibirBoleto(@RequestParam Map<String, String> query) {
+		if(!query.containsKey("id")) {
+			throw new ErroParametroObrigatorioException("Cobrança sem id");
+		}
+        return pagamentoService.boletoExibirBoleto(query.get("id"));
     }
 }
