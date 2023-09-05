@@ -229,7 +229,7 @@ public class PagamentoService {
 		if(!retorno) {
 			throw new ErroCriacaoChavePixException(operacoesPix.getErro());
 		}
-		return dados.getRetornoString();
+		return dados.getRetornoJson().toString();
 	}
 	
 	public String pixListarCobrancas(String sDtInicial, 
