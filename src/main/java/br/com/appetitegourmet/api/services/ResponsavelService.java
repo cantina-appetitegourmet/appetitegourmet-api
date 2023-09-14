@@ -57,6 +57,7 @@ public class ResponsavelService {
 				responsavel.setPessoa(novaPessoa);
     		}
 		}
+    	
         return responsavelRepository.save(responsavel);
     }
     
