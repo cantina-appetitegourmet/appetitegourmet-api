@@ -33,9 +33,11 @@ public class EmailService {
 		helper.setSubject(subject);
 		helper.setText(body);
 
-		for(String fileName : listFileName) {
-			FileSystemResource file = new FileSystemResource(new File(fileName));
-			helper.addAttachment(fileName, file);
+		if(listFileName != null) {
+			for(String fileName : listFileName) {
+				FileSystemResource file = new FileSystemResource(new File(fileName));
+				helper.addAttachment(fileName, file);
+			}
 		}
 
 		mailSender.send(message);
