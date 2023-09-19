@@ -1,5 +1,6 @@
 package br.com.appetitegourmet.api.controllers;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,16 +13,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.appetitegourmet.api.models.Responsavel;
+import br.com.appetitegourmet.api.services.EmailService;
 import br.com.appetitegourmet.api.services.ResponsavelService;
+import jakarta.mail.MessagingException;
 
 @RestController
 @RequestMapping("/responsaveis")
 public class ResponsavelController {
 
 	private final ResponsavelService responsavelService;
+	private final EmailService emailService;
     
-    public ResponsavelController(ResponsavelService responsavelService) {
+    public ResponsavelController(ResponsavelService responsavelService, EmailService emailService) {
         this.responsavelService = responsavelService;
+		this.emailService = emailService;
     }
     
     @GetMapping
@@ -35,8 +40,13 @@ public class ResponsavelController {
     }
     
     @PostMapping
-    public Responsavel salvarResponsavel(@RequestBody Responsavel responsavel) {
-        return responsavelService.salvarResponsavel(responsavel);
+    public Responsavel salvarResponsavel(@RequestBody Responsavel responsavel) throws MessagingException, IOException {
+    	Responsavel cadastrado = responsavelService.salvarResponsavel(responsavel);
+    	String mensagem = "Clique aqui para ativar a sua conta";
+    	//emailService.sendHtmlEmail("ricardooliveira@dot7", 
+    	//						   cadastrado.getPessoa().getEmail(), 
+    	//						   "Ativação da conta Appetite Gourmet", mensagem, null);
+        return cadastrado;
     }
     
     @DeleteMapping("/{id}")

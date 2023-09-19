@@ -55,7 +55,15 @@ public class OperacoesBoleto {
 		}
 		
 		if(cliente.getTelefone() != null) {
-			customer.put("phone_number", cliente.getTelefone());
+			String telefone = null;
+			if(cliente.getTelefone().substring(0, 1) == "55") {
+				telefone = cliente.getTelefone().substring(2);
+			} else if(cliente.getTelefone().substring(0, 2) == "+55") {
+				telefone = cliente.getTelefone().substring(3);
+			}
+			if(telefone != null) {
+				customer.put("phone_number", telefone);
+			}
 		}
 		
 		if(cliente.getDataNascimento() != null) {
