@@ -2,6 +2,7 @@ package br.com.appetitegourmet.api.controllers;
 
 import java.util.List;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,31 +26,37 @@ public class ContratoController {
     }
     
     @GetMapping
+    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
     public List<Contrato> listarContratos() {
         return contratoService.listarContratos();
     }
     
     @GetMapping("/responsavel/{id}")
+    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN') or hasRole('RESPONSAVEL')")
     public List<Contrato> listarContratosDeUmResponsavel(@PathVariable Long id) {
         return contratoService.listarContratosDeUmResponsavel(id);
     }
     
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
     public Contrato buscarContratoPorId(@PathVariable Long id) {
         return contratoService.buscarContratoPorId(id);
     }
     
     @PostMapping
+    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN') or hasRole('RESPONSAVEL')")
     public Contrato salvarContrato(@RequestBody Contrato contrato) {
         return contratoService.salvarContrato(contrato);
     }
     
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
     public void excluirContrato(@PathVariable Long id) {
         contratoService.excluirContrato(id);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
     public void editarContrato(@PathVariable Long id, @RequestBody Contrato contrato) {
         contratoService.editarContrato(id, contrato);
     }

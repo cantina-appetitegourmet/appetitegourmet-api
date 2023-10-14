@@ -2,6 +2,7 @@ package br.com.appetitegourmet.api.controllers;
 
 import java.util.List;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,36 +25,43 @@ public class UnidadeController {
     }
     
     @GetMapping
+    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN') or hasRole('RESPONSAVEL')")
     public List<Unidade> listarUnidades() {
         return unidadeService.listarUnidades();
     }
     
     @GetMapping("/colegio/{colegioId}")
+    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
     public List<Unidade> listarUnidadesPorColegio(@PathVariable Long colegioId) {
         return unidadeService.listarUnidadesPorColegio(colegioId);
     }
     
     @GetMapping("/empresa/{empresaId}")
+    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
     public List<Unidade> listarUnidadesPorEmpresa(@PathVariable Long empresaId) {
         return unidadeService.listarUnidadesPorEmpresa(empresaId);
     }
     
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
     public Unidade buscarUnidadePorId(@PathVariable Long id) {
         return unidadeService.buscarUnidadePorId(id);
     }
     
     @PostMapping
+    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
     public Unidade salvarUnidade(@RequestBody Unidade unidade) {
         return unidadeService.salvarUnidade(unidade);
     }
     
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
     public void excluirUnidade(@PathVariable Long id) {
         unidadeService.excluirUnidade(id);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
     public void editarUnidade(@PathVariable Long id, @RequestBody Unidade unidade) {
         unidadeService.editarUnidade(id, unidade);
     }
