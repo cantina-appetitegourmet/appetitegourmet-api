@@ -34,7 +34,7 @@ import br.com.appetitegourmet.api.spring.login.repository.UserRepository;
 import br.com.appetitegourmet.api.spring.login.security.jwt.JwtUtils;
 import br.com.appetitegourmet.api.spring.login.security.services.UserDetailsImpl;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
 //@CrossOrigin(origins= {"*"}, maxAge = 4800, allowCredentials = "false")
 //@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
 //@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")

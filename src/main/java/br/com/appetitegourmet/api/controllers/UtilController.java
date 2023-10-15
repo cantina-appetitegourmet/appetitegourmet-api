@@ -1,16 +1,14 @@
 package br.com.appetitegourmet.api.controllers;
 
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import br.com.appetitegourmet.api.models.Endereco;
 import br.com.appetitegourmet.api.services.UtilService;
 
 @RestController
 @RequestMapping("/utils")
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
 public class UtilController {
 	
 	private final UtilService utilService;
