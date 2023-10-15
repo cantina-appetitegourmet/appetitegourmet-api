@@ -20,11 +20,11 @@ public class User {
   private Long id;
 
   @NotBlank
-  @Size(max = 20)
+  @Size(max = 300)
   private String username;
 
   @NotBlank
-  @Size(max = 50)
+  @Size(max = 300)
   @Email
   private String email;
 

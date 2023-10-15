@@ -13,7 +13,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
 import br.com.appetitegourmet.api.spring.login.security.jwt.AuthEntryPointJwt;
 import br.com.appetitegourmet.api.spring.login.security.jwt.AuthTokenFilter;
 import br.com.appetitegourmet.api.spring.login.security.services.UserDetailsServiceImpl;
@@ -64,9 +63,10 @@ public class WebSecurityConfig {
         .authorizeHttpRequests(auth -> 
           auth.requestMatchers("/api/auth/**").permitAll()
               .requestMatchers("/api/test/**").permitAll()
-              .requestMatchers("responsaveis/enviarEmail/**").permitAll()
-              .requestMatchers("responsaveis/consultaCpf/**").permitAll()
-              .requestMatchers("responsaveis/consultaEmail/**").permitAll()
+              .requestMatchers("/responsaveis/enviarEmail/**").permitAll()
+              .requestMatchers("/responsaveis/consultaCpf/**").permitAll()
+              .requestMatchers("/responsaveis/consultaEmail/**").permitAll()
+              .requestMatchers("/utils/consultaEndereco/**").permitAll()
               .anyRequest().authenticated()
         );
     
@@ -75,5 +75,5 @@ public class WebSecurityConfig {
     http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     
     return http.build();
-  }
+  }  
 }

@@ -35,6 +35,9 @@ import br.com.appetitegourmet.api.spring.login.security.jwt.JwtUtils;
 import br.com.appetitegourmet.api.spring.login.security.services.UserDetailsImpl;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
+//@CrossOrigin(origins= {"*"}, maxAge = 4800, allowCredentials = "false")
+//@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
+//@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -59,16 +62,22 @@ public class AuthController {
     Authentication authentication = authenticationManager
         .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
+    System.out.println("Passo1");
     SecurityContextHolder.getContext().setAuthentication(authentication);
 
+    System.out.println("Passo2");
     UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
+    System.out.println("userDetails=" + userDetails.toString());
+    System.out.println("Passo3");
     ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
 
+    System.out.println("Passo4");
     List<String> roles = userDetails.getAuthorities().stream()
         .map(item -> item.getAuthority())
         .collect(Collectors.toList());
 
+    System.out.println("Passo5");
     return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
         .body(new UserInfoResponse(userDetails.getId(),
                                    userDetails.getUsername(),
