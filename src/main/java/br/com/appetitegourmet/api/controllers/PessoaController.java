@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,6 +28,7 @@ import lombok.AllArgsConstructor;
 @RequestMapping("/pessoas")
 @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
 @AllArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
 public class PessoaController {
     private final PessoaService pessoaService;
     private final PessoaMapper pessoaMapper;

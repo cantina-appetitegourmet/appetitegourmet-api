@@ -3,6 +3,7 @@ package br.com.appetitegourmet.api.controllers;
 import java.util.List;
 
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +18,7 @@ import br.com.appetitegourmet.api.services.ResponsavelAlunoService;
 @RestController
 @RequestMapping("/responsavelAlunos")
 @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
 public class ResponsavelAlunoController {
 	
 	private final ResponsavelAlunoService responsavelAlunoService;

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,7 +21,7 @@ import jakarta.mail.MessagingException;
 
 @RestController
 @RequestMapping("/responsaveis")
-@PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
+@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
 public class ResponsavelController {
 
 	private final ResponsavelService responsavelService;
@@ -32,16 +33,31 @@ public class ResponsavelController {
     }
     
     @GetMapping
+    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
     public List<Responsavel> listarResponsaveis() {
         return responsavelService.listarResponsaveis();
     }
     
+    @GetMapping("/consultaCpf/{cpf}")
+    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN') or hasRole('RESPONSAVEL')")
+    public Boolean consultaCpf(@PathVariable String cpf) {
+        return responsavelService.consultaCpf(cpf);
+    }
+    
+    @GetMapping("/consultaEmail/{email}")
+    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN') or hasRole('RESPONSAVEL')")
+    public Boolean consultaEmail(@PathVariable String email) {
+        return responsavelService.consultaEmail(email);
+    }
+    
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
     public Responsavel buscarResponsavelPorId(@PathVariable Long id) {
         return responsavelService.buscarResponsavelPorId(id);
     }
     
     @PostMapping
+    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
     public Responsavel salvarResponsavel(@RequestBody Responsavel responsavel) throws MessagingException, IOException {
     	Responsavel cadastrado = responsavelService.salvarResponsavel(responsavel);
     	String mensagem = "Clique aqui para ativar a sua conta";
@@ -52,11 +68,13 @@ public class ResponsavelController {
     }
     
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
     public void excluirResponsavel(@PathVariable Long id) {
         responsavelService.excluirResponsavel(id);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
     public void editarResponsavel(@PathVariable Long id, @RequestBody Responsavel responsavel) {
         responsavelService.editarResponsavel(id, responsavel);
     }

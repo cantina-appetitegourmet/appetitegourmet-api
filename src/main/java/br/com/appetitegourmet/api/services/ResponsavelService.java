@@ -30,6 +30,14 @@ public class ResponsavelService {
         return responsavelRepository.findAll();
     }
     
+    public Boolean consultaCpf(String cpf) {
+    	return responsavelRepository.existsByPessoaCpf(cpf);
+    }
+    
+    public Boolean consultaEmail(String email) {
+    	return responsavelRepository.existsByPessoaEmail(email);
+    }
+    
     public Responsavel buscarResponsavelPorId(Long id) {
         return responsavelRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Responsavel não encontrado"));
