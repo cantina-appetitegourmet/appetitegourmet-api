@@ -28,37 +28,37 @@ public class ContratoPlanoController {
     }
     
     @GetMapping
-    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
     public List<ContratoPlano> listarContratoPlanos() {
         return contratoPlanoService.listarContratoPlanos();
     }
     
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
     public ContratoPlano buscarContratoPlanoPorId(@PathVariable Long id) {
         return contratoPlanoService.buscarContratoPlanoPorId(id);
     }
     
     @GetMapping("/contrato/{id}")
-    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN') or hasRole('RESPONSAVEL')")
+    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN') or hasRole('ROLE_RESPONSAVEL')")
     public List<ContratoPlano> buscarContratoPlanoPorContratoId(@PathVariable Long id) {
         return contratoPlanoService.buscarContratoPlanoPorContratoId(id);
     }
     
     @PostMapping
-    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN') or hasRole('RESPONSAVEL')")
+    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN') or hasRole('ROLE_RESPONSAVEL')")
     public ContratoPlano salvarContratoPlano(@RequestBody ContratoPlano contratoPlano) {
         return contratoPlanoService.salvarContratoPlano(contratoPlano);
     }
     
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
     public void excluirContratoPlano(@PathVariable Long id) {
         contratoPlanoService.excluirContratoPlano(id);
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
     public void editarContratoPlano(@PathVariable Long id, @RequestBody ContratoPlano contratoPlano) {
         contratoPlanoService.editarContratoPlano(id, contratoPlano);
     }

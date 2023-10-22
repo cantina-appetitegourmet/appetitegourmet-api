@@ -18,8 +18,16 @@ public class UtilController {
 	}
 
 	@GetMapping("/consultaEndereco/{cep}")
-	@PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN') or hasRole('RESPONSAVEL')")
+	@PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN') or hasRole('ROLE_RESPONSAVEL')")
     public Endereco consultaEnderecoPorCep(@PathVariable String cep) throws Exception {
         return utilService.consultaEnderecoPorCep(cep);
     }
+	
+	@PostMapping("/teste")
+	//@PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN') or hasRole('ROLE_RESPONSAVEL')")
+	@PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
+	public Endereco Teste() throws Exception {
+		System.out.println("TESTOU!!");
+		return utilService.consultaEnderecoPorCep("50060060");
+	}
 }

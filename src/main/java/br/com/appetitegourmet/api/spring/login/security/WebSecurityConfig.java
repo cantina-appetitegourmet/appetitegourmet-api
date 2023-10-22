@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -20,10 +21,10 @@ import br.com.appetitegourmet.api.spring.login.security.services.UserDetailsServ
 
 @Configuration
 //@EnableWebSecurity
-@EnableMethodSecurity
-//(securedEnabled = true,
-//jsr250Enabled = true,
-//prePostEnabled = true) // by default
+@EnableMethodSecurity(
+securedEnabled = true,
+jsr250Enabled = true,
+prePostEnabled = true) // by default
 public class WebSecurityConfig {
   @Autowired
   UserDetailsServiceImpl userDetailsService;
@@ -58,6 +59,7 @@ public class WebSecurityConfig {
   
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+	  System.out.println("SecurityFilterChain - 1");
     http.csrf(AbstractHttpConfigurer::disable)
         .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -68,13 +70,14 @@ public class WebSecurityConfig {
               .requestMatchers("/responsaveis/consultaCpf/**").permitAll()
               .requestMatchers("/responsaveis/consultaEmail/**").permitAll()
               .requestMatchers("/utils/consultaEndereco/**").permitAll()
+              .requestMatchers("/associacaoUsuarios/**").permitAll()
               .anyRequest().authenticated()
         );
-    
+    System.out.println("SecurityFilterChain - 2");
     http.authenticationProvider(authenticationProvider());
-
+    System.out.println("SecurityFilterChain - 3");
     http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-    
+    System.out.println("SecurityFilterChain - 4");
     return http.build();
   }  
 }

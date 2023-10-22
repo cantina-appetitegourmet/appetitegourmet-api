@@ -27,43 +27,43 @@ public class PlanoAlimentarPrecoController {
     }
     
     @GetMapping
-    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
     public List<PlanoAlimentarPreco> listarPlanoAlimentarPrecos() {
         return planoAlimentarPrecoService.listarPlanoAlimentarPrecos();
     }
     
     @GetMapping("/planoAlimentar/{planoAlimentarId}")
-    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
     public List<PlanoAlimentarPreco> listarPlanoAlimentarPrecosPorPlanoAlimentar(@PathVariable Long planoAlimentarId) {
         return planoAlimentarPrecoService.listarPlanoAlimentarPrecosPorPlanoAlimentar(planoAlimentarId);
     }
     
     @GetMapping("/turmaAnoLetivo/{turmaAnoLetivoId}")
-    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN') or hasRole('RESPONSAVEL')")
+    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN') or hasRole('ROLE_RESPONSAVEL')")
     public List<PlanoAlimentarPreco> listarPlanoAlimentarPrecosPorTurmaAnoLetivo(@PathVariable Long turmaAnoLetivoId) {
         return planoAlimentarPrecoService.listarPlanoAlimentarPrecosPorTurmaAnoLetivo(turmaAnoLetivoId);
     }
     
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
     public PlanoAlimentarPreco buscarPlanoAlimentarPrecoPorId(@PathVariable Long id) {
         return planoAlimentarPrecoService.buscarPlanoAlimentarPrecoPorId(id);
     }
     
     @PostMapping
-    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
     public PlanoAlimentarPreco salvarPlanoAlimentarPreco(@RequestBody PlanoAlimentarPreco planoAlimentarPreco) {
         return planoAlimentarPrecoService.salvarPlanoAlimentarPreco(planoAlimentarPreco);
     }
     
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
     public void excluirPlanoAlimentarPreco(@PathVariable Long id) {
         planoAlimentarPrecoService.excluirPlanoAlimentarPreco(id);
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
     public void editarPlanoAlimentarPreco(@PathVariable Long id, @RequestBody PlanoAlimentarPreco planoAlimentarPreco) {
         planoAlimentarPrecoService.editarPlanoAlimentarPreco(id, planoAlimentarPreco);
     }

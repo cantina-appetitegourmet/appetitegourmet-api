@@ -28,37 +28,37 @@ public class ContratoDescontoController {
     }
     
     @GetMapping
-    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
     public List<ContratoDesconto> listarContratoDescontos() {
         return contratoDescontoService.listarContratoDescontos();
     }
     
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
     public ContratoDesconto buscarContratoDescontoPorId(@PathVariable Long id) {
         return contratoDescontoService.buscarContratoDescontoPorId(id);
     }
     
     @GetMapping("/contrato/{id}")
-    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN') or hasRole('RESPONSAVEL')")
+    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN') or hasRole('ROLE_RESPONSAVEL')")
     public List<ContratoDesconto> buscarContratoDescontoPorContratoIds(@PathVariable Long id) {
         return contratoDescontoService.buscarContratoDescontoPorContratoId(id);
     }
     
     @PostMapping
-    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
     public ContratoDesconto salvarContratoDesconto(@RequestBody ContratoDesconto contratoDesconto) {
         return contratoDescontoService.salvarContratoDesconto(contratoDesconto);
     }
     
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
     public void excluirContratoDesconto(@PathVariable Long id) {
     	contratoDescontoService.excluirContratoDesconto(id);
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
     public void editarContratoDesconto(@PathVariable Long id, @RequestBody ContratoDesconto contratoDesconto) {
     	contratoDescontoService.editarContratoDesconto(id, contratoDesconto);
     }

@@ -27,43 +27,43 @@ public class AnoSerieUnidadeController {
     }
     
     @GetMapping
-    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
     public List<AnoSerieUnidade> listarAnoSerieUnidades() {
         return anoSerieUnidadeService.listarAnoSerieUnidades();
     }
     
     @GetMapping("/anoSerie/{anoSerieId}")
-    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
     public List<AnoSerieUnidade> listarAnoSerieUnidadesPorAnoSerie(@PathVariable Long anoSerieId) {
         return anoSerieUnidadeService.listarAnoSerieUnidadesPorAnoSerie(anoSerieId);
     }
     
     @GetMapping("/unidade/{unidadeId}")
-    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN') or hasRole('RESPONSAVEL')")
+    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN') or hasRole('ROLE_RESPONSAVEL')")
     public List<AnoSerieUnidade> listarAnoSerieUnidadesPorUnidade(@PathVariable Long unidadeId) {
         return anoSerieUnidadeService.listarAnoSerieUnidadesPorUnidade(unidadeId);
     }
     
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
     public AnoSerieUnidade buscarAnoSerieUnidadePorId(@PathVariable Long id) {
         return anoSerieUnidadeService.buscarAnoSerieUnidadePorId(id);
     }
     
     @PostMapping
-    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
     public AnoSerieUnidade salvarAnoSerieUnidade(@RequestBody AnoSerieUnidade anoSerieUnidade) {
         return anoSerieUnidadeService.salvarAnoSerieUnidade(anoSerieUnidade);
     }
     
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
     public void excluirAnoSerieUnidade(@PathVariable Long id) {
         anoSerieUnidadeService.excluirAnoSerieUnidade(id);
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
     public void editarAnoSerieUnidade(@PathVariable Long id, @RequestBody AnoSerieUnidade anoSerieUnidade) {
         anoSerieUnidadeService.editarAnoSerieUnidade(id, anoSerieUnidade);
     }

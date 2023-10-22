@@ -26,7 +26,7 @@ import lombok.AllArgsConstructor;
 
 @RestController
 @RequestMapping("/pessoas")
-@PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
+@PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
 @AllArgsConstructor
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
 public class PessoaController {

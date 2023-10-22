@@ -27,31 +27,31 @@ public class ParentescoController {
     }
     
     @GetMapping
-    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN') or hasRole('RESPONSAVEL')")
+    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN') or hasRole('ROLE_RESPONSAVEL')")
     public List<Parentesco> listarParentescos() {
         return parentescoService.listarParentescos();
     }
     
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
     public Parentesco buscarParentescoPorId(@PathVariable Long id) {
         return parentescoService.buscarParentescoPorId(id);
     }
     
     @PostMapping
-    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
     public Parentesco salvarParentesco(@RequestBody Parentesco parentesco) {
         return parentescoService.salvarParentesco(parentesco);
     }
     
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
     public void excluirParentesco(@PathVariable Long id) {
         parentescoService.excluirParentesco(id);
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
     public void editarParentesco(@PathVariable Long id, @RequestBody Parentesco parentesco) {
         parentescoService.editarParentesco(id, parentesco);
     }

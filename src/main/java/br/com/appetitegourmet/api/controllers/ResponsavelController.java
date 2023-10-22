@@ -40,38 +40,38 @@ public class ResponsavelController {
     }
     
     @GetMapping
-    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
     public List<Responsavel> listarResponsaveis() {
         return responsavelService.listarResponsaveis();
     }
     
     @GetMapping("/consultaCpf/{cpf}")
-    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
     public Boolean consultaCpf(@PathVariable String cpf) {
         return responsavelService.consultaCpf(cpf);
     }
     
     @GetMapping("/consultaEmail/{email}")
-    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
     public Boolean consultaEmail(@PathVariable String email) {
         return responsavelService.consultaEmail(email);
     }
     
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
     public Responsavel buscarResponsavelPorId(@PathVariable Long id) {
         return responsavelService.buscarResponsavelPorId(id);
     }
     
     @PostMapping
-    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
     public Responsavel salvarResponsavel(@RequestBody Responsavel responsavel) throws MessagingException, IOException {
     	Responsavel cadastrado = responsavelService.salvarResponsavel(responsavel);
         return cadastrado;
     }
     
     @PostMapping("/enviarEmail")
-    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
     public Responsavel enviarEmail(@RequestBody CadastroResponsavelComUsuarioRequest cadastro) throws MessagingException, IOException {
     	Responsavel responsavel = new Responsavel();
     	int resp;
@@ -99,13 +99,13 @@ public class ResponsavelController {
     }
     
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
     public void excluirResponsavel(@PathVariable Long id) {
         responsavelService.excluirResponsavel(id);
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
     public void editarResponsavel(@PathVariable Long id, @RequestBody Responsavel responsavel) {
         responsavelService.editarResponsavel(id, responsavel);
     }

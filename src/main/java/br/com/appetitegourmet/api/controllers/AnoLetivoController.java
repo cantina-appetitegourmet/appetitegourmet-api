@@ -28,37 +28,37 @@ public class AnoLetivoController {
     }
     
     @GetMapping
-    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
     public List<AnoLetivo> listarAnoLetivos() {
         return anoLetivoService.listarAnoLetivos();
     }
     
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
     public AnoLetivo buscarAnoLetivoPorId(@PathVariable Long id) {
         return anoLetivoService.buscarAnoLetivoPorId(id);
     }
     
     @GetMapping("/ativos")
-    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN') or hasRole('RESPONSAVEL')")
+    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN') or hasRole('ROLE_RESPONSAVEL')")
     public List<AnoLetivo> buscarAnosLetivosAtivos() {
         return anoLetivoService.buscarAnosLetivosAtivos();
     }
     
     @PostMapping
-    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
     public AnoLetivo salvarAnoLetivo(@RequestBody AnoLetivo anoLetivo) {
         return anoLetivoService.salvarAnoLetivo(anoLetivo);
     }
     
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
     public void excluirAnoLetivo(@PathVariable Long id) {
         anoLetivoService.excluirAnoLetivo(id);
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
     public void editarAnoLetivo(@PathVariable Long id, @RequestBody AnoLetivo anoLetivo) {
         anoLetivoService.salvarAnoLetivo(anoLetivo);
     }

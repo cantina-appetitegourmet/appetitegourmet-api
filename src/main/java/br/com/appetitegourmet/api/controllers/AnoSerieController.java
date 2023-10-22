@@ -18,7 +18,7 @@ import br.com.appetitegourmet.api.services.AnoSerieService;
 
 @RestController
 @RequestMapping("/anoSeries")
-@PreAuthorize("hasRole('OPERADOR') or hasRole('ADMIN')")
+@PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
 public class AnoSerieController {
     private final AnoSerieService anoSerieService;
