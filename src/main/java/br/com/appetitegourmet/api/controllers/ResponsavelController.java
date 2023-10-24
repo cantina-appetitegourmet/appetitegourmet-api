@@ -1,7 +1,6 @@
 package br.com.appetitegourmet.api.controllers;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -26,7 +25,9 @@ import jakarta.mail.MessagingException;
 
 @RestController
 @RequestMapping("/responsaveis")
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
+@CrossOrigin(origins = "http://localhost:4200",
+   			 maxAge = 3600, 
+   			 allowCredentials="true")
 public class ResponsavelController {
 
 	private final ResponsavelService responsavelService;
@@ -46,13 +47,13 @@ public class ResponsavelController {
     }
     
     @GetMapping("/consultaCpf/{cpf}")
-    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
+    //@PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN') or hasRole('ROLE_RESPONSAVEL')")
     public Boolean consultaCpf(@PathVariable String cpf) {
         return responsavelService.consultaCpf(cpf);
     }
     
     @GetMapping("/consultaEmail/{email}")
-    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
+    //@PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN') or hasRole('ROLE_RESPONSAVEL')")
     public Boolean consultaEmail(@PathVariable String email) {
         return responsavelService.consultaEmail(email);
     }

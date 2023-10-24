@@ -18,7 +18,6 @@ public class UtilController {
 	}
 
 	@GetMapping("/consultaEndereco/{cep}")
-	@PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN') or hasRole('ROLE_RESPONSAVEL')")
     public Endereco consultaEnderecoPorCep(@PathVariable String cep) throws Exception {
         return utilService.consultaEnderecoPorCep(cep);
     }

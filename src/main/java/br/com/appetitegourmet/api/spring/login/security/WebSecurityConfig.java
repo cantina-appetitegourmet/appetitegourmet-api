@@ -1,12 +1,14 @@
 package br.com.appetitegourmet.api.spring.login.security;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -19,12 +21,14 @@ import br.com.appetitegourmet.api.spring.login.security.jwt.AuthEntryPointJwt;
 import br.com.appetitegourmet.api.spring.login.security.jwt.AuthTokenFilter;
 import br.com.appetitegourmet.api.spring.login.security.services.UserDetailsServiceImpl;
 
+import org.springframework.web.cors.CorsConfiguration;
+
 @Configuration
 //@EnableWebSecurity
 @EnableMethodSecurity(
 securedEnabled = true,
 jsr250Enabled = true,
-prePostEnabled = true) // by default
+prePostEnabled = true) 
 public class WebSecurityConfig {
   @Autowired
   UserDetailsServiceImpl userDetailsService;
@@ -59,8 +63,17 @@ public class WebSecurityConfig {
   
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+	  
+	  CorsConfiguration corsConfiguration = new CorsConfiguration();
+      corsConfiguration.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
+      corsConfiguration.setAllowedOrigins(List.of("http://localhost:4200"));
+      corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PUT","OPTIONS","PATCH", "DELETE"));
+      corsConfiguration.setAllowCredentials(true);
+      corsConfiguration.setExposedHeaders(List.of("Authorization"));
+	  
 	  System.out.println("SecurityFilterChain - 1");
     http.csrf(AbstractHttpConfigurer::disable)
+    	.cors(Customizer.withDefaults())
         .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(auth -> 
@@ -79,5 +92,18 @@ public class WebSecurityConfig {
     http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     System.out.println("SecurityFilterChain - 4");
     return http.build();
-  }  
+  }
+  
+  /*
+  @Bean
+  CorsConfigurationSource corsConfigurationSource() {
+  	CorsConfiguration configuration = new CorsConfiguration();
+  	configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
+  	configuration.setAllowedMethods(Arrays.asList("GET","POST"));
+  	UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+  	source.registerCorsConfiguration("/**", configuration);
+  	return source;
+  }
+  */
 }
+
