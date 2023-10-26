@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class AssociacaoResponse {
 
-	private Integer id;
+	private Long id;
 }

@@ -15,13 +15,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.appetitegourmet.api.dto.CadastroResponsavelComUsuarioRequest;
 import br.com.appetitegourmet.api.models.Responsavel;
+import br.com.appetitegourmet.api.services.AssociacaoUsuarioService;
 import br.com.appetitegourmet.api.services.EmailService;
 import br.com.appetitegourmet.api.services.ResponsavelService;
+import br.com.appetitegourmet.api.spring.login.models.ERole;
 import br.com.appetitegourmet.api.spring.login.payload.request.SignupRequest;
 import br.com.appetitegourmet.api.spring.login.security.services.UserService;
 import jakarta.mail.MessagingException;
+import utils.GeracaoSenha;
 
 @RestController
 @RequestMapping("/responsaveis")
@@ -33,11 +35,13 @@ public class ResponsavelController {
 	private final ResponsavelService responsavelService;
 	private final EmailService emailService;
 	private final UserService userService;
+	private final AssociacaoUsuarioService associacaoService;
     
-    public ResponsavelController(ResponsavelService responsavelService, EmailService emailService, UserService userService) {
+    public ResponsavelController(ResponsavelService responsavelService, EmailService emailService, UserService userService, AssociacaoUsuarioService associacaoService) {
         this.responsavelService = responsavelService;
 		this.emailService = emailService;
 		this.userService = userService;
+		this.associacaoService = associacaoService;
     }
     
     @GetMapping
@@ -72,25 +76,35 @@ public class ResponsavelController {
     }
     
     @PostMapping("/enviarEmail")
-    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
-    public Responsavel enviarEmail(@RequestBody CadastroResponsavelComUsuarioRequest cadastro) throws MessagingException, IOException {
+    public Responsavel enviarEmail(@RequestBody Responsavel cadastro) throws MessagingException, IOException {
     	Responsavel responsavel = new Responsavel();
     	int resp;
     	Set<String> strRoles = Set.of("resp");
+    	GeracaoSenha gs = new GeracaoSenha();
+    	String password;
     	
     	SignupRequest signUpRequest = new SignupRequest(); 
     	
     	responsavel.setPessoa(cadastro.getPessoa());
     	
+    	password = gs.GeradorSenha();
     	signUpRequest.setUsername(cadastro.getPessoa().getEmail());
     	signUpRequest.setEmail(cadastro.getPessoa().getEmail());
-    	signUpRequest.setPassword(cadastro.getSenha());
+    	signUpRequest.setPassword(password);
     	signUpRequest.setRole(strRoles);
     	resp = userService.registerUser(signUpRequest);
     	
     	if(resp == 0) {
 	    	Responsavel cadastrado = responsavelService.salvarResponsavel(responsavel);
-	    	String mensagem = "Sua conta foi ativada com sucesso, faça login para fazer a adesão ao sistema!";
+	    	
+	    	associacaoService.associa(cadastro.getPessoa().getEmail(), 
+	    							  ERole.ROLE_RESPONSAVEL, 
+	    							  cadastrado.getId());
+	    	
+	    	String mensagem = "Sua conta foi ativada com sucesso!\n"
+	    			+ "Usuario: " + cadastro.getPessoa().getEmail() + "\n" 
+	    			+ "Senha: " + password + "\n"
+	    			+ "Faça login para fazer a adesão ao sistema!";
 	    	emailService.sendHtmlEmail("ricardooliveira@dot7", 
 	    							   cadastrado.getPessoa().getEmail(), 
 	    							   "Ativação da conta Appetite Gourmet", mensagem, null);

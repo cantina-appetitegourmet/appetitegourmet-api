@@ -38,6 +38,6 @@ public class AssociacaoUsuario {
     @JoinColumn(name = "role_id", nullable = false)
 	private Role role;
 	
-	@Column(name="associado_id", nullable = false, unique = true)
-	private Integer associado_id;
+	@Column(name="associado_id", nullable = false)
+	private Long associado_id;
 }

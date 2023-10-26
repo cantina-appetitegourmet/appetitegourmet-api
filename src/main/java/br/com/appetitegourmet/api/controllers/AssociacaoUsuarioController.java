@@ -39,7 +39,7 @@ public class AssociacaoUsuarioController {
 		
 		if(associacaoUsuario == null) {
 			System.out.println("Associacao NULL");
-			resposta.setId(0);
+			resposta.setId((long) 0);
 			return ResponseEntity.badRequest().body(new MessageResponse("Usuario não encontrado"));
 		}
 		// apenas o id

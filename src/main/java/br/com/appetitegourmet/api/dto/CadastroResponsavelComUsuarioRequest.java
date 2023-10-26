@@ -5,6 +5,5 @@ import lombok.Data;
 
 @Data
 public class CadastroResponsavelComUsuarioRequest {
-	private String senha;
 	private Pessoa pessoa;
 }
