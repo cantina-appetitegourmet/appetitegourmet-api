@@ -18,7 +18,7 @@ import br.com.appetitegourmet.api.services.UnidadeService;
 
 @RestController
 @RequestMapping("/unidades")
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
+//@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
 public class UnidadeController {
     private final UnidadeService unidadeService;
     

@@ -16,7 +16,7 @@ import br.com.appetitegourmet.api.dto.AssociacaoResponse;
 
 @RestController
 @RequestMapping("/associacaoUsuarios")
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
+//@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
 public class AssociacaoUsuarioController {
 	
 	private final AssociacaoUsuarioService associacaoUsuarioService; 

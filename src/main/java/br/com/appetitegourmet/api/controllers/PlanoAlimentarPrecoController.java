@@ -18,7 +18,7 @@ import br.com.appetitegourmet.api.services.PlanoAlimentarPrecoService;
 
 @RestController
 @RequestMapping("/planoAlimentarPrecos")
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
+//@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
 public class PlanoAlimentarPrecoController {
     private final PlanoAlimentarPrecoService planoAlimentarPrecoService;
     

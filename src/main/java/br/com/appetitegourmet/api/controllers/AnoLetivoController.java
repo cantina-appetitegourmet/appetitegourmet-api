@@ -18,7 +18,7 @@ import br.com.appetitegourmet.api.services.AnoLetivoService;
 
 @RestController
 @RequestMapping("/anosLetivos")
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
+//@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
 public class AnoLetivoController {
 
 	private final AnoLetivoService anoLetivoService;

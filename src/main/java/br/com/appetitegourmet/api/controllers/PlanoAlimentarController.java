@@ -19,7 +19,7 @@ import br.com.appetitegourmet.api.services.PlanoAlimentarService;
 @RestController
 @RequestMapping("/planosAlimentares")
 @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
+//@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
 public class PlanoAlimentarController {
     private final PlanoAlimentarService planoAlimentarService;
     

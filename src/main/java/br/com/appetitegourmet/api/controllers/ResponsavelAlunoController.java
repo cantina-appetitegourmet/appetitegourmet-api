@@ -17,7 +17,7 @@ import br.com.appetitegourmet.api.services.ResponsavelAlunoService;
 
 @RestController
 @RequestMapping("/responsavelAlunos")
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
+//@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
 public class ResponsavelAlunoController {
 	
 	private final ResponsavelAlunoService responsavelAlunoService;

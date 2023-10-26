@@ -18,7 +18,7 @@ import br.com.appetitegourmet.api.services.ContratoDescontoService;
 
 @RestController
 @RequestMapping("/contratoDescontos")
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
+//@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
 public class ContratoDescontoController {
 
 	private final ContratoDescontoService contratoDescontoService;

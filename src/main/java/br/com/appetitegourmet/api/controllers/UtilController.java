@@ -8,7 +8,7 @@ import br.com.appetitegourmet.api.services.UtilService;
 
 @RestController
 @RequestMapping("/utils")
-@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
+//@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
 public class UtilController {
 	
 	private final UtilService utilService;
