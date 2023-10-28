@@ -30,12 +30,9 @@ import br.com.appetitegourmet.api.spring.login.security.jwt.JwtUtils;
 import br.com.appetitegourmet.api.spring.login.security.services.UserDetailsImpl;
 import br.com.appetitegourmet.api.spring.login.security.services.UserService;
 
-//@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
-//@CrossOrigin(origins= {"*"}, maxAge = 4800, allowCredentials = "false")
-////@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
-////@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
 @RestController
 @RequestMapping("/api/auth")
+@CrossOrigin(origins = "http://localhost:4200,https://nice-beach-01dafa610.3.azurestaticapps.net", maxAge = 3600, allowCredentials="true")
 public class AuthController {
   @Autowired
   AuthenticationManager authenticationManager;
