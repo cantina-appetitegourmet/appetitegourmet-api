@@ -18,7 +18,7 @@ import br.com.appetitegourmet.api.services.TurmaAnoLetivoService;
 
 @RestController
 @RequestMapping("/turmaAnoLetivos")
-//@CrossOrigin(origins = "http://localhost:4200", maxAge = 3600, allowCredentials="true")
+@CrossOrigin(origins = "http://localhost:4200,https://nice-beach-01dafa610.3.azurestaticapps.net", maxAge = 3600, allowCredentials="true")
 public class TurmaAnoLetivoController {
     private final TurmaAnoLetivoService turmaAnoLetivoService;
     

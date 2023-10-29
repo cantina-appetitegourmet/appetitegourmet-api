@@ -27,9 +27,7 @@ import utils.GeracaoSenha;
 
 @RestController
 @RequestMapping("/responsaveis")
-@CrossOrigin(origins = "http://localhost:4200",
-   			 maxAge = 3600, 
-   			 allowCredentials="true")
+@CrossOrigin(origins = "http://localhost:4200,https://nice-beach-01dafa610.3.azurestaticapps.net", maxAge = 3600, allowCredentials="true")
 public class ResponsavelController {
 
 	private final ResponsavelService responsavelService;
