@@ -73,6 +73,7 @@ public class WebSecurityConfig {
 	  
 	  System.out.println("SecurityFilterChain - 1");
     http.csrf(AbstractHttpConfigurer::disable)
+    	.cors(Customizer.withDefaults())
         .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(auth -> 
@@ -105,4 +106,3 @@ public class WebSecurityConfig {
   }
   */
 }
-
