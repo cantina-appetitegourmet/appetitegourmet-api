@@ -30,3 +30,4 @@
 
 # Documentação da API
 https://appetitegourmetapi.azurewebsites.net/swagger-ui/index.html
+http://localhost:8080/swagger-ui/index.html
