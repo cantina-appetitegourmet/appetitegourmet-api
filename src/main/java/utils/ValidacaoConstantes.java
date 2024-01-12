@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import br.com.appetitegourmet.api.models.ContratoPlano;
+import br.com.appetitegourmet.api.models.Feriado;
 
 public final class ValidacaoConstantes {
     public static final int TAMANHO_MAXIMO_NOME_COMPLETO = 100;
@@ -25,6 +26,10 @@ public final class ValidacaoConstantes {
     public static final int STATUS_CANCELADO = 3;
     
     public static final int DESCONTO_2_OU_MAIS_FILHOS = 1;
+    
+    public static final int FERIADO_NACIONAL = 1;
+    public static final int FERIADO_ESTADUAL = 2;
+    public static final int FERIADO_MUNICIPAL = 3;
 
     private ValidacaoConstantes() {
     }
@@ -61,4 +66,16 @@ public final class ValidacaoConstantes {
 		
 		return total;
 	}
+    
+    static public int getTipoFeriado(Feriado feriado) {
+    	int tipo = FERIADO_NACIONAL;
+    	
+    	if (feriado.getCidade() != null) {
+    		tipo = FERIADO_MUNICIPAL;
+    	} else if(feriado.getEstado() != null) {
+    		tipo = FERIADO_ESTADUAL;
+    	}
+    	
+    	return tipo;
+    }
 }

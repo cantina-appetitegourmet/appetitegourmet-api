@@ -67,4 +67,8 @@ public class Unidade {
     @Builder.Default
     @Column(nullable = false)
     private Boolean ativo = true;
+    
+    @ManyToOne
+    @JoinColumn(name = "cidade_id", nullable = false)
+    private Cidade cidade;
 }
