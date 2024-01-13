@@ -5,7 +5,10 @@ import java.sql.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import org.apache.commons.lang3.time.DateUtils;
+
 
 import org.springframework.stereotype.Service;
 import br.com.appetitegourmet.api.models.AnoLetivo;
@@ -153,7 +156,114 @@ public class CalendarioService {
     	} while(mes < (GregorianCalendar.DECEMBER + 1));
     }
     
-    public CalendarioExcecao pegaExcecao(List<CalendarioExcecao> listaCalendarioExcecao, 
+    private List<Calendario> pegaCalendarioGeral(Long cidadeId, 
+			    								AnoLetivo anoLetivo, 
+			    								Date dataInicio, 
+			    								Date dataFim) {
+    	GregorianCalendar cal = new GregorianCalendar();
+    	boolean util;
+    	String observacao;
+    	List <Feriado> todosFeriados;
+    	List <Feriado> feriados;
+    	Calendario calendario = null;
+    	CidadeAnoLetivo cidadeAnoLetivo;
+    	Optional <CidadeAnoLetivo> opt;
+    	int tipoFeriado = 0;
+    	Date data = null;
+    	List<Calendario> retorno = new ArrayList<Calendario>();
+    	
+    	System.out.println("ANO_LETIVO = " + anoLetivo.toString());
+    	
+    	opt = cidadeAnoLetivoRepository.findByAnoLetivoIdAndCidadeId(anoLetivo.getId(), cidadeId);
+    	 
+    	if(opt.isPresent()) {
+    		cidadeAnoLetivo = opt.get();
+    	} else {
+    		return null;
+    	}
+    	
+    	cal.setTime(dataInicio);
+    	
+    	todosFeriados = feriadoRepository.findByDataBetween(dataInicio, dataFim);
+    	
+    	for(data = dataInicio; data.compareTo(dataFim) < 0; ) {
+    		
+    		feriados = pegaFeriados(data, todosFeriados);
+    		
+			calendario = new Calendario();
+        	calendario.setAnoLetivo(anoLetivo);
+        	calendario.setData(data);
+		
+    		calendario.setCidade(cidadeAnoLetivo.getCidade());
+    		if(calendario.getData().compareTo(cidadeAnoLetivo.getInicioAnoLetivo()) < 0) {
+    			util = false;
+        		observacao = "Férias";
+    		} else if(calendario.getData().compareTo(cidadeAnoLetivo.getFimPrimeiroSemestre()) <= 0) {
+    			util = true;
+        		observacao = "Dia letivo";
+    		} else if(calendario.getData().compareTo(cidadeAnoLetivo.getInicioSegundSemestre()) < 0) {
+    			util = false;
+        		observacao = "Férias";
+    		} else if(calendario.getData().compareTo(cidadeAnoLetivo.getFimAnoLetivo()) <= 0) {
+    			util = true;
+        		observacao = "Dia letivo";
+    		} else {
+    			util = false;
+        		observacao = "Férias";
+    		}
+    		
+    		if(util) {
+        		if(!feriados.isEmpty()) {
+        			for(Feriado feriado : feriados) {
+        				tipoFeriado = ValidacaoConstantes.getTipoFeriado(feriado);
+        				if(tipoFeriado == ValidacaoConstantes.FERIADO_NACIONAL) {
+		        			util = false;
+		        			observacao = feriados.get(0).getObservacao();
+		        			break;
+        				} else if( (tipoFeriado == ValidacaoConstantes.FERIADO_ESTADUAL) &&
+        						   (cidadeAnoLetivo.getCidade().getEstado().getEstado().compareTo(feriado.getEstado().getEstado()) == 0) ) {
+        					util = false;
+		        			observacao = feriados.get(0).getObservacao();
+		        			break;
+        				} else if( (tipoFeriado == ValidacaoConstantes.FERIADO_MUNICIPAL) &&
+        						   (cidadeAnoLetivo.getCidade().getCidade().compareTo(feriado.getCidade().getCidade()) == 0) ) {
+        					util = false;
+		        			observacao = feriados.get(0).getObservacao();
+		        			break;
+        				}
+        			}
+        		} 
+        		if(util) {
+        			if(cal.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SUNDAY) {
+        				util = false;
+		        		observacao = "Domingo";
+        			} else if(cal.get(GregorianCalendar.DAY_OF_WEEK) == GregorianCalendar.SATURDAY) {
+        				util = false;
+		        		observacao = "Sábado";
+	        		}
+        		}
+    		}
+    		calendario.setUtil(util);
+    		calendario.setObservacao(observacao);
+    		retorno.add(calendario);
+    		cal.add(GregorianCalendar.DATE, 1);
+    		data = new java.sql.Date(cal.getTimeInMillis());
+    	}
+    	return retorno;
+    }
+    
+    private List<Feriado> pegaFeriados(Date data, List<Feriado> todosFeriados) {
+    	List<Feriado> retorno = new ArrayList<Feriado>();
+    	
+    	for(Feriado feriado : todosFeriados) {
+    		if(DateUtils.isSameDay(feriado.getData(), data)) {
+    			retorno.add(feriado);
+    		}
+    	}
+		return retorno;
+	}
+
+	private CalendarioExcecao pegaExcecao(List<CalendarioExcecao> listaCalendarioExcecao, 
 										 Long turma_id, 
 										 Long serie_id, 
 									 	 Long plano_alimentar_id) {
@@ -231,9 +341,13 @@ public class CalendarioService {
     	int ano;
     	int ultimoDia;
     	int numeroDiasUteis = 0;
-    	Optional <AnoLetivo> anoLetivo = anoLetivoRepository.findById(anoLetivoId);
-    	if (anoLetivo.isPresent()) {
-    		ano = Integer.parseInt(anoLetivo.get().getAno());
+    	Optional <AnoLetivo> opt = anoLetivoRepository.findById(anoLetivoId);
+    	AnoLetivo anoLetivo;
+    	List<CalendarioExcecao> todosCalendarioExcecao;
+    	
+    	if (opt.isPresent()) {
+    		ano = Integer.parseInt(opt.get().getAno());
+    		anoLetivo = opt.get();
     	} else {
     		return null;
     	}
@@ -256,17 +370,14 @@ public class CalendarioService {
 		System.out.println("Ano Letivo Id = " + anoLetivoId);
 		System.out.println("Data Inicial = " + diaInicial.toString());
 		System.out.println("Data Final = " + diaFinal.toString());
-    	
-    	listaCalendario = calendarioRepository.findByCidadeIdAndAnoLetivoIdAndDataBetween(cidadeId, 
-																		    			  anoLetivoId, 
-																		    			  diaInicial, 
-																		    			  diaFinal);
+		
+		listaCalendario = pegaCalendarioGeral(cidadeId, anoLetivo, diaInicial, diaFinal);
+		
+		todosCalendarioExcecao = calendarioExcecaoRepository.findByAnoLetivoIdAndUnidadeIdAndDataBetween(anoLetivoId, unidade_id, diaInicial, diaFinal);
+		
     	System.out.println("Numero de Dias = " + listaCalendario.size());
     	for(Calendario calendario : listaCalendario) {
-    		listaCalendarioExcecao = 
-    				calendarioExcecaoRepository.findByDataAndAnoLetivoIdAndUnidadeId(calendario.getData(), 
-    																	 			 anoLetivoId, 
-    																	 			 unidade_id);
+    		listaCalendarioExcecao = pegaListaCalendarioExcecao(calendario.getData(), todosCalendarioExcecao);
     		
     		calendarioExcecao = pegaExcecao(listaCalendarioExcecao, 
     										turma_id, 
@@ -334,7 +445,21 @@ public class CalendarioService {
     	return valor;
     }
     
-    public List<Calendario> listarCalendariosPorAnoLetivoEPorCidadeEMes(Long anoLetivoId, Long cidadeId, Long mes) {
+	private List<CalendarioExcecao> pegaListaCalendarioExcecao(Date data,
+			List<CalendarioExcecao> todosCalendarioExcecao) {
+		List<CalendarioExcecao> retorno = new ArrayList<CalendarioExcecao>();
+		
+		for(CalendarioExcecao calendario : todosCalendarioExcecao) {
+			if(DateUtils.isSameDay(calendario.getData(), data)) {
+				retorno.add(calendario);
+			}
+		}
+		
+		
+		return retorno;
+	}
+
+	public List<Calendario> listarCalendariosPorAnoLetivoEPorCidadeEMes(Long anoLetivoId, Long cidadeId, Long mes) {
     	Date start;
     	Date end;
     	Long ano;

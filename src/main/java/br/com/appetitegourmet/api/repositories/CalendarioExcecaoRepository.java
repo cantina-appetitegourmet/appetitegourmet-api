@@ -10,4 +10,5 @@ import br.com.appetitegourmet.api.models.CalendarioExcecao;
 public interface CalendarioExcecaoRepository extends JpaRepository<CalendarioExcecao, Long>  {
 	List<CalendarioExcecao> findByDataAndAnoLetivoId(Date data, Long anoLetivoId);
 	List<CalendarioExcecao> findByDataAndAnoLetivoIdAndUnidadeId(Date data, Long anoLetivoId, Long unidadeId);
+	List<CalendarioExcecao> findByAnoLetivoIdAndUnidadeIdAndDataBetween(Long anoLetivoId, Long unidadeId, Date startDate, Date endDate);
 }

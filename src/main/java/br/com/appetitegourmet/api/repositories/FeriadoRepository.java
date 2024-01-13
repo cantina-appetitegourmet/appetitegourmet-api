@@ -12,4 +12,5 @@ import br.com.appetitegourmet.api.models.Feriado;
 public interface FeriadoRepository extends JpaRepository<Feriado, Long>  {
 
 	List<Feriado> findByData(Date data);
+	List<Feriado> findByDataBetween(Date startDate, Date endDate);
 }
