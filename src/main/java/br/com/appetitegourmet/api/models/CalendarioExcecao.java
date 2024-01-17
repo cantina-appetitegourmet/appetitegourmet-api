@@ -26,7 +26,7 @@ public class CalendarioExcecao {
     private AnoLetivo anoLetivo;
 	
 	@ManyToOne
-    @JoinColumn(name = "unidade_id", nullable = true)
+    @JoinColumn(name = "unidade_id", nullable = false)
     private Unidade unidade;
 	
 	@ManyToOne
@@ -34,7 +34,7 @@ public class CalendarioExcecao {
     private Turma turma;
 	
 	@ManyToOne
-    @JoinColumn(name = "serie_id", nullable = false)
+    @JoinColumn(name = "serie_id", nullable = true)
     private Serie serie;
 	
 	@ManyToOne
