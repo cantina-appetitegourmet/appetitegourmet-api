@@ -99,4 +99,28 @@ public class CalendarioController {
         	    								 serieId, 
         	    								 plano_alimentarId);
     }
+    
+    @GetMapping("/preco2/{dataInicial}/{dataFinal}/{seg}/{ter}/{qua}/{qui}/{sex}/{sab}/{dom}/{plano_alimentar_precoId}")
+    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN') or hasRole('ROLE_RESPONSAVEL')")
+    public BigDecimal calculaTotalMes2(@PathVariable String dataInicial,
+    								   @PathVariable String dataFinal,
+    								   @PathVariable boolean seg, 
+    								   @PathVariable boolean ter, 
+    								   @PathVariable boolean qua, 
+    								   @PathVariable boolean qui, 
+    								   @PathVariable boolean sex,
+    								   @PathVariable boolean sab,
+    								   @PathVariable boolean dom,
+    								   @PathVariable Long plano_alimentar_precoId) {
+        return calendarioService.calculaTotalMes2(dataInicial,
+        										  dataFinal,
+        										  seg,
+        										  ter,
+        										  qua,
+        										  qui,
+        										  sex,
+        										  sab,
+        	    								  dom,
+        	    								  plano_alimentar_precoId);
+    }
 }
