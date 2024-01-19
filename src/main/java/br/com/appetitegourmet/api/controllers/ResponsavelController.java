@@ -99,13 +99,13 @@ public class ResponsavelController {
 	    							  ERole.ROLE_RESPONSAVEL, 
 	    							  cadastrado.getId());
 	    	
-	    	String mensagem = "Sua conta foi ativada com sucesso!\n"
+	    	String mensagem = "Sua conta foi criada com sucesso!\n"
 	    			+ "Usuario: " + cadastro.getPessoa().getEmail() + "\n" 
 	    			+ "Senha: " + password + "\n"
-	    			+ "Faça login para fazer a adesão ao sistema!";
+	    			+ "Crie a senha para fazer login e adesão ao sistema!";
 	    	emailService.sendHtmlEmail("ricardooliveira@dot7", 
 	    							   cadastrado.getPessoa().getEmail(), 
-	    							   "Ativação da conta Appetite Gourmet", mensagem, null);
+	    							   "Criação da conta Appetite Gourmet", mensagem, null);
 	        return cadastrado;
     	}
     	return null;

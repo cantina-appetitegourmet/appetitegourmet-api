@@ -22,28 +22,28 @@ public class GeracaoSenha {
 		// create character rule for lower case  
         CharacterRule LCR = new CharacterRule(EnglishCharacterData.LowerCase);  
         // set number of lower case characters  
-        LCR.setNumberOfCharacters(2);  
+        LCR.setNumberOfCharacters(20);  
   
         // create character rule for upper case  
         CharacterRule UCR = new CharacterRule(EnglishCharacterData.UpperCase);  
         // set number of upper case characters  
-        UCR.setNumberOfCharacters(2);  
+        UCR.setNumberOfCharacters(20);  
   
         // create character rule for digit  
         CharacterRule DR = new CharacterRule(EnglishCharacterData.Digit);  
         // set number of digits  
-        DR.setNumberOfCharacters(2);  
+        DR.setNumberOfCharacters(20);  
   
         // create character rule for special characters  
         CharacterRule SR = new CharacterRule(specialChars);  
         // set number of special characters  
-        SR.setNumberOfCharacters(2);
+        SR.setNumberOfCharacters(0);
         
         // create instance of the PasswordGenerator class   
         PasswordGenerator passGen = new PasswordGenerator();  
           
         // call generatePassword() method of PasswordGenerator class to get Passay generated password  
-        String password = passGen.generatePassword(8, SR, LCR, UCR, DR);  
+        String password = passGen.generatePassword(60, SR, LCR, UCR, DR);  
         
         return password;
 	}
