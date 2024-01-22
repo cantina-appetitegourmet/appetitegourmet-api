@@ -28,7 +28,7 @@ public class ContratoController {
     }
     
     @GetMapping
-    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN') or hasRole('ROLE_RESPONSAVEL')")
     public List<Contrato> listarContratos() {
         return contratoService.listarContratos();
     }

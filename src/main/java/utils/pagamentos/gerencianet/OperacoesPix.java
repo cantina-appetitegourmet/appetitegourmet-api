@@ -6,7 +6,6 @@ import utils.Retorno;
 
 import org.json.JSONObject;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -224,8 +223,6 @@ public class OperacoesPix {
 		Credentials credentials = new Credentials(Credentials.PIX, Credentials.PRODUCAO);
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
 		String complemento = "T00:00:00Z";
-		Date dtInicial = null; 
-		Date dtFinal = null;
 		
 		JSONObject options = new JSONObject();
 		options.put("client_id", credentials.getClientId());
@@ -235,14 +232,14 @@ public class OperacoesPix {
 		
 		HashMap<String, String> params = new HashMap<String, String>();
 		try {
-			dtInicial = formatter.parse(sDtIncio);
+			formatter.parse(sDtIncio);
 		} catch (ParseException e) {
 			throw new ErroFormatacaoDataException("formato = yyyy-mm-dd");
 		}
 		sDtIncio += complemento;
 		params.put("inicio", sDtIncio);
 		try {
-			dtInicial = formatter.parse(sDtFim);
+			formatter.parse(sDtFim);
 		} catch (ParseException e) {
 			throw new ErroFormatacaoDataException("formato = yyyy-mm-dd");
 		}

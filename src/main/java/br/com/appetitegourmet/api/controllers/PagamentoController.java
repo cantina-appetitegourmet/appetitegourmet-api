@@ -46,7 +46,7 @@ public class PagamentoController {
 	
 	@GetMapping
 	@RequestMapping("/pagamentos/contrato/{id}")
-	@PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN') or hasRole('ROLE_RESPONSAVEL')")
     public List<Pagamento> buscarPagamentoPorContratoId(@PathVariable Long id) {
         return pagamentoService.buscarPagamentoPorContratoId(id);
     }

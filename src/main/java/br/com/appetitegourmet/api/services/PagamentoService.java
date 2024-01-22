@@ -48,6 +48,8 @@ public class PagamentoService {
 	@Autowired
     private Environment env;
 	
+	public static final int DIAS_PARA_VENCIMENTO = 90;
+	
 	public PagamentoService(ResponsavelRepository responsavelRepository, 
 			                UnidadeRepository unidadeRepository, ContratoRepository contratoRepository, ContratoPlanoRepository contratoPlanoRepository, PagamentoRepository pagamentoRepository, ResponsavelAlunoRepository responsavelAlunoRepository, ContratoDescontoRepository contratoDescontoRepository) {
 		this.responsavelRepository = responsavelRepository;
@@ -118,7 +120,7 @@ public class PagamentoService {
 		Retorno dados = new Retorno();
 		boolean retorno;
 		OperacoesPix operacoesPix;
-		int expiracao = 3600*24*10;
+		int expiracao = 3600*24*DIAS_PARA_VENCIMENTO;
 		String cpf = null; 
 		String nome = null;
 		String valor = null; 
@@ -367,7 +369,7 @@ public class PagamentoService {
         cliente.setTelefone(responsavel.getPessoa().getTelefone());
         
         LocalDate hoje = LocalDate.now();
-        LocalDate amanha = hoje.plusDays(15);
+        LocalDate amanha = hoje.plusDays(DIAS_PARA_VENCIMENTO);
         DateTimeFormatter formatters = DateTimeFormatter.ofPattern("uuuu-MM-dd");
         dataExpiracao = amanha.format(formatters);
         
