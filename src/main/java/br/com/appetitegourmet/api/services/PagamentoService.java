@@ -18,6 +18,7 @@ import br.com.appetitegourmet.api.models.Unidade;
 import br.com.appetitegourmet.api.models.Contrato;
 import br.com.appetitegourmet.api.models.ContratoDesconto;
 import br.com.appetitegourmet.api.models.ContratoPlano;
+import br.com.appetitegourmet.api.models.Empresa;
 import br.com.appetitegourmet.api.models.Pagamento;
 import br.com.appetitegourmet.api.models.Responsavel;
 import br.com.appetitegourmet.api.exception.ErroCriacaoChavePixException;
@@ -25,6 +26,7 @@ import br.com.appetitegourmet.api.repositories.UnidadeRepository;
 import br.com.appetitegourmet.api.repositories.ContratoDescontoRepository;
 import br.com.appetitegourmet.api.repositories.ContratoPlanoRepository;
 import br.com.appetitegourmet.api.repositories.ContratoRepository;
+import br.com.appetitegourmet.api.repositories.EmpresaRepository;
 import br.com.appetitegourmet.api.repositories.PagamentoRepository;
 import br.com.appetitegourmet.api.repositories.ResponsavelAlunoRepository;
 import br.com.appetitegourmet.api.repositories.ResponsavelRepository;
@@ -45,16 +47,20 @@ public class PagamentoService {
 	private final ContratoPlanoRepository contratoPlanoRepository;
 	private final ContratoDescontoRepository contratoDescontoRepository;
 	private final PagamentoRepository pagamentoRepository;
+	private final EmpresaRepository empresaRepository;
 	@Autowired
     private Environment env;
 	
+	public static final int DIAS_PARA_VENCIMENTO = 90;
+	
 	public PagamentoService(ResponsavelRepository responsavelRepository, 
-			                UnidadeRepository unidadeRepository, ContratoRepository contratoRepository, ContratoPlanoRepository contratoPlanoRepository, PagamentoRepository pagamentoRepository, ResponsavelAlunoRepository responsavelAlunoRepository, ContratoDescontoRepository contratoDescontoRepository) {
+			                EmpresaRepository empresaRepository, ContratoRepository contratoRepository, ContratoPlanoRepository contratoPlanoRepository, PagamentoRepository pagamentoRepository, ResponsavelAlunoRepository responsavelAlunoRepository, ContratoDescontoRepository contratoDescontoRepository, UnidadeRepository unidadeRepository2) {
 		this.responsavelRepository = responsavelRepository;
 		this.contratoRepository = contratoRepository;
 		this.contratoPlanoRepository = contratoPlanoRepository;
 		this.contratoDescontoRepository = contratoDescontoRepository;
 		this.pagamentoRepository = pagamentoRepository;
+		this.empresaRepository = empresaRepository;
 		
 	}
 	
@@ -88,17 +94,26 @@ public class PagamentoService {
 		return dados.getRetornoString();
 	}
 	
-	public String criarChavePix() {
+	public String criarChavePix(int empresa) {
 		Retorno dados = new Retorno();
 		boolean retorno;
 		OperacoesPix operacoesPix;
+		Optional<Empresa> optEmpresa;
 		
-		operacoesPix = new OperacoesPix();
-		retorno = operacoesPix.criarChave(dados);
-		if(!retorno) {
-			throw new ErroCriacaoChavePixException(operacoesPix.getErro());
+		optEmpresa = empresaRepository.findById((long)empresa);
+		
+		if(optEmpresa.isPresent()) {
+			
+			operacoesPix = new OperacoesPix();
+			System.out.println("Empresa - " + optEmpresa.get().getRazaoSocial());			
+			System.out.println("Dados Integração - " + optEmpresa.get().getDadosIntegracaoPix());
+			retorno = operacoesPix.criarChave2(dados, optEmpresa.get().getDadosIntegracaoPix());
+			if(!retorno) {
+				throw new ErroCriacaoChavePixException(operacoesPix.getErro());
+			}
+			return dados.getRetornoString();
 		}
-		return dados.getRetornoString();
+		throw new ErroCriacaoChavePixException("Empresa inexistente!");
 	}
 	
 	public String removerChavePix(String chave) {
@@ -118,7 +133,7 @@ public class PagamentoService {
 		Retorno dados = new Retorno();
 		boolean retorno;
 		OperacoesPix operacoesPix;
-		int expiracao = 3600*24*10;
+		int expiracao = 3600*24*DIAS_PARA_VENCIMENTO;
 		String cpf = null; 
 		String nome = null;
 		String valor = null; 
@@ -207,7 +222,7 @@ public class PagamentoService {
 		
 		dados = new Retorno();
 		operacoesPix = new OperacoesPix();
-		retorno = operacoesPix.criarQrCode(dados, idPix);
+		retorno = operacoesPix.criarQrCode2(dados, idPix, contrato.getUnidade().getEmpresa().getDadosIntegracaoPix());
 		
 		if(!retorno) {
 			throw new ErroCriacaoChavePixException(operacoesPix.getErro());
@@ -367,7 +382,7 @@ public class PagamentoService {
         cliente.setTelefone(responsavel.getPessoa().getTelefone());
         
         LocalDate hoje = LocalDate.now();
-        LocalDate amanha = hoje.plusDays(15);
+        LocalDate amanha = hoje.plusDays(DIAS_PARA_VENCIMENTO);
         DateTimeFormatter formatters = DateTimeFormatter.ofPattern("uuuu-MM-dd");
         dataExpiracao = amanha.format(formatters);
         

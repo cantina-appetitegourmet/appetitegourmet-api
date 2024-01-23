@@ -6,7 +6,6 @@ import utils.Retorno;
 
 import org.json.JSONObject;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -42,6 +41,28 @@ public class OperacoesPix {
 		options.put("client_secret", credentials.getClientSecret());
 		options.put("certificate", credentials.getCertificate());
 		options.put("sandbox", credentials.isSandbox());
+		
+		try {
+			Gerencianet gn = new Gerencianet(options);
+			response = gn.call("pixCreateEvp", new HashMap<String,String>(), new JSONObject());
+			dados.setRetornoString(response.toString());
+			retorno = true;
+		}catch (GerencianetException e){
+			erro = e.getError();
+			erro += " - " + e.getErrorDescription();
+		}
+		catch (Exception e) {
+			erro = e.getMessage();
+		}
+		return retorno;
+	}
+	
+	public boolean criarChave2(Retorno dados, String dadosItegracaoPix) {
+		
+		boolean retorno = false;
+		JSONObject response = null;
+
+		JSONObject options = new JSONObject(dadosItegracaoPix);
 		
 		try {
 			Gerencianet gn = new Gerencianet(options);
@@ -210,6 +231,30 @@ public class OperacoesPix {
 		return retorno;
 	}
 	
+	public boolean criarQrCode2(Retorno dados, Integer id, String dadosItegracaoPix) {
+
+		boolean retorno = false;
+		Map<String, Object> response;
+
+		JSONObject options = new JSONObject(dadosItegracaoPix);
+
+		HashMap<String, String> params = new HashMap<String, String>();
+		params.put("id", id.toString());
+
+		try {
+			Gerencianet gn = new Gerencianet(options);
+			response = gn.call("pixGenerateQRCode", params, new HashMap<String, Object>());
+			dados.setRetornoJson(new JSONObject(response));
+			retorno = true;
+		} catch (GerencianetException e){
+			erro = e.getError();
+			erro += " - " + e.getErrorDescription();
+		} catch (Exception e) {
+			erro = e.getMessage();
+		}
+		return retorno;
+	}
+	
 	public boolean listarCobrancas(Retorno dados, 
 				   			       String sDtIncio,
 				   			       String sDtFim,
@@ -224,8 +269,6 @@ public class OperacoesPix {
 		Credentials credentials = new Credentials(Credentials.PIX, Credentials.PRODUCAO);
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
 		String complemento = "T00:00:00Z";
-		Date dtInicial = null; 
-		Date dtFinal = null;
 		
 		JSONObject options = new JSONObject();
 		options.put("client_id", credentials.getClientId());
@@ -235,14 +278,14 @@ public class OperacoesPix {
 		
 		HashMap<String, String> params = new HashMap<String, String>();
 		try {
-			dtInicial = formatter.parse(sDtIncio);
+			formatter.parse(sDtIncio);
 		} catch (ParseException e) {
 			throw new ErroFormatacaoDataException("formato = yyyy-mm-dd");
 		}
 		sDtIncio += complemento;
 		params.put("inicio", sDtIncio);
 		try {
-			dtInicial = formatter.parse(sDtFim);
+			formatter.parse(sDtFim);
 		} catch (ParseException e) {
 			throw new ErroFormatacaoDataException("formato = yyyy-mm-dd");
 		}

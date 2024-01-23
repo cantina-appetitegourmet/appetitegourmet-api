@@ -1,16 +1,20 @@
 package br.com.appetitegourmet.api.spring.login.security.services;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import br.com.appetitegourmet.api.spring.login.models.AlterPassword;
 import br.com.appetitegourmet.api.spring.login.models.ERole;
 import br.com.appetitegourmet.api.spring.login.models.Role;
 import br.com.appetitegourmet.api.spring.login.models.User;
+import br.com.appetitegourmet.api.spring.login.payload.request.LoginRequest;
 import br.com.appetitegourmet.api.spring.login.payload.request.SignupRequest;
+import br.com.appetitegourmet.api.spring.login.repository.AlterPasswordRepository;
 import br.com.appetitegourmet.api.spring.login.repository.RoleRepository;
 import br.com.appetitegourmet.api.spring.login.repository.UserRepository;
 
@@ -18,13 +22,15 @@ import br.com.appetitegourmet.api.spring.login.repository.UserRepository;
 public class UserService {
 	private final UserRepository userRepository;
 	private final RoleRepository roleRepository;
+	private final AlterPasswordRepository alterRepository;
 	
 	@Autowired
 	PasswordEncoder encoder;
 	
-	public UserService(UserRepository userRepository, RoleRepository roleRepository) {
+	public UserService(UserRepository userRepository, RoleRepository roleRepository, AlterPasswordRepository alterRepository) {
 		this.userRepository = userRepository;
-		this.roleRepository = roleRepository;		
+		this.roleRepository = roleRepository;
+		this.alterRepository = alterRepository;		
 	}
 	
 	public int registerUser(SignupRequest signUpRequest) {
@@ -76,5 +82,37 @@ public class UserService {
 	    userRepository.save(user);
 	    
 	    return 0;
+	}
+	
+	public Boolean salvarHashSenha(String email, String hash) {
+		Boolean retorno = true;
+		AlterPassword alter = new AlterPassword();
+		
+		alter.setEmail(email);
+		alter.setHash(hash);
+		alterRepository.save(alter);
+		
+		return retorno;
+	}
+	
+	public int alterPassword(LoginRequest loginRequest) {
+		Optional <User> optUser = userRepository.findByUsername(loginRequest.getUsername());
+		User user;
+		Boolean existe = alterRepository.existsByEmailAndHash(loginRequest.getUsername(), loginRequest.getHash());
+		
+		if(!existe) {
+			return 1;
+		}
+		
+		if(!optUser.isPresent()) {
+			return 1;
+		}
+		
+		user = optUser.get();
+		user.setPassword(encoder.encode(loginRequest.getPassword()));
+		userRepository.save(user);
+		//alterRepository.deleteByEmailAndHash(loginRequest.getUsername(), loginRequest.getHash());
+		
+		return 0;
 	}
 }

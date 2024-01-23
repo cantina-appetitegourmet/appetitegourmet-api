@@ -1,5 +1,8 @@
 package br.com.appetitegourmet.api.spring.login.controllers;
 
+import java.util.Arrays;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -82,8 +85,10 @@ public class AuthController {
   }
 
   @PostMapping("/signup")
-  public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+  public ResponseEntity<?> registerUserResponsavel(@Valid @RequestBody SignupRequest signUpRequest) {
+	Set<String> roles = new HashSet<>(Arrays.asList("resp"));
 	  
+	signUpRequest.setRole(roles);
 	int resp = userService.registerUser(signUpRequest);
 	
     if (resp == 1) {
@@ -95,6 +100,53 @@ public class AuthController {
     }
     
     return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+  }
+  
+  @PostMapping("/signupAdmin")
+  public ResponseEntity<?> registerUserAdmin(@Valid @RequestBody SignupRequest signUpRequest) {
+	Set<String> roles = new HashSet<>(Arrays.asList("admin"));
+	  
+	signUpRequest.setRole(roles);
+	int resp = userService.registerUser(signUpRequest);
+	
+    if (resp == 1) {
+      return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
+    }
+
+    if (resp == 2) {
+      return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
+    }
+    
+    return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+  }
+  
+  @PostMapping("/signupOperador")
+  public ResponseEntity<?> registerUserOperador(@Valid @RequestBody SignupRequest signUpRequest) {
+	Set<String> roles = new HashSet<>(Arrays.asList("oper"));
+	  
+	signUpRequest.setRole(roles);
+	int resp = userService.registerUser(signUpRequest);
+	
+    if (resp == 1) {
+      return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));
+    }
+
+    if (resp == 2) {
+      return ResponseEntity.badRequest().body(new MessageResponse("Error: Email is already in use!"));
+    }
+    
+    return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+  }
+  
+  @PostMapping("/alterPassword")
+  public ResponseEntity<?> alterPassword(@Valid @RequestBody LoginRequest loginRequest) {
+	int resp = userService.alterPassword(loginRequest);
+	
+    if (resp == 1) {
+      return ResponseEntity.badRequest().body(new MessageResponse("Error: Falha ao alterar a senha!"));
+    }
+
+    return ResponseEntity.ok(new MessageResponse("Senha alterada com sucesso!"));
   }
 
   @PostMapping("/signout")

@@ -46,16 +46,16 @@ public class PagamentoController {
 	
 	@GetMapping
 	@RequestMapping("/pagamentos/contrato/{id}")
-	@PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
+	@PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN') or hasRole('ROLE_RESPONSAVEL')")
     public List<Pagamento> buscarPagamentoPorContratoId(@PathVariable Long id) {
         return pagamentoService.buscarPagamentoPorContratoId(id);
     }
 	
 	@PostMapping
 	@RequestMapping("/pagamentos/criarChavePix")
-	@PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
-    public String criarChavePix() {
-        return pagamentoService.criarChavePix();
+	@PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN') or hasRole('ROLE_RESPONSAVEL')")
+    public String criarChavePix(@RequestBody Integer empresa) {
+        return pagamentoService.criarChavePix(empresa);
     }
 	
 	@DeleteMapping
