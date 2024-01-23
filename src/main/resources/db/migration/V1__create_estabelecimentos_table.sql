@@ -186,44 +186,55 @@ CREATE TABLE anos_serie (
     UNIQUE (nome, serie_id)
 );
 
-INSERT INTO series (nome) VALUES ('Maternal');
+INSERT INTO series (nome) VALUES ('Educação Infantil');
+
+-- GGE/CBV
+INSERT INTO anos_serie (nome, serie_id) 
+SELECT 'Infantil 1', series.id from series where series.nome = 'Educação Infantil';
 
 INSERT INTO anos_serie (nome, serie_id) 
-SELECT 'Maternal', ser.id from series where nome = 'Maternal';
-
-INSERT INTO series (nome) VALUES ('Infantil');
+SELECT 'Infantil 2', series.id from series where series.nome = 'Educação Infantil';
 
 INSERT INTO anos_serie (nome, serie_id) 
-SELECT '1', ser.id from series where nome = 'Infantil';
+SELECT 'Infantil 3', series.id from series where series.nome = 'Educação Infantil';
 
 INSERT INTO anos_serie (nome, serie_id) 
-SELECT '2', ser.id from series where nome = 'Infantil';
+SELECT 'Infantil 4', series.id from series where series.nome = 'Educação Infantil';
 
 INSERT INTO anos_serie (nome, serie_id) 
-SELECT '3', ser.id from series where nome = 'Infantil';
+SELECT 'Infantil 5', series.id from series where series.nome = 'Educação Infantil';
+
+-- Equipe
 
 INSERT INTO anos_serie (nome, serie_id) 
-SELECT '4', ser.id from series where nome = 'Infantil';
+SELECT 'Maternal', series.id from series where series.nome = 'Educação Infantil';
 
 INSERT INTO anos_serie (nome, serie_id) 
-SELECT '5', ser.id from series where nome = 'Infantil';
+SELECT 'Nível 1', series.id from series where series.nome = 'Educação Infantil';
+
+INSERT INTO anos_serie (nome, serie_id) 
+SELECT 'Nível 2', series.id from series where series.nome = 'Educação Infantil';
+
+INSERT INTO anos_serie (nome, serie_id) 
+SELECT 'Nível 3', series.id from series where series.nome = 'Educação Infantil';
+
 
 INSERT INTO series (nome) VALUES ('Ensino Fundamental I');
 
 INSERT INTO anos_serie (nome, serie_id) 
-SELECT '1° Ano', ser.id from series where nome = 'Ensino Fundamental I';
+SELECT '1° Ano', series.id from series where series.nome = 'Ensino Fundamental I';
 
 INSERT INTO anos_serie (nome, serie_id) 
-SELECT '2° Ano', ser.id from series where nome = 'Ensino Fundamental I';
+SELECT '2° Ano', series.id from series where series.nome = 'Ensino Fundamental I';
 
 INSERT INTO anos_serie (nome, serie_id) 
-SELECT '3° Ano', ser.id from series where nome = 'Ensino Fundamental I';
+SELECT '3° Ano', series.id from series where series.nome = 'Ensino Fundamental I';
 
 INSERT INTO anos_serie (nome, serie_id) 
-SELECT '4° Ano', ser.id from series where nome = 'Ensino Fundamental I';
+SELECT '4° Ano', series.id from series where series.nome = 'Ensino Fundamental I';
 
 INSERT INTO anos_serie (nome, serie_id) 
-SELECT '5° Ano', ser.id from series where nome = 'Ensino Fundamental I';
+SELECT '5° Ano', series.id from series where series.nome = 'Ensino Fundamental I';
 
 CREATE TABLE anos_serie_unidade (
     id SERIAL PRIMARY KEY,

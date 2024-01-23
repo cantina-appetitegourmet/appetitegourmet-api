@@ -133,21 +133,40 @@ INSERT INTO public.unidades(
 	where col.nome = 'Colégio GGE' and can.cnpj = '40.654.219/0001-29' and cid.nome = 'PETROLINA'
 
 
+-- GGE(Exceto unidade BENFICA)/CBV sem a nomenclatura específica do Equipe
 INSERT INTO anos_serie_unidade (ano_serie_id, unidade_id)
 SELECT anos_serie.id, unidades.id
 FROM anos_serie , unidades 
-where unidades.id not in (select id from unidade where cantinanome = 'Appetite Gourmet GGE Benfica');
+where unidades.id not in (select id from unidade 
+                          where 
+                            (cantinanome = 'Appetite Gourmet GGE Benfica') 
+                            or 
+                            (cantinanome = 'Appetite Gourmet Equipe') );
 
+-- GGE BENFICA apenas com o fundamenta I, 
+--  pois os planos para a Educação Infantil estao indisponiveis
+--  também não entra a nomenclatura específica do Equipe 
 INSERT INTO anos_serie_unidade (ano_serie_id, unidade_id)
 SELECT anos_serie.id, unidades.id
 FROM anos_serie , unidades 
 where anos_serie.id in (select id from anos_serie 
                         where serie_id in (select id from serie 
                                            where nome = 'Ensino Fundamental I')) 
+      and
+      anos_serie.nome not in('Maternal', 'Nível 1', 'Nível 2', 'Nível 3')  
       and 
       unidades.id in (select id from unidade 
                       where cantinanome = 'Appetite Gourmet GGE Benfica');
-
+                      
+-- Equipe 
+INSERT INTO anos_serie_unidade (ano_serie_id, unidade_id)
+SELECT anos_serie.id, unidades.id
+FROM anos_serie , unidades 
+where anos_serie.nome in('Maternal', 'Nível 1', 'Nível 2', 'Nível 3', 
+                         '1° Ano', '2° Ano', '3° Ano', '4° Ano', '5° Ano')  
+      and 
+      unidades.id in (select id from unidade 
+                      where cantinanome = 'Appetite Gourmet GGE Benfica');
 
 
 INSERT INTO ano_serie_unidade_turnos (ano_serie_unidade_id, turno)
