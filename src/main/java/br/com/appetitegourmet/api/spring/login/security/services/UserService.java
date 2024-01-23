@@ -85,7 +85,7 @@ public class UserService {
 	}
 	
 	public Boolean salvarHashSenha(String email, String hash) {
-		Boolean retorno = false;
+		Boolean retorno = true;
 		AlterPassword alter = new AlterPassword();
 		
 		alter.setEmail(email);
