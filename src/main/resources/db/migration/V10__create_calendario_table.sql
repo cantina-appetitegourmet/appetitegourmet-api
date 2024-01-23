@@ -29,21 +29,21 @@ INSERT INTO cidades_anos_letivos (ano_letivo_id, cidade_id,
                                   inicio_ano_letivo, fim_primeiro_semestre, 
                                   inicio_segundo_semestre, fim_ano_letivo) 
 	SELECT al.id, cid.id, '2024-02-05', '2024-07-05', '2024-07-24', '2024-12-20'  
-	FROM cidades cid, anos_letivos al WHERE c.nome = 'RECIFE' and al.ano = '2024';
+	FROM cidades cid, anos_letivos al WHERE cid.nome = 'RECIFE' and al.ano = '2024';
 	
 -- CARUARU
 INSERT INTO cidades_anos_letivos (ano_letivo_id, cidade_id,
                                   inicio_ano_letivo, fim_primeiro_semestre, 
                                   inicio_segundo_semestre, fim_ano_letivo) 
 	SELECT al.id, cid.id, '2024-02-05', '2024-07-05', '2024-07-24', '2024-12-20'  
-	FROM cidades cid, anos_letivos al WHERE c.nome = 'CARUARU' and al.ano = '2024';
+	FROM cidades cid, anos_letivos al WHERE cid.nome = 'CARUARU' and al.ano = '2024';
 	
 -- PETROLINA
 INSERT INTO cidades_anos_letivos (ano_letivo_id, cidade_id,
                                   inicio_ano_letivo, fim_primeiro_semestre, 
                                   inicio_segundo_semestre, fim_ano_letivo) 
 	SELECT al.id, cid.id, '2024-02-05', '2024-07-05', '2024-07-24', '2024-12-20'  
-	FROM cidades cid, anos_letivos al WHERE c.nome = 'PETROLINA' and al.ano = '2024';
+	FROM cidades cid, anos_letivos al WHERE cid.nome = 'PETROLINA' and al.ano = '2024';
 
 CREATE TABLE calendarios_excecao (
     id SERIAL PRIMARY KEY,
@@ -67,7 +67,7 @@ INSERT INTO public.unidades(
 	nome, cantinanome, tipo_desconto_boleto, valor_desconto_boleto, tipo_desconto_condicional_boleto, valor_desconto_condicional_boleto, valor_multa_boleto, valor_juros_dia_boleto, colegio_id, cantina_empresa_id, endereco_id, ativo, cidade_id)
 	SELECT 'Boa Viagem','Appetite Gourmet GGE Boa Viagem',0,0.00,0,0.00,2.00,0.03,col.id, can.id, currval('enderecos_id_seq'),true,cid.id 
 	from colegios col, cantinas_empresa can, cidades cid 
-	where col.nome = 'Colégio GGE' and can.cnpj = '24.687.382/0001-31' and cid.nome = 'RECIFE'
+	where col.nome = 'Colégio GGE' and can.cnpj = '24.687.382/0001-31' and cid.nome = 'RECIFE';
 
 INSERT INTO public.enderecos(
 	cep, logradouro, bairro, cidade, uf, numero, complemento)
@@ -76,7 +76,7 @@ INSERT INTO public.unidades(
 	nome, cantinanome, tipo_desconto_boleto, valor_desconto_boleto, tipo_desconto_condicional_boleto, valor_desconto_condicional_boleto, valor_multa_boleto, valor_juros_dia_boleto, colegio_id, cantina_empresa_id, endereco_id, ativo, cidade_id)
 	SELECT 'Parnamirim','Appetite Gourmet GGE Parnamirim',0,0.00,0,0.00,2.00,0.03,col.id, can.id, currval('enderecos_id_seq'),true,cid.id 
 	from colegios col, cantinas_empresa can, cidades cid 
-	where col.nome = 'Colégio GGE' and can.cnpj = '40.208.467/0001-46' and cid.nome = 'RECIFE'
+	where col.nome = 'Colégio GGE' and can.cnpj = '40.208.467/0001-46' and cid.nome = 'RECIFE';
 
 INSERT INTO public.enderecos(
 	cep, logradouro, bairro, cidade, uf, numero, complemento)
@@ -85,7 +85,7 @@ INSERT INTO public.unidades(
 	nome, cantinanome, tipo_desconto_boleto, valor_desconto_boleto, tipo_desconto_condicional_boleto, valor_desconto_condicional_boleto, valor_multa_boleto, valor_juros_dia_boleto, colegio_id, cantina_empresa_id, endereco_id, ativo, cidade_id)
 	SELECT 'Benfica','Appetite Gourmet GGE Benfica',0,0.00,0,0.00,2.00,0.03,col.id, can.id, currval('enderecos_id_seq'),true,cid.id 
 	from colegios col, cantinas_empresa can, cidades cid 
-	where col.nome = 'Colégio GGE' and can.cnpj = '48.893.826/0001-53' and cid.nome = 'RECIFE'
+	where col.nome = 'Colégio GGE' and can.cnpj = '48.893.826/0001-53' and cid.nome = 'RECIFE';
 
 INSERT INTO public.enderecos(
 	cep, logradouro, bairro, cidade, uf, numero, complemento)
@@ -94,7 +94,7 @@ INSERT INTO public.unidades(
 	nome, cantinanome, tipo_desconto_boleto, valor_desconto_boleto, tipo_desconto_condicional_boleto, valor_desconto_condicional_boleto, valor_multa_boleto, valor_juros_dia_boleto, colegio_id, cantina_empresa_id, endereco_id, ativo, cidade_id)
 	SELECT 'Caruaru','Appetite Gourmet GGE Caruaru',0,0.00,0,0.00,2.00,0.03,col.id, can.id, currval('enderecos_id_seq'),true,cid.id 
 	from colegios col, cantinas_empresa can, cidades cid 
-	where col.nome = 'Colégio GGE' and can.cnpj = '28.319.352/0001-23' and cid.nome = 'CARUARU'
+	where col.nome = 'Colégio GGE' and can.cnpj = '28.319.352/0001-23' and cid.nome = 'CARUARU';
 
 INSERT INTO public.enderecos(
 	cep, logradouro, bairro, cidade, uf, numero, complemento)
@@ -103,7 +103,7 @@ INSERT INTO public.unidades(
 	nome, cantinanome, tipo_desconto_boleto, valor_desconto_boleto, tipo_desconto_condicional_boleto, valor_desconto_condicional_boleto, valor_multa_boleto, valor_juros_dia_boleto, colegio_id, cantina_empresa_id, endereco_id, ativo, cidade_id)
 	SELECT 'Boa Viagem','Appetite Gourmet CBV Boa Viagem',0,0.00,0,0.00,2.00,0.03,col.id, can.id, currval('enderecos_id_seq'),true,cid.id 
 	from colegios col, cantinas_empresa can, cidades cid 
-	where col.nome = 'Colégio CBV' and can.cnpj = '35.857.574/0001-65' and cid.nome = 'RECIFE'
+	where col.nome = 'Colégio CBV' and can.cnpj = '35.857.574/0001-65' and cid.nome = 'RECIFE';
 
 INSERT INTO public.enderecos(
 	cep, logradouro, bairro, cidade, uf, numero, complemento)
@@ -112,7 +112,7 @@ INSERT INTO public.unidades(
 	nome, cantinanome, tipo_desconto_boleto, valor_desconto_boleto, tipo_desconto_condicional_boleto, valor_desconto_condicional_boleto, valor_multa_boleto, valor_juros_dia_boleto, colegio_id, cantina_empresa_id, endereco_id, ativo, cidade_id)
 	SELECT 'Jaqueira','Appetite Gourmet CBV Jaqueira',0,0.00,0,0.00,2.00,0.03,col.id, can.id, currval('enderecos_id_seq'),true,cid.id 
 	from colegios col, cantinas_empresa can, cidades cid 
-	where col.nome = 'Colégio CBV' and can.cnpj = '35.857.206/0001-17' and cid.nome = 'RECIFE'
+	where col.nome = 'Colégio CBV' and can.cnpj = '35.857.206/0001-17' and cid.nome = 'RECIFE';
 	
 INSERT INTO public.enderecos(
 	cep, logradouro, bairro, cidade, uf, numero, complemento)
@@ -121,7 +121,7 @@ INSERT INTO public.unidades(
 	nome, cantinanome, tipo_desconto_boleto, valor_desconto_boleto, tipo_desconto_condicional_boleto, valor_desconto_condicional_boleto, valor_multa_boleto, valor_juros_dia_boleto, colegio_id, cantina_empresa_id, endereco_id, ativo, cidade_id)
 	SELECT 'Torre','Appetite Gourmet Equipe',0,0.00,0,0.00,2.00,0.03,col.id, can.id, currval('enderecos_id_seq'),true,cid.id 
 	from colegios col, cantinas_empresa can, cidades cid 
-	where col.nome = 'Colégio Equipe' and can.cnpj = '97.534.191/0001-03' and cid.nome = 'RECIFE'
+	where col.nome = 'Colégio Equipe' and can.cnpj = '97.534.191/0001-03' and cid.nome = 'RECIFE';
 	
 INSERT INTO public.enderecos(
 	cep, logradouro, bairro, cidade, uf, numero, complemento)
@@ -130,14 +130,14 @@ INSERT INTO public.unidades(
 	nome, cantinanome, tipo_desconto_boleto, valor_desconto_boleto, tipo_desconto_condicional_boleto, valor_desconto_condicional_boleto, valor_multa_boleto, valor_juros_dia_boleto, colegio_id, cantina_empresa_id, endereco_id, ativo, cidade_id)
 	SELECT 'Petrolina','Appetite Gourmet GGE Petrolina',0,0.00,0,0.00,2.00,0.03,col.id, can.id, currval('enderecos_id_seq'),true,cid.id 
 	from colegios col, cantinas_empresa can, cidades cid 
-	where col.nome = 'Colégio GGE' and can.cnpj = '40.654.219/0001-29' and cid.nome = 'PETROLINA'
+	where col.nome = 'Colégio GGE' and can.cnpj = '40.654.219/0001-29' and cid.nome = 'PETROLINA';
 
 
 -- GGE(Exceto unidade BENFICA)/CBV sem a nomenclatura específica do Equipe
 INSERT INTO anos_serie_unidade (ano_serie_id, unidade_id)
 SELECT anos_serie.id, unidades.id
 FROM anos_serie , unidades 
-where unidades.id not in (select id from unidade 
+where unidades.id not in (select id from unidades 
                           where 
                             (cantinanome = 'Appetite Gourmet GGE Benfica') 
                             or 
@@ -150,12 +150,12 @@ INSERT INTO anos_serie_unidade (ano_serie_id, unidade_id)
 SELECT anos_serie.id, unidades.id
 FROM anos_serie , unidades 
 where anos_serie.id in (select id from anos_serie 
-                        where serie_id in (select id from serie 
+                        where serie_id in (select id from series 
                                            where nome = 'Ensino Fundamental I')) 
       and
       anos_serie.nome not in('Maternal', 'Nível 1', 'Nível 2', 'Nível 3')  
       and 
-      unidades.id in (select id from unidade 
+      unidades.id in (select id from unidades 
                       where cantinanome = 'Appetite Gourmet GGE Benfica');
                       
 -- Equipe 
@@ -165,8 +165,8 @@ FROM anos_serie , unidades
 where anos_serie.nome in('Maternal', 'Nível 1', 'Nível 2', 'Nível 3', 
                          '1° Ano', '2° Ano', '3° Ano', '4° Ano', '5° Ano')  
       and 
-      unidades.id in (select id from unidade 
-                      where cantinanome = 'Appetite Gourmet GGE Benfica');
+      unidades.id in (select id from unidades 
+                      where cantinanome = 'Appetite Gourmet Equipe');
 
 
 INSERT INTO ano_serie_unidade_turnos (ano_serie_unidade_id, turno)
@@ -192,7 +192,7 @@ FROM turmas t, anos_letivos a;
 
 
 ------ GGE  
-
+---- LANCHES
 INSERT INTO planos_alimentares_precos (plano_alimentar_id, turma_anos_letivos_id, preco_dia) 
 SELECT pl.id, tal.id, 12.00 from planos_alimentares pl, turma_anos_letivos tal 
 WHERE (pl.descricao = 'Combinações Lanches Coletivos Regular' 
@@ -204,7 +204,7 @@ WHERE (pl.descricao = 'Combinações Lanches Coletivos Regular'
           where ano_serie_unidade_turno_id 
                 in (select id from ano_serie_unidade_turnos 
                     where ano_serie_unidade_id 
-                          in (select id from  ano_serie_unidade 
+                          in (select id from  anos_serie_unidade 
                               where unidade_id 
                                     in (select id from unidades 
                                         where colegio_id 
@@ -214,9 +214,9 @@ WHERE (pl.descricao = 'Combinações Lanches Coletivos Regular'
                                               cantinanome <> 'Appetite Gourmet GGE Petrolina')
                                     and 
                                     ano_serie_id 
-                                    in (select id from ano_serie 
+                                    in (select id from anos_serie 
                                         where serie_id 
-                                              in (select id from serie 
+                                              in (select id from series 
                                                   where nome = 'Educação Infantil')))));
                                                   
 INSERT INTO planos_alimentares_precos (plano_alimentar_id, turma_anos_letivos_id, preco_dia) 
@@ -230,7 +230,7 @@ WHERE (pl.descricao = 'Combinações Lanches Coletivos Regular'
           where ano_serie_unidade_turno_id 
                 in (select id from ano_serie_unidade_turnos 
                     where ano_serie_unidade_id 
-                          in (select id from  ano_serie_unidade 
+                          in (select id from  anos_serie_unidade 
                               where unidade_id 
                                     in (select id from unidades 
                                         where colegio_id 
@@ -240,9 +240,9 @@ WHERE (pl.descricao = 'Combinações Lanches Coletivos Regular'
                                               cantinanome <> 'Appetite Gourmet GGE Petrolina')
                                     and 
                                     ano_serie_id 
-                                    in (select id from ano_serie 
+                                    in (select id from anos_serie 
                                         where serie_id 
-                                              in (select id from serie 
+                                              in (select id from series 
                                                   where nome = 'Ensino Fundamental I')))));
                                                   
 INSERT INTO planos_alimentares_precos (plano_alimentar_id, turma_anos_letivos_id, preco_dia) 
@@ -256,7 +256,7 @@ WHERE (pl.descricao = 'Combinações Lanches Coletivos Regular'
           where ano_serie_unidade_turno_id 
                 in (select id from ano_serie_unidade_turnos 
                     where ano_serie_unidade_id 
-                          in (select id from  ano_serie_unidade 
+                          in (select id from  anos_serie_unidade 
                               where unidade_id 
                                     in (select id from unidades 
                                         where colegio_id 
@@ -266,9 +266,9 @@ WHERE (pl.descricao = 'Combinações Lanches Coletivos Regular'
                                               cantinanome = 'Appetite Gourmet GGE Petrolina')
                                     and 
                                     ano_serie_id 
-                                    in (select id from ano_serie 
+                                    in (select id from anos_serie 
                                         where serie_id 
-                                              in (select id from serie 
+                                              in (select id from series 
                                                   where nome = 'Educação Infantil')))));
                                                   
 INSERT INTO planos_alimentares_precos (plano_alimentar_id, turma_anos_letivos_id, preco_dia) 
@@ -282,7 +282,7 @@ WHERE (pl.descricao = 'Combinações Lanches Coletivos Regular'
           where ano_serie_unidade_turno_id 
                 in (select id from ano_serie_unidade_turnos 
                     where ano_serie_unidade_id 
-                          in (select id from  ano_serie_unidade 
+                          in (select id from  anos_serie_unidade 
                               where unidade_id 
                                     in (select id from unidades 
                                         where colegio_id 
@@ -292,9 +292,9 @@ WHERE (pl.descricao = 'Combinações Lanches Coletivos Regular'
                                               cantinanome = 'Appetite Gourmet GGE Petrolina')
                                     and 
                                     ano_serie_id 
-                                    in (select id from ano_serie 
+                                    in (select id from anos_serie 
                                         where serie_id 
-                                              in (select id from serie 
+                                              in (select id from series 
                                                   where nome = 'Ensino Fundamental I')))));
                                                   
 --------- Almoço 
@@ -308,7 +308,7 @@ WHERE pl.descricao = 'Combinações Almoços'
           where ano_serie_unidade_turno_id 
                 in (select id from ano_serie_unidade_turnos 
                     where ano_serie_unidade_id 
-                          in (select id from  ano_serie_unidade 
+                          in (select id from  anos_serie_unidade 
                               where unidade_id 
                                     in (select id from unidades 
                                         where colegio_id 
@@ -318,9 +318,9 @@ WHERE pl.descricao = 'Combinações Almoços'
                                               cantinanome <> 'Appetite Gourmet GGE Petrolina')
                                     and 
                                     ano_serie_id 
-                                    in (select id from ano_serie 
+                                    in (select id from anos_serie 
                                         where serie_id 
-                                              in (select id from serie 
+                                              in (select id from series 
                                                   where nome = 'Educação Infantil')))));
                                                   
 INSERT INTO planos_alimentares_precos (plano_alimentar_id, turma_anos_letivos_id, preco_dia) 
@@ -332,7 +332,7 @@ WHERE pl.descricao = 'Combinações Almoços'
           where ano_serie_unidade_turno_id 
                 in (select id from ano_serie_unidade_turnos 
                     where ano_serie_unidade_id 
-                          in (select id from  ano_serie_unidade 
+                          in (select id from  anos_serie_unidade 
                               where unidade_id 
                                     in (select id from unidades 
                                         where colegio_id 
@@ -342,9 +342,9 @@ WHERE pl.descricao = 'Combinações Almoços'
                                               cantinanome <> 'Appetite Gourmet GGE Petrolina')
                                     and 
                                     ano_serie_id 
-                                    in (select id from ano_serie 
+                                    in (select id from anos_serie 
                                         where serie_id 
-                                              in (select id from serie 
+                                              in (select id from series 
                                                   where nome = 'Ensino Fundamental I')))));
                                                   
 INSERT INTO planos_alimentares_precos (plano_alimentar_id, turma_anos_letivos_id, preco_dia) 
@@ -356,7 +356,7 @@ WHERE pl.descricao = 'Combinações Almoços'
           where ano_serie_unidade_turno_id 
                 in (select id from ano_serie_unidade_turnos 
                     where ano_serie_unidade_id 
-                          in (select id from  ano_serie_unidade 
+                          in (select id from  anos_serie_unidade 
                               where unidade_id 
                                     in (select id from unidades 
                                         where colegio_id 
@@ -366,9 +366,9 @@ WHERE pl.descricao = 'Combinações Almoços'
                                               cantinanome = 'Appetite Gourmet GGE Petrolina')
                                     and 
                                     ano_serie_id 
-                                    in (select id from ano_serie 
+                                    in (select id from anos_serie 
                                         where serie_id 
-                                              in (select id from serie 
+                                              in (select id from series 
                                                   where nome = 'Educação Infantil')))));
                                                   
 INSERT INTO planos_alimentares_precos (plano_alimentar_id, turma_anos_letivos_id, preco_dia) 
@@ -380,7 +380,7 @@ WHERE pl.descricao = 'Combinações Almoços'
           where ano_serie_unidade_turno_id 
                 in (select id from ano_serie_unidade_turnos 
                     where ano_serie_unidade_id 
-                          in (select id from  ano_serie_unidade 
+                          in (select id from  anos_serie_unidade 
                               where unidade_id 
                                     in (select id from unidades 
                                         where colegio_id 
@@ -390,13 +390,13 @@ WHERE pl.descricao = 'Combinações Almoços'
                                               cantinanome = 'Appetite Gourmet GGE Petrolina')
                                     and 
                                     ano_serie_id 
-                                    in (select id from ano_serie 
+                                    in (select id from anos_serie 
                                         where serie_id 
-                                              in (select id from serie 
+                                              in (select id from series 
                                                   where nome = 'Ensino Fundamental I')))));
 
 ------ CBV 
-
+-- LANCHES
 INSERT INTO planos_alimentares_precos (plano_alimentar_id, turma_anos_letivos_id, preco_dia) 
 SELECT pl.id, tal.id, 12.00 from planos_alimentares pl, turma_anos_letivos tal 
 WHERE (pl.descricao = 'Combinações Lanches Coletivos Regular' 
@@ -408,7 +408,7 @@ WHERE (pl.descricao = 'Combinações Lanches Coletivos Regular'
           where ano_serie_unidade_turno_id 
                 in (select id from ano_serie_unidade_turnos 
                     where ano_serie_unidade_id 
-                          in (select id from  ano_serie_unidade 
+                          in (select id from  anos_serie_unidade 
                               where unidade_id 
                                     in (select id from unidades 
                                         where colegio_id 
@@ -416,9 +416,9 @@ WHERE (pl.descricao = 'Combinações Lanches Coletivos Regular'
                                                   where nome = 'Colégio CBV'))
                                     and 
                                     ano_serie_id 
-                                    in (select id from ano_serie 
+                                    in (select id from anos_serie 
                                         where serie_id 
-                                              in (select id from serie 
+                                              in (select id from series 
                                                   where nome = 'Educação Infantil')))));
                                                   
 INSERT INTO planos_alimentares_precos (plano_alimentar_id, turma_anos_letivos_id, preco_dia) 
@@ -432,7 +432,7 @@ WHERE (pl.descricao = 'Combinações Lanches Coletivos Regular'
           where ano_serie_unidade_turno_id 
                 in (select id from ano_serie_unidade_turnos 
                     where ano_serie_unidade_id 
-                          in (select id from  ano_serie_unidade 
+                          in (select id from  anos_serie_unidade 
                               where unidade_id 
                                     in (select id from unidades 
                                         where colegio_id 
@@ -440,23 +440,21 @@ WHERE (pl.descricao = 'Combinações Lanches Coletivos Regular'
                                                   where nome = 'Colégio CBV'))
                                     and 
                                     ano_serie_id 
-                                    in (select id from ano_serie 
+                                    in (select id from anos_serie 
                                         where serie_id 
-                                              in (select id from serie 
+                                              in (select id from series 
                                                   where nome = 'Ensino Fundamental I')))));
-                                                  
+-- ALMOÇO                                                  
 INSERT INTO planos_alimentares_precos (plano_alimentar_id, turma_anos_letivos_id, preco_dia) 
 SELECT pl.id, tal.id, 12.00 from planos_alimentares pl, turma_anos_letivos tal 
-WHERE (pl.descricao = 'Combinações Lanches Coletivos Regular' 
-       or 
-       pl.descricao = 'Combinações Lanches Coletivos Complementar')
+WHERE pl.descricao = 'Combinações Almoços' 
       and 
       tal.turma_id 
       in (select id from turmas 
           where ano_serie_unidade_turno_id 
                 in (select id from ano_serie_unidade_turnos 
                     where ano_serie_unidade_id 
-                          in (select id from  ano_serie_unidade 
+                          in (select id from  anos_serie_unidade 
                               where unidade_id 
                                     in (select id from unidades 
                                         where colegio_id 
@@ -464,23 +462,21 @@ WHERE (pl.descricao = 'Combinações Lanches Coletivos Regular'
                                                   where nome = 'Colégio CBV'))
                                     and 
                                     ano_serie_id 
-                                    in (select id from ano_serie 
+                                    in (select id from anos_serie 
                                         where serie_id 
-                                              in (select id from serie 
+                                              in (select id from series 
                                                   where nome = 'Educação Infantil')))));
                                                   
 INSERT INTO planos_alimentares_precos (plano_alimentar_id, turma_anos_letivos_id, preco_dia) 
 SELECT pl.id, tal.id, 13.00 from planos_alimentares pl, turma_anos_letivos tal 
-WHERE (pl.descricao = 'Combinações Lanches Coletivos Regular' 
-       or 
-       pl.descricao = 'Combinações Lanches Coletivos Complementar')
+WHERE pl.descricao = 'Combinações Almoços' 
       and 
       tal.turma_id 
       in (select id from turmas 
           where ano_serie_unidade_turno_id 
                 in (select id from ano_serie_unidade_turnos 
                     where ano_serie_unidade_id 
-                          in (select id from  ano_serie_unidade 
+                          in (select id from  anos_serie_unidade 
                               where unidade_id 
                                     in (select id from unidades 
                                         where colegio_id 
@@ -488,9 +484,9 @@ WHERE (pl.descricao = 'Combinações Lanches Coletivos Regular'
                                                   where nome = 'Colégio CBV'))
                                     and 
                                     ano_serie_id 
-                                    in (select id from ano_serie 
+                                    in (select id from anos_serie 
                                         where serie_id 
-                                              in (select id from serie 
+                                              in (select id from series 
                                                   where nome = 'Ensino Fundamental I')))));
                                                   
 ------ EQUIPE  
@@ -504,7 +500,7 @@ WHERE pl.descricao = 'Combinações Lanches Coletivos Regular'
           where ano_serie_unidade_turno_id 
                 in (select id from ano_serie_unidade_turnos 
                     where ano_serie_unidade_id 
-                          in (select id from  ano_serie_unidade 
+                          in (select id from  anos_serie_unidade 
                               where unidade_id 
                                     in (select id from unidades 
                                         where colegio_id 
@@ -512,9 +508,9 @@ WHERE pl.descricao = 'Combinações Lanches Coletivos Regular'
                                                   where nome = 'Colégio Equipe'))
                                     and 
                                     ano_serie_id 
-                                    in (select id from ano_serie 
+                                    in (select id from anos_serie 
                                         where serie_id 
-                                              in (select id from serie 
+                                              in (select id from series 
                                                   where nome = 'Educação Infantil')))));
                                                   
 INSERT INTO planos_alimentares_precos (plano_alimentar_id, turma_anos_letivos_id, preco_dia) 
@@ -526,7 +522,7 @@ WHERE pl.descricao = 'Combinações Lanches Coletivos Regular'
           where ano_serie_unidade_turno_id 
                 in (select id from ano_serie_unidade_turnos 
                     where ano_serie_unidade_id 
-                          in (select id from  ano_serie_unidade 
+                          in (select id from  anos_serie_unidade 
                               where unidade_id 
                                     in (select id from unidades 
                                         where colegio_id 
@@ -534,9 +530,9 @@ WHERE pl.descricao = 'Combinações Lanches Coletivos Regular'
                                                   where nome = 'Colégio Equipe'))
                                     and 
                                     ano_serie_id 
-                                    in (select id from ano_serie 
+                                    in (select id from anos_serie 
                                         where serie_id 
-                                              in (select id from serie 
+                                              in (select id from series 
                                                   where nome = 'Ensino Fundamental I')))));
 
 
