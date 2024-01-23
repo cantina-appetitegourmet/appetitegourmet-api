@@ -53,9 +53,9 @@ public class PagamentoController {
 	
 	@PostMapping
 	@RequestMapping("/pagamentos/criarChavePix")
-	@PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
-    public String criarChavePix() {
-        return pagamentoService.criarChavePix();
+	@PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN') or hasRole('ROLE_RESPONSAVEL')")
+    public String criarChavePix(@RequestBody Integer empresa) {
+        return pagamentoService.criarChavePix(empresa);
     }
 	
 	@DeleteMapping

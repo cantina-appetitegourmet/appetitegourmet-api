@@ -98,22 +98,26 @@ public class ResponsavelController {
     	resp = userService.registerUser(signUpRequest);
     	
     	if(resp == 0) {
-	    	Responsavel cadastrado = responsavelService.salvarResponsavel(responsavel);
-	    	
-	    	associacaoService.associa(cadastro.getPessoa().getEmail(), 
-	    							  ERole.ROLE_RESPONSAVEL, 
-	    							  cadastrado.getId());
-	    	
-	    	String mensagem = "Sua conta foi criada com sucesso!\n"
-	    			+ "Usuario: " + cadastro.getPessoa().getEmail() + "\n" 
-	    			+ "Crie a senha para fazer login e adesão ao sistema!" + "\n"
-	    			+ "Link para criação da senha: " 
-	    			+ env.getProperty("appetitegourmet.app.linkPassword") + password 
-	    			+ "/" + cadastrado.getPessoa().getEmail() + "\n";
-	    	emailService.sendHtmlEmail(env.getProperty("spring.mail.username"), 
-	    							   cadastrado.getPessoa().getEmail(), 
-	    							   "Criação da conta Appetite Gourmet", mensagem, null);
-	        return cadastrado;
+    		
+    		if(userService.salvarHashSenha(cadastro.getPessoa().getEmail(), password)) {
+    		
+		    	Responsavel cadastrado = responsavelService.salvarResponsavel(responsavel);
+		    	
+		    	associacaoService.associa(cadastro.getPessoa().getEmail(), 
+		    							  ERole.ROLE_RESPONSAVEL, 
+		    							  cadastrado.getId());
+		    	
+		    	String mensagem = "Sua conta foi criada com sucesso!\n"
+		    			+ "Usuario: " + cadastro.getPessoa().getEmail() + "\n" 
+		    			+ "Crie a senha para fazer login e adesão ao sistema!" + "\n"
+		    			+ "Link para criação da senha: " 
+		    			+ env.getProperty("appetitegourmet.app.linkPassword") + password 
+		    			+ "/" + cadastrado.getPessoa().getEmail() + "\n";
+		    	emailService.sendHtmlEmail(env.getProperty("spring.mail.username"), 
+		    							   cadastrado.getPessoa().getEmail(), 
+		    							   "Criação da conta Appetite Gourmet", mensagem, null);
+		        return cadastrado;
+    		}
     	}
     	return null;
     }

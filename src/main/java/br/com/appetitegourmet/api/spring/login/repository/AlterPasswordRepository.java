@@ -9,4 +9,5 @@ import br.com.appetitegourmet.api.spring.login.models.AlterPassword;
 public interface AlterPasswordRepository extends JpaRepository<AlterPassword, Long> {
 	Boolean existsByEmailAndHash(String email, String hash);
 	void deleteByEmailAndHash(String email, String hash);
+	void deleteByEmail(String email);
 }

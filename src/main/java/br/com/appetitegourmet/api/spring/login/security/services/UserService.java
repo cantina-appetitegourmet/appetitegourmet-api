@@ -7,6 +7,8 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import br.com.appetitegourmet.api.spring.login.models.AlterPassword;
 import br.com.appetitegourmet.api.spring.login.models.ERole;
 import br.com.appetitegourmet.api.spring.login.models.Role;
 import br.com.appetitegourmet.api.spring.login.models.User;
@@ -82,10 +84,21 @@ public class UserService {
 	    return 0;
 	}
 	
-	public int alterPassword(LoginRequest loginRequest, String hash) {
+	public Boolean salvarHashSenha(String email, String hash) {
+		Boolean retorno = false;
+		AlterPassword alter = new AlterPassword();
+		
+		alter.setEmail(email);
+		alter.setHash(hash);
+		alterRepository.save(alter);
+		
+		return retorno;
+	}
+	
+	public int alterPassword(LoginRequest loginRequest) {
 		Optional <User> optUser = userRepository.findByUsername(loginRequest.getUsername());
 		User user;
-		Boolean existe = alterRepository.existsByEmailAndHash(loginRequest.getUsername(), hash);
+		Boolean existe = alterRepository.existsByEmailAndHash(loginRequest.getUsername(), loginRequest.getHash());
 		
 		if(!existe) {
 			return 1;
@@ -98,7 +111,7 @@ public class UserService {
 		user = optUser.get();
 		user.setPassword(encoder.encode(loginRequest.getPassword()));
 		userRepository.save(user);
-		alterRepository.deleteByEmailAndHash(loginRequest.getUsername(), hash);
+		//alterRepository.deleteByEmailAndHash(loginRequest.getUsername(), loginRequest.getHash());
 		
 		return 0;
 	}

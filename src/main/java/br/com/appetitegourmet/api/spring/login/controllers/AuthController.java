@@ -139,8 +139,8 @@ public class AuthController {
   }
   
   @PostMapping("/alterPassword")
-  public ResponseEntity<?> alterPassword(@Valid @RequestBody LoginRequest loginRequest, String hash) {
-	int resp = userService.alterPassword(loginRequest, hash);
+  public ResponseEntity<?> alterPassword(@Valid @RequestBody LoginRequest loginRequest) {
+	int resp = userService.alterPassword(loginRequest);
 	
     if (resp == 1) {
       return ResponseEntity.badRequest().body(new MessageResponse("Error: Falha ao alterar a senha!"));

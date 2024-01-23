@@ -57,6 +57,28 @@ public class OperacoesPix {
 		return retorno;
 	}
 	
+	public boolean criarChave2(Retorno dados, String dadosItegracaoPix) {
+		
+		boolean retorno = false;
+		JSONObject response = null;
+
+		JSONObject options = new JSONObject(dadosItegracaoPix);
+		
+		try {
+			Gerencianet gn = new Gerencianet(options);
+			response = gn.call("pixCreateEvp", new HashMap<String,String>(), new JSONObject());
+			dados.setRetornoString(response.toString());
+			retorno = true;
+		}catch (GerencianetException e){
+			erro = e.getError();
+			erro += " - " + e.getErrorDescription();
+		}
+		catch (Exception e) {
+			erro = e.getMessage();
+		}
+		return retorno;
+	}
+	
 	public boolean removerChave(Retorno dados, String chave) {
 		
 		boolean retorno = false;
@@ -204,6 +226,30 @@ public class OperacoesPix {
 			erro = e.getError();
 			erro += " - " + e.getErrorDescription();
 	    } catch (Exception e) {
+			erro = e.getMessage();
+		}
+		return retorno;
+	}
+	
+	public boolean criarQrCode2(Retorno dados, Integer id, String dadosItegracaoPix) {
+
+		boolean retorno = false;
+		Map<String, Object> response;
+
+		JSONObject options = new JSONObject(dadosItegracaoPix);
+
+		HashMap<String, String> params = new HashMap<String, String>();
+		params.put("id", id.toString());
+
+		try {
+			Gerencianet gn = new Gerencianet(options);
+			response = gn.call("pixGenerateQRCode", params, new HashMap<String, Object>());
+			dados.setRetornoJson(new JSONObject(response));
+			retorno = true;
+		} catch (GerencianetException e){
+			erro = e.getError();
+			erro += " - " + e.getErrorDescription();
+		} catch (Exception e) {
 			erro = e.getMessage();
 		}
 		return retorno;

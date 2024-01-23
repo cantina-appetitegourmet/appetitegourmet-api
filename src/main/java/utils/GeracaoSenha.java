@@ -35,15 +35,15 @@ public class GeracaoSenha {
         DR.setNumberOfCharacters(20);  
   
         // create character rule for special characters  
-        CharacterRule SR = new CharacterRule(specialChars);  
+        //CharacterRule SR = new CharacterRule(specialChars);  
         // set number of special characters  
-        SR.setNumberOfCharacters(0);
+        //SR.setNumberOfCharacters(0);
         
         // create instance of the PasswordGenerator class   
         PasswordGenerator passGen = new PasswordGenerator();  
           
         // call generatePassword() method of PasswordGenerator class to get Passay generated password  
-        String password = passGen.generatePassword(60, SR, LCR, UCR, DR);  
+        String password = passGen.generatePassword(60, LCR, UCR, DR);  
         
         return password;
 	}
