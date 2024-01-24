@@ -85,6 +85,11 @@ public class UserService {
 	    return 0;
 	}
 	
+	@Transactional
+	public void removeLink(String email) {
+		alterRepository.deleteByEmail(email);
+	}
+	
 	public Boolean salvarHashSenha(String email, String hash) {
 		Boolean retorno = true;
 		AlterPassword alter = new AlterPassword();
