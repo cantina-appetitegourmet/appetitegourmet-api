@@ -19,7 +19,7 @@ import br.com.appetitegourmet.api.services.ColegioService;
 @RestController
 @RequestMapping("/colegios")
 @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
-@CrossOrigin(origins = "http://localhost:4200,https://nice-beach-01dafa610.3.azurestaticapps.net", maxAge = 3600, allowCredentials="true")
+@CrossOrigin(origins = "http://localhost:4200,https://nice-beach-01dafa610.3.azurestaticapps.net,https://menukids.appetitegourmet.com.br", maxAge = 3600, allowCredentials="true")
 public class ColegioController {
     private final ColegioService colegioService;
     
