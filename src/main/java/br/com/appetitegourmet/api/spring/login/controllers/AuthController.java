@@ -192,10 +192,10 @@ public class AuthController {
 	}
 	  
 	if (falhou) {
-		return ResponseEntity.badRequest().body(new MessageResponse("Alteração de senha realizada sem sucesso!"));
+		return ResponseEntity.badRequest().body(new MessageResponse("Solicitação de alteração de senha realizada sem sucesso!"));
 	} 
 	
-    return ResponseEntity.ok(new MessageResponse("Alteração de senha realizada com sucesso!"));
+    return ResponseEntity.ok(new MessageResponse("Solicitação de alteração de senha realizada com sucesso!"));
   }
 
   @PostMapping("/signout")
