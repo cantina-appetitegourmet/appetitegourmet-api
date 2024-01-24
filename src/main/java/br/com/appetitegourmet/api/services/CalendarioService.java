@@ -72,7 +72,7 @@ public class CalendarioService {
     	
     	todosFeriados = feriadoRepository.findByDataBetween(dataInicio, dataFim);
     	
-    	for(data = dataInicio; data.compareTo(dataFim) < 0; ) {
+    	for(data = dataInicio; data.compareTo(dataFim) <= 0; ) {
     		
     		feriados = pegaFeriados(data, todosFeriados);
     		
@@ -324,6 +324,7 @@ public class CalendarioService {
     	Optional <CidadeAnoLetivo> opt;
     	Date diaInicial;
 		Date diaFinal;
+		Date dia;
     	
     	if(!optPAP.isPresent()) {
     		return null;
@@ -408,13 +409,19 @@ public class CalendarioService {
     	System.out.println("Data Inicial = " + diaInicial.toString());
     	System.out.println("Data Final = " + diaFinal.toString());
 
-    	listaCalendario = pegaCalendarioGeral(cidadeId, anoLetivo, diaInicial, diaFinal);
+    	//listaCalendario = pegaCalendarioGeral(cidadeId, anoLetivo, diaInicial, diaFinal);
 
     	todosCalendarioExcecao = calendarioExcecaoRepository.findByAnoLetivoIdAndUnidadeIdAndDataBetween(anoLetivo.getId(), unidade_id, diaInicial, diaFinal);
 
-    	System.out.println("Numero de Dias = " + listaCalendario.size());
-    	for(Calendario calendario : listaCalendario) {
-    		listaCalendarioExcecao = pegaListaCalendarioExcecao(calendario.getData(), todosCalendarioExcecao);
+    	//System.out.println("Numero de Dias = " + listaCalendario.size());
+    	for(dia = diaInicial; dia.compareTo(diaFinal) <= 0;) {
+    		System.out.println("Data para calculo = " + dia.toString());
+    		Date diaAtual = dia;
+    		cal.setTime(diaAtual);
+    		cal.add(GregorianCalendar.DATE, 1);
+    		dia = new java.sql.Date(cal.getTimeInMillis());
+    	//for(Calendario calendario : listaCalendario) {
+    		listaCalendarioExcecao = pegaListaCalendarioExcecao(diaAtual, todosCalendarioExcecao);
 
     		calendarioExcecao = pegaExcecao(listaCalendarioExcecao, 
     				turma_id, 
@@ -422,6 +429,12 @@ public class CalendarioService {
     				pap.getPlanoAlimentar().getId());
 
     		if (calendarioExcecao == null) {
+    			listaCalendario = pegaCalendarioGeral(cidadeId, anoLetivo, diaAtual, diaAtual);
+    			System.out.println("Calendario = " + listaCalendario.toString());
+    			if(listaCalendario.size() == 0) {
+    				continue;
+    			}
+    			Calendario calendario = listaCalendario.get(0);
     			if(calendario.isUtil()) {
     				cal.setTime(calendario.getData());
     				System.out.println("Data = " + calendario.getData().toString());

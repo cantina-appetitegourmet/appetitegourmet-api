@@ -7,6 +7,7 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.appetitegourmet.api.spring.login.models.AlterPassword;
 import br.com.appetitegourmet.api.spring.login.models.ERole;
@@ -95,6 +96,7 @@ public class UserService {
 		return retorno;
 	}
 	
+	@Transactional
 	public int alterPassword(LoginRequest loginRequest) {
 		Optional <User> optUser = userRepository.findByUsername(loginRequest.getUsername());
 		User user;
@@ -111,7 +113,7 @@ public class UserService {
 		user = optUser.get();
 		user.setPassword(encoder.encode(loginRequest.getPassword()));
 		userRepository.save(user);
-		//alterRepository.deleteByEmailAndHash(loginRequest.getUsername(), loginRequest.getHash());
+		alterRepository.deleteByEmailAndHash(loginRequest.getUsername(), loginRequest.getHash());
 		
 		return 0;
 	}
