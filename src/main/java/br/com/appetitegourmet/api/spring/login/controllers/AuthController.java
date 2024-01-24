@@ -1,14 +1,18 @@
 package br.com.appetitegourmet.api.spring.login.controllers;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
+import utils.GeracaoSenha;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.appetitegourmet.api.services.EmailService;
 import br.com.appetitegourmet.api.spring.login.payload.request.LoginRequest;
 import br.com.appetitegourmet.api.spring.login.payload.request.SignupRequest;
 import br.com.appetitegourmet.api.spring.login.payload.response.UserInfoResponse;
@@ -54,6 +59,12 @@ public class AuthController {
   
   @Autowired
   UserService userService;
+  
+  @Autowired 
+  Environment env;
+  
+  @Autowired
+  EmailService emailService;
 
   @PostMapping("/signin")
   public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -147,6 +158,44 @@ public class AuthController {
     }
 
     return ResponseEntity.ok(new MessageResponse("Senha alterada com sucesso!"));
+  }
+  
+  @PostMapping("/lostPassword")
+  public ResponseEntity<?> lostPassword(@Valid @RequestBody LoginRequest loginRequest) {
+	  
+	GeracaoSenha gs = new GeracaoSenha();
+	String password;
+	Boolean falhou = false;
+	
+	password = gs.GeradorSenha();
+	userService.removeLink(loginRequest.getUsername());
+	userService.salvarHashSenha(loginRequest.getUsername(), password);
+	
+	String mensagem = "A alteração de senha da sua conta foi solicitada com sucesso!\n"
+			+ "Usuario: " + loginRequest.getUsername() + "\n" 
+			+ "Altere a senha para voltar a fazer login no sistema!" + "\n"
+			+ "Link para alteração da senha: " 
+			+ env.getProperty("appetitegourmet.app.linkPassword") + password 
+			+ "/" + loginRequest.getUsername() + "\n";
+	try {
+		emailService.sendHtmlEmail(env.getProperty("spring.mail.username"), 
+								   loginRequest.getUsername(), 
+								   "Alteração de senha da conta Appetite Gourmet", mensagem, null);
+	} catch (MessagingException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		falhou = true;
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		falhou = true;
+	}
+	  
+	if (falhou) {
+		return ResponseEntity.badRequest().body(new MessageResponse("Solicitação de alteração de senha realizada sem sucesso!"));
+	} 
+	
+    return ResponseEntity.ok(new MessageResponse("Solicitação de alteração de senha realizada com sucesso!"));
   }
 
   @PostMapping("/signout")

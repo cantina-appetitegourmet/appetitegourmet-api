@@ -325,6 +325,7 @@ public class CalendarioService {
     	Date diaInicial;
 		Date diaFinal;
 		Date dia;
+		int mes;
     	
     	if(!optPAP.isPresent()) {
     		return null;
@@ -385,6 +386,22 @@ public class CalendarioService {
         	ultimoDia = cal.getActualMaximum( GregorianCalendar.DAY_OF_MONTH );
         	cal.set( GregorianCalendar.DATE, ultimoDia );
         	diaFinal = new java.sql.Date(cal.getTimeInMillis());
+        	
+        	mes = cal.get(GregorianCalendar.MONTH);
+        	if( (mes == GregorianCalendar.JANUARY) || 
+        		(mes == GregorianCalendar.JULY) ){
+        		
+        		// adiciona mais um dia para ir para o proximo mes
+        		cal.setTime(diaFinal);
+        		cal.add(GregorianCalendar.DATE, 1);
+        		diaFinal = new java.sql.Date(cal.getTimeInMillis());
+        		
+        		// pega o ultimo dia do mes
+        		cal.setTime(diaFinal);
+            	ultimoDia = cal.getActualMaximum( GregorianCalendar.DAY_OF_MONTH );
+            	cal.set( GregorianCalendar.DATE, ultimoDia );
+            	diaFinal = new java.sql.Date(cal.getTimeInMillis());
+        	}
     	} else {
     		System.out.println("PEGANDO AS DATAS");
     		cal.set( GregorianCalendar.YEAR, pegaAno(dataInicial) );
