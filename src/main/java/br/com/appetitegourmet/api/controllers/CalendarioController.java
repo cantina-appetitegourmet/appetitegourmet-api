@@ -12,7 +12,7 @@ import br.com.appetitegourmet.api.services.CalendarioService;
 
 @RestController
 @RequestMapping("/calendarios")
-@CrossOrigin(origins = "http://localhost:4200,https://nice-beach-01dafa610.3.azurestaticapps.net", maxAge = 3600, allowCredentials="true")
+@CrossOrigin(origins = "http://localhost:4200,https://nice-beach-01dafa610.3.azurestaticapps.net,https://menukids.appetitegourmet.com.br", maxAge = 3600, allowCredentials="true")
 public class CalendarioController {
 
 	private final CalendarioService calendarioService;

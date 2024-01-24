@@ -19,7 +19,7 @@ import br.com.appetitegourmet.api.services.EmpresaService;
 @RestController
 @RequestMapping("/empresas")
 @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN') or hasRole('ROLE_RESPONSAVEL')")
-@CrossOrigin(origins = "http://localhost:4200,https://nice-beach-01dafa610.3.azurestaticapps.net", maxAge = 3600, allowCredentials="true")
+@CrossOrigin(origins = "http://localhost:4200,https://nice-beach-01dafa610.3.azurestaticapps.net,https://menukids.appetitegourmet.com.br", maxAge = 3600, allowCredentials="true")
 public class EmpresaController {
     private final EmpresaService empresaService;
     

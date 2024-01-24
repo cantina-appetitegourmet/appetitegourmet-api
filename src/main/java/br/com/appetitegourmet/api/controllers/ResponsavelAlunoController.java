@@ -17,7 +17,7 @@ import br.com.appetitegourmet.api.services.ResponsavelAlunoService;
 
 @RestController
 @RequestMapping("/responsavelAlunos")
-@CrossOrigin(origins = "http://localhost:4200,https://nice-beach-01dafa610.3.azurestaticapps.net", maxAge = 3600, allowCredentials="true")
+@CrossOrigin(origins = "http://localhost:4200,https://nice-beach-01dafa610.3.azurestaticapps.net,https://menukids.appetitegourmet.com.br", maxAge = 3600, allowCredentials="true")
 public class ResponsavelAlunoController {
 	
 	private final ResponsavelAlunoService responsavelAlunoService;
