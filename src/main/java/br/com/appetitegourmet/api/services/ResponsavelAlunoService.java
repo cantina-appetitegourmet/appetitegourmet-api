@@ -108,6 +108,10 @@ public class ResponsavelAlunoService {
 		
 		return responsavelAlunoRepository.save(responsavelAluno);
 	}
+
+	public List<ResponsavelAluno> buscarAlunosPorResponsavel(Long responsavelId) {
+		return responsavelAlunoRepository.findByResponsavelId(responsavelId);
+	}
 	
 	public void excluirResponsavelAluno(Long id) {
         responsavelAlunoRepository.deleteById(id);

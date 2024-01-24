@@ -31,11 +31,17 @@ public class ResponsavelAlunoController {
     public List<ResponsavelAluno> listarResponsavelAlunos() {
         return responsavelAlunoService.listarResponsavelAlunos();
     }
-    
+
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
     public ResponsavelAluno buscarResponsavelAlunoPorId(@PathVariable Long id) {
         return responsavelAlunoService.buscarResponsavelAlunoPorId(id);
+    }
+
+    @GetMapping("/responsavelId/{responsavelId}")
+    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN') or hasRole('ROLE_RESPONSAVEL')")
+    public List<ResponsavelAluno> buscarResponsavelAlunoPorIdResponsavel(@PathVariable Long responsavelId) {
+        return responsavelAlunoService.buscarAlunosPorResponsavel(responsavelId);
     }
     
     @PostMapping
