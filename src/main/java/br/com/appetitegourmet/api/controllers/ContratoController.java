@@ -2,6 +2,7 @@ package br.com.appetitegourmet.api.controllers;
 
 import java.util.List;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -32,11 +33,17 @@ public class ContratoController {
     public List<Contrato> listarContratos() {
         return contratoService.listarContratos();
     }
-    
+
     @GetMapping("/responsavel/{id}")
     @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN') or hasRole('ROLE_RESPONSAVEL')")
-    public List<Contrato> listarContratosDeUmResponsavel(@PathVariable Long id) {
-        return contratoService.listarContratosDeUmResponsavel(id);
+    public List<Contrato> listarContratosDeUmResponsavel(HttpServletRequest request, @PathVariable Long id) {
+        return contratoService.listarContratosResponsavel(request);
+    }
+
+    @GetMapping("/responsavel")
+    @PreAuthorize("hasRole('ROLE_RESPONSAVEL')")
+    public List<Contrato> listarContratosResponsavel(HttpServletRequest request) {
+        return contratoService.listarContratosResponsavel(request);
     }
     
     @GetMapping("/{id}")
