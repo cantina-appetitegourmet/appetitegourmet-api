@@ -84,6 +84,7 @@ public class WebSecurityConfig {
               .requestMatchers("/responsaveis/consultaEmail/**").permitAll()
               .requestMatchers("/utils/consultaEndereco/**").permitAll()
               .requestMatchers("/associacaoUsuarios/**").permitAll()
+                  .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
               .anyRequest().authenticated()
         );
     System.out.println("SecurityFilterChain - 2");
