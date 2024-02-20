@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.appetitegourmet.api.models.Aluno;
 import br.com.appetitegourmet.api.services.AlunoService;
+import jakarta.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/alunos")
@@ -27,7 +28,7 @@ public class AlunoController {
         this.alunoService = alunoService;
     }
     
-    @GetMapping
+    @RequestMapping("/admin")
     @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
     public List<Aluno> listarAlunos() {
         return alunoService.listarAlunos();

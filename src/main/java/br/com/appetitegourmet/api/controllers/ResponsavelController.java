@@ -2,8 +2,15 @@ package br.com.appetitegourmet.api.controllers;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
+import br.com.appetitegourmet.api.models.AssociacaoUsuario;
+import br.com.appetitegourmet.api.spring.login.models.User;
+import br.com.appetitegourmet.api.spring.login.payload.request.UserInfoRequest;
+import br.com.appetitegourmet.api.spring.login.repository.UserRepository;
+import br.com.appetitegourmet.api.spring.login.security.jwt.JwtUtils;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -31,6 +38,13 @@ import utils.GeracaoSenha;
 @RequestMapping("/responsaveis")
 @CrossOrigin(origins = "http://localhost:4200,https://nice-beach-01dafa610.3.azurestaticapps.net,https://menukids.appetitegourmet.com.br", maxAge = 3600, allowCredentials="true")
 public class ResponsavelController {
+	@Autowired
+	private JwtUtils jwtUtils;
+	@Autowired
+	UserRepository userRepository;
+
+	@Autowired
+	AssociacaoUsuarioService associacaoUsuarioService;
 
 	private final ResponsavelService responsavelService;
 	private final EmailService emailService;
@@ -46,12 +60,27 @@ public class ResponsavelController {
 		this.userService = userService;
 		this.associacaoService = associacaoService;
     }
-    
-    @GetMapping
-    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
-    public List<Responsavel> listarResponsaveis() {
-        return responsavelService.listarResponsaveis();
-    }
+
+	@GetMapping
+	@PreAuthorize("hasRole('ROLE_RESPONSAVEL')")
+	public Responsavel listarAlunosResponsavel(HttpServletRequest request) {
+		String username = jwtUtils.getUserNameFromJwtToken(jwtUtils.getJwtFromCookies(request));
+		Optional<User> user = userRepository.findByUsername(username);
+		System.out.println(username);
+		System.out.println(user.get().getId());
+		UserInfoRequest userInfo = new UserInfoRequest();
+		userInfo.setId(user.get().getId());
+		userInfo.setRole("ROLE_RESPONSAVEL");
+		AssociacaoUsuario associacaoUsuario = associacaoUsuarioService.pegaAssociacaoUsuario(userInfo);
+		System.out.println(associacaoUsuario.getAssociado_id());
+		return responsavelService.buscarResponsavelPorId(associacaoUsuario.getAssociado_id());
+	}
+
+	@GetMapping("/admin")
+	@PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
+	public List<Responsavel> listarResponsaveis() {
+		return responsavelService.listarResponsaveis();
+	}
     
     @GetMapping("/consultaCpf/{cpf}")
     //@PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN') or hasRole('ROLE_RESPONSAVEL')")
@@ -64,7 +93,7 @@ public class ResponsavelController {
     public Boolean consultaEmail(@PathVariable String email) {
         return responsavelService.consultaEmail(email);
     }
-    
+
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
     public Responsavel buscarResponsavelPorId(@PathVariable Long id) {

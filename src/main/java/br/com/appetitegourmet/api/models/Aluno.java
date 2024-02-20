@@ -1,14 +1,11 @@
 package br.com.appetitegourmet.api.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.Data;
 import utils.Colunas;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -23,4 +20,8 @@ public class Aluno {
     
     @Column(name="restricao_alimentar", nullable = true, length=Colunas.RESTRICAO_ALIMENTAR)
     private String RestricaoAlimentar;
+
+    @ManyToMany(mappedBy = "alunos")
+    @JsonIgnore
+    List<Responsavel> responsavels;
 }

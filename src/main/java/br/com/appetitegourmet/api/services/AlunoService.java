@@ -10,6 +10,7 @@ import br.com.appetitegourmet.api.models.Aluno;
 import br.com.appetitegourmet.api.models.Pessoa;
 import br.com.appetitegourmet.api.repositories.AlunoRepository;
 import br.com.appetitegourmet.api.repositories.PessoaRepository;
+import jakarta.servlet.http.HttpServletRequest;
 
 @Service
 public class AlunoService {
