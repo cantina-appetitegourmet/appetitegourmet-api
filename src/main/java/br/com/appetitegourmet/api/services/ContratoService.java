@@ -5,13 +5,15 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import br.com.appetitegourmet.api.models.*;
+import br.com.appetitegourmet.api.spring.login.models.User;
+import br.com.appetitegourmet.api.spring.login.payload.request.UserInfoRequest;
+import br.com.appetitegourmet.api.spring.login.repository.UserRepository;
+import br.com.appetitegourmet.api.spring.login.security.jwt.JwtUtils;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.appetitegourmet.api.models.Contrato;
-import br.com.appetitegourmet.api.models.ContratoDesconto;
-import br.com.appetitegourmet.api.models.Desconto;
-import br.com.appetitegourmet.api.models.ResponsavelAluno;
-import br.com.appetitegourmet.api.models.TurmaAnoLetivo;
 import br.com.appetitegourmet.api.repositories.ContratoDescontoRepository;
 import br.com.appetitegourmet.api.repositories.ContratoRepository;
 import br.com.appetitegourmet.api.repositories.DescontoRepository;
@@ -21,6 +23,13 @@ import utils.ValidacaoConstantes;
 
 @Service
 public class ContratoService {
+	@Autowired
+	private JwtUtils jwtUtils;
+	@Autowired
+	UserRepository userRepository;
+
+	@Autowired
+	AssociacaoUsuarioService associacaoUsuarioService;
 
 	private final ContratoRepository contratoRepository;
 	private final ResponsavelAlunoRepository responsavelAlunoRepository;
@@ -41,9 +50,21 @@ public class ContratoService {
         return contratoRepository.findAll();
     }
 	
-	public List<Contrato> listarContratosDeUmResponsavel(Long id) {
+	public List<Contrato> listarContratosResponsavel(Long id) {
         return contratoRepository.findAllByResponsavelId(id);
     }
+
+	public List<Contrato> listarContratosResponsavel(HttpServletRequest request) {
+		String jwt = jwtUtils.getJwtFromCookies(request);
+		String username = jwtUtils.getUserNameFromJwtToken(jwt);
+		Optional<User> user = userRepository.findByUsername(username);
+		UserInfoRequest userInfo = new UserInfoRequest();
+		userInfo.setId(user.get().getId());
+		userInfo.setRole("ROLE_RESPONSAVEL");
+		AssociacaoUsuario associacaoUsuario = associacaoUsuarioService.pegaAssociacaoUsuario(userInfo);
+
+		return contratoRepository.findAllByResponsavelId(associacaoUsuario.getAssociado_id());
+	}
 
     public Contrato buscarContratoPorId(Long id) {
         return contratoRepository.findById(id)
