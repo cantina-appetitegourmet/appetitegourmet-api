@@ -54,8 +54,8 @@ public class ContratoController {
     
     @PostMapping
     @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN') or hasRole('ROLE_RESPONSAVEL')")
-    public Contrato salvarContrato(@RequestBody Contrato contrato) {
-        return contratoService.salvarContrato(contrato);
+    public Contrato salvarContrato(HttpServletRequest request, @RequestBody Contrato contrato) {
+        return contratoService.salvarContrato(request, contrato);
     }
     
     @DeleteMapping("/{id}")

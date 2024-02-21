@@ -28,4 +28,7 @@ public class Responsavel {
             joinColumns = @JoinColumn(name = "responsavel_id"),
             inverseJoinColumns = @JoinColumn(name = "aluno_id"))
     List<Aluno> alunos;
+
+    @OneToMany(mappedBy="responsavel")
+    private List<ResponsavelAluno> responsavelAlunos;
 }

@@ -1,16 +1,13 @@
 package br.com.appetitegourmet.api.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -29,11 +26,16 @@ public class ResponsavelAluno {
 	
 	@ManyToOne
     @JoinColumn(name = "responsavel_id", nullable = false)
+	@JsonIgnore
 	private Responsavel responsavel;
 	
 	@ManyToOne
     @JoinColumn(name = "grau_parentesco_id", nullable = false)
 	private Parentesco parentesco;
+
+	@OneToMany(mappedBy="responsavelAluno")
+	@JsonIgnore
+	private List<Contrato> contratos;
 	
 	@Builder.Default
     @Column(nullable = false)

@@ -71,7 +71,7 @@ public class ContratoService {
                 .orElseThrow(() -> new NoSuchElementException("Contrato não encontrado"));
     }
 
-    public Contrato salvarContrato(Contrato contrato) {
+    public Contrato salvarContrato(HttpServletRequest request, Contrato contrato) {
     	Contrato retContrato;
     	List<Contrato> contratos;
     	
