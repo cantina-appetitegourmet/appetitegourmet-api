@@ -2,6 +2,7 @@ package br.com.appetitegourmet.api.controllers;
 
 import java.util.List;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -45,9 +46,9 @@ public class ResponsavelAlunoController {
     }
     
     @PostMapping
-    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN') or hasRole('ROLE_RESPONSAVEL')")
-    public ResponsavelAluno salvarResponsavelAluno(@RequestBody ResponsavelAluno responsavelAluno) {
-        return responsavelAlunoService.salvarResponsavelAluno(responsavelAluno);
+    @PreAuthorize("hasRole('ROLE_RESPONSAVEL')")
+    public ResponsavelAluno salvarResponsavelAluno(HttpServletRequest request, @RequestBody ResponsavelAluno responsavelAluno) {
+        return responsavelAlunoService.salvarResponsavelAluno(request, responsavelAluno);
     }
     
     @DeleteMapping("/{id}")

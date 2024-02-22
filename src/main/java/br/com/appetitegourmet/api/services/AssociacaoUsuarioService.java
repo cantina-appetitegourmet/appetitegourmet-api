@@ -2,6 +2,9 @@ package br.com.appetitegourmet.api.services;
 
 import java.util.Optional;
 
+import br.com.appetitegourmet.api.spring.login.security.jwt.JwtUtils;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.appetitegourmet.api.models.AssociacaoUsuario;
@@ -15,7 +18,8 @@ import br.com.appetitegourmet.api.spring.login.repository.UserRepository;
 
 @Service
 public class AssociacaoUsuarioService {
-	
+	@Autowired
+	private JwtUtils jwtUtils;
 	private final AssociacaoUsuarioRepository associacaoUsuarioRepository;
 	private final RoleRepository roleRepository;
 	private final UserRepository userRepository;
@@ -56,13 +60,13 @@ public class AssociacaoUsuarioService {
 		
 		return false;
 	}
-	
+
 	public AssociacaoUsuario pegaAssociacaoUsuario(UserInfoRequest usuario) {
 		Optional<AssociacaoUsuario> associacaoUsuarioDB = null;
 		Optional<Role> roleDB = null;
-		
+
 		System.out.println("usuario.getRole() = " + usuario.getRole());
-		
+
 		if(usuario.getRole().compareTo("ROLE_RESPONSAVEL") == 0) {
 			System.out.println("RESPONSAVEL");
 			roleDB = roleRepository.findByName(ERole.ROLE_RESPONSAVEL);
@@ -72,10 +76,10 @@ public class AssociacaoUsuarioService {
 		} else if(usuario.getRole().compareTo("ROLE_ADMIN") == 0) {
 			System.out.println("ADMIN");
 			roleDB = roleRepository.findByName(ERole.ROLE_ADMIN);
-		} 
-		
-		 
-		
+		}
+
+
+
 		if(roleDB.isPresent()) {
 			System.out.println("findByUsuarioIdAndRoleId");
 			associacaoUsuarioDB = associacaoUsuarioRepository.findByUsuarioIdAndRoleId(usuario.getId(), roleDB.get().getId());
@@ -86,5 +90,15 @@ public class AssociacaoUsuarioService {
 		}
 		System.out.println("Retorno = NULL");
 		return null;
+	}
+
+	public AssociacaoUsuario pegaAssociacaoUsuarioResponsavelJWT(HttpServletRequest request) {
+		String jwt = jwtUtils.getJwtFromCookies(request);
+		String username = jwtUtils.getUserNameFromJwtToken(jwt);
+		Optional<User> user = userRepository.findByUsername(username);
+		UserInfoRequest userInfo = new UserInfoRequest();
+		userInfo.setId(user.get().getId());
+		userInfo.setRole("ROLE_RESPONSAVEL");
+		return this.pegaAssociacaoUsuario(userInfo);
 	}
 }

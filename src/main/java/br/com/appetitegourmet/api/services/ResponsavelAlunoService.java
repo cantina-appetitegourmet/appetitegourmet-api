@@ -4,15 +4,13 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import br.com.appetitegourmet.api.models.*;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.appetitegourmet.api.exception.EntidadeObrigatoriaException;
 import br.com.appetitegourmet.api.exception.OperacaoInvalidaException;
-import br.com.appetitegourmet.api.models.Aluno;
-import br.com.appetitegourmet.api.models.Parentesco;
-import br.com.appetitegourmet.api.models.Pessoa;
-import br.com.appetitegourmet.api.models.Responsavel;
-import br.com.appetitegourmet.api.models.ResponsavelAluno;
 import br.com.appetitegourmet.api.repositories.AlunoRepository;
 import br.com.appetitegourmet.api.repositories.ParentescoRepository;
 import br.com.appetitegourmet.api.repositories.PessoaRepository;
@@ -21,6 +19,9 @@ import br.com.appetitegourmet.api.repositories.ResponsavelRepository;
 
 @Service
 public class ResponsavelAlunoService {
+
+	@Autowired
+	AssociacaoUsuarioService associacaoUsuarioService;
 	private final ResponsavelAlunoRepository responsavelAlunoRepository;
 	private final ResponsavelRepository responsavelRepository;
 	private final AlunoRepository alunoRepository;
@@ -45,8 +46,10 @@ public class ResponsavelAlunoService {
                 .orElseThrow(() -> new NoSuchElementException("Responsavel Aluno não encontrado"));
     }
 	
-	public ResponsavelAluno salvarResponsavelAluno(ResponsavelAluno responsavelAluno) {
-		
+	public ResponsavelAluno salvarResponsavelAluno(HttpServletRequest request, ResponsavelAluno responsavelAluno) {
+		AssociacaoUsuario associacaoUsuario = associacaoUsuarioService.pegaAssociacaoUsuarioResponsavelJWT(request);
+		Optional<Responsavel> responsavel = responsavelRepository.findById(associacaoUsuario.getAssociado_id());
+		responsavelAluno.setResponsavel(responsavel.get());
 		if(responsavelAluno.getAluno() == null) {
 			throw new EntidadeObrigatoriaException("Obrigatório ter o aluno na relação");
 		} else {
@@ -75,19 +78,14 @@ public class ResponsavelAlunoService {
 				}
 			}
 		}
-		
-		if(responsavelAluno.getResponsavel() == null) {
-			throw new EntidadeObrigatoriaException("Obrigatório ter o responsável na relação");
+		if(responsavelAluno.getResponsavel().getId() == null) {
+			throw new OperacaoInvalidaException("Não é possível criar Responsável a partir deste endpoint");
 		} else {
-			if(responsavelAluno.getResponsavel().getId() == null) {
-				throw new OperacaoInvalidaException("Não é possível criar Responsável a partir deste endpoint");
+			Optional<Responsavel> optional = responsavelRepository.findById(responsavelAluno.getResponsavel().getId());
+			if(optional.isPresent()) {
+				responsavelAluno.setResponsavel(optional.get());
 			} else {
-				Optional<Responsavel> optional = responsavelRepository.findById(responsavelAluno.getResponsavel().getId());
-				if(optional.isPresent()) {
-					responsavelAluno.setResponsavel(optional.get());
-				} else {
-					throw new NoSuchElementException("Responsável não encontrado");
-				}
+				throw new NoSuchElementException("Responsável não encontrado");
 			}
 		}
 		
