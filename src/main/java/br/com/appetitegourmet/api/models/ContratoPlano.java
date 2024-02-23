@@ -2,6 +2,9 @@ package br.com.appetitegourmet.api.models;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+
+import br.com.appetitegourmet.api.dto.ContratoPlanoReq;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -27,6 +30,7 @@ public class ContratoPlano {
     
     @ManyToOne
     @JoinColumn(name = "contrato_id", nullable = false)
+    @JsonIgnore
     private Contrato contrato;
     
     @ManyToOne

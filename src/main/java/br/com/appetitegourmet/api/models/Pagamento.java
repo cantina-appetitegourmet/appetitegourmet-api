@@ -2,6 +2,7 @@ package br.com.appetitegourmet.api.models;
 
 import java.math.BigDecimal;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,6 +22,7 @@ public class Pagamento {
 	
 	@ManyToOne
 	@JoinColumn(name = "contrato_id", nullable = false)
+	@JsonIgnore
 	private Contrato contrato;
 	
 	// 1 - PIX, 2 - BOLETO
@@ -33,9 +35,13 @@ public class Pagamento {
 	private Integer idStatus;
 	
 	private BigDecimal valor;
-	
+
 	// Dados de localizacao da empresa de integracao
 	@Column(nullable = true)
 	private String dados;
+
+	// Dados de localizacao da empresa de integracao
+	@Column(nullable = true)
+	private String dadosRetorno;
 	
 }

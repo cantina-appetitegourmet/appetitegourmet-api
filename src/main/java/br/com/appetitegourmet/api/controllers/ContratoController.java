@@ -47,7 +47,7 @@ public class ContratoController {
     }
     
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN') or hasRole('ROLE_RESPONSAVEL')")
     public Contrato buscarContratoPorId(@PathVariable Long id) {
         return contratoService.buscarContratoPorId(id);
     }

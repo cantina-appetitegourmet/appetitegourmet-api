@@ -2,6 +2,7 @@ package br.com.appetitegourmet.api.controllers;
 
 import java.util.List;
 
+import br.com.appetitegourmet.api.dto.ContratoPlanoReq;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -46,8 +47,8 @@ public class ContratoPlanoController {
     }
     
     @PostMapping
-    @PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN') or hasRole('ROLE_RESPONSAVEL')")
-    public ContratoPlano salvarContratoPlano(@RequestBody ContratoPlano contratoPlano) {
+    @PreAuthorize("hasRole('ROLE_RESPONSAVEL')")
+    public ContratoPlano salvarContratoPlano(@RequestBody ContratoPlanoReq contratoPlano) {
         return contratoPlanoService.salvarContratoPlano(contratoPlano);
     }
     

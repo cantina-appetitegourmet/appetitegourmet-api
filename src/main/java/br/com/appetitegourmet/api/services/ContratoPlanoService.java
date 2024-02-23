@@ -4,6 +4,10 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import br.com.appetitegourmet.api.dto.ContratoPlanoReq;
+import br.com.appetitegourmet.api.dto.PessoaResponse;
+import br.com.appetitegourmet.api.mapper.ContratoPlanoMapper;
+import br.com.appetitegourmet.api.mapper.PessoaMapper;
 import org.springframework.stereotype.Service;
 
 import br.com.appetitegourmet.api.models.Contrato;
@@ -42,29 +46,8 @@ public class ContratoPlanoService {
         return contratoPlanoRepository.findByContratoId(id);
     }
 
-    public ContratoPlano salvarContratoPlano(ContratoPlano contratoPlano) {
-    	if(contratoPlano.getContrato() != null) {
-    		Contrato retorno;
-    		Optional<Contrato> opt;
-    		opt = contratoRepository.findById(contratoPlano.getContrato().getId());
-    		if(!opt.isPresent()) {
-    			new Exception("Falha, Contrato(" + Long.toString(contratoPlano.getContrato().getId()) + ") inexistente");
-    		}
-    		retorno = opt.get();
-    		contratoPlano.setContrato(retorno);
-    	}
-    	if(contratoPlano.getPlanoAlimentarPreco() != null) {
-    		PlanoAlimentarPreco retorno;
-    		Optional<PlanoAlimentarPreco> opt;
-    		opt = planoAlimentarPrecoRepository.findById(contratoPlano.getPlanoAlimentarPreco().getId());
-    		if(!opt.isPresent()) {
-    			new Exception("Falha, Plano Alimentar Preço(" + Long.toString(contratoPlano.getContrato().getId()) + ") inexistente");
-    		}
-    		retorno = opt.get();
-    		contratoPlano.setPlanoAlimentarPreco(retorno);
-    	}
-    	contratoPlano.setPrecoDia(contratoPlano.getPlanoAlimentarPreco().getPrecoDia());
-        return contratoPlanoRepository.save(contratoPlano);
+    public ContratoPlano salvarContratoPlano(ContratoPlanoReq contratoPlano) {
+        return contratoPlanoRepository.save(ContratoPlanoMapper.INSTANCE.contratoPlanoReqtoContratoPlano(contratoPlano));
     }
 
     public void excluirContratoPlano(Long id) {

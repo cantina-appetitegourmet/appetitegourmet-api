@@ -216,7 +216,6 @@ public class PagamentoService {
 		dadosRetorno.put("tipo", "PIX");
 		
 		pagamento.setDados(dadosRetorno.toString());
-		pagamentoRepository.save(pagamento);
 		
 		idPix = dadosRetorno.getInt("id");
 		
@@ -227,10 +226,11 @@ public class PagamentoService {
 		if(!retorno) {
 			throw new ErroCriacaoChavePixException(operacoesPix.getErro());
 		}
+		pagamento.setDadosRetorno(dados.getRetornoJson().toString());
+		pagamentoRepository.save(pagamento);
 
 		System.out.println("Dados JSON = " + dados.getRetornoJson());
 		System.out.println("Dados String = " + dados.getRetornoString());
-//		return dados.getRetornoJson();
 		return dados.getRetornoJson().toString();
 	}
 	
@@ -462,9 +462,10 @@ public class PagamentoService {
 		
 		dadosBD.put("tipo", "BOLETO");
 		dadosBD.put("id", Long.toString(data.getLong("charge_id")));
-		
+
 		pagamentoBD.setDados(dadosBD.toString());
-		pagamentoBD = pagamentoRepository.save(pagamentoBD);
+		pagamentoBD.setDadosRetorno(dadosRetorno.toString());
+		pagamentoRepository.save(pagamentoBD);
 		
 		return dadosRetorno.toString();
 	}
@@ -490,7 +491,7 @@ public class PagamentoService {
 		OperacoesBoleto operacoesBoleto;
 		
 		operacoesBoleto = new OperacoesBoleto();
-		retorno = operacoesBoleto.exibirBoleto(dados, 
+		retorno = operacoesBoleto.exibirBoleto(dados,
 											   idBoleto);  
 		if(!retorno) {
 			throw new ErroCriacaoChavePixException(operacoesBoleto.getErro());
