@@ -18,9 +18,8 @@ public interface PessoaMapper {
     @Mapping(target = "sexoExtenso", expression = "java(pessoa.isSexo() ? \"Masculino\" : \"Feminino\")")
     PessoaResponse pessoaToPessoaResponse(Pessoa pessoa);
 
-    List<PessoaResponse> pessoasToPessoaResponses(List<Pessoa> pessoas);
+    Pessoa PessoaRequestToPessoa(PessoaRequest pessoaRequest);
 
-    @Mapping(target = "id", ignore = true)
-    void atualizarPessoaFromRequest(PessoaRequest pessoaRequest, @MappingTarget Pessoa pessoa);
+    List<PessoaResponse> pessoasToPessoaResponses(List<Pessoa> pessoas);
 
 }

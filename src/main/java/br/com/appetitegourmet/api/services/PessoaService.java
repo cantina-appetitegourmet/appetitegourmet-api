@@ -15,6 +15,8 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class PessoaService {
     private final PessoaRepository pessoaRepository;
+
+
     private final PessoaMapper pessoaMapper;
 
     public Pessoa salvarPessoa(Pessoa pessoa) {
@@ -31,10 +33,7 @@ public class PessoaService {
     }
 
     public Pessoa editarPessoa(Long id, PessoaRequest pessoaRequest) throws PessoaNaoEncontradaException {
-        Pessoa pessoaExistente = buscarPessoaPorId(id);
-        pessoaMapper.atualizarPessoaFromRequest(pessoaRequest, pessoaExistente);
-        salvarPessoa(pessoaExistente);
-        return pessoaRepository.save(pessoaExistente);
+        return salvarPessoa(pessoaMapper.INSTANCE.PessoaRequestToPessoa(pessoaRequest));
     }
 
 }
