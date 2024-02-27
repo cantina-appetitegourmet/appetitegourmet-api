@@ -29,4 +29,12 @@ public class UtilController {
 		System.out.println("TESTOU!!");
 		return utilService.consultaEnderecoPorCep("50060060");
 	}
+	
+	@PostMapping("/teste2")
+	//@PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN') or hasRole('ROLE_RESPONSAVEL')")
+	@PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN') or hasRole('ROLE_RESPONSAVEL')")
+	public Endereco Teste2() throws Exception {
+		System.out.println("TESTOU2!!");
+		return utilService.consultaEnderecoPorCep("52050300");
+	}
 }
