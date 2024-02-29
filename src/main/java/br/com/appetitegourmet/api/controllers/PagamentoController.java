@@ -31,6 +31,13 @@ public class PagamentoController {
     }
 	
 	@GetMapping
+	@RequestMapping("/pagamentos/listarChaves")
+	@PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN') or hasRole('ROLE_RESPONSAVEL')")
+    public String listarChaves() {
+        return pagamentoService.listarChaves();
+    }
+	
+	@GetMapping
 	@RequestMapping("/pagamentos/listarChavesPix")
 	@PreAuthorize("hasRole('ROLE_OPERADOR') or hasRole('ROLE_ADMIN')")
     public String listarChavesPix() {

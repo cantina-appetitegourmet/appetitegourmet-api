@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.io.File;
 
 import org.springframework.stereotype.Service;
 import org.json.JSONObject;
@@ -75,6 +76,24 @@ public class PagamentoService {
 			throw new NoSuchElementException("Pagamento não encontrato");
 		}		
 		return pag;
+	}
+	
+	public String listarChaves() {
+		
+		List<Empresa> listaEmpresas = empresaRepository.findAll();
+		List<String> resultados = new ArrayList<String>();
+		
+		for(Empresa empresa: listaEmpresas ) {
+			String resultado;
+			resultado = empresa.getId().toString();
+			JSONObject options = new JSONObject(empresa.getDadosIntegracaoPix());
+			String certificado = options.get("certificate").toString();
+			File file = new File(certificado);
+			resultado += " - " + file.exists();
+			resultados.add(resultado);
+		}
+		
+		return resultados.toString();
 	}
 	
 	public List<Pagamento> buscarPagamentoPorContratoId(Long id) {
