@@ -10,6 +10,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.io.File;
 
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +53,8 @@ public class PagamentoService {
 	private final EmpresaRepository empresaRepository;
 	@Autowired
     private Environment env;
+
+	private final String PATH = System.getProperty("user.dir");
 	
 	public static final int DIAS_PARA_VENCIMENTO = 90;
 	
@@ -82,13 +86,15 @@ public class PagamentoService {
 		
 		List<Empresa> listaEmpresas = empresaRepository.findAll();
 		List<String> resultados = new ArrayList<String>();
-		
+
+		System.out.println(PATH);
+
 		for(Empresa empresa: listaEmpresas ) {
 			String resultado;
 			resultado = empresa.getId().toString();
 			JSONObject options = new JSONObject(empresa.getDadosIntegracaoPix());
 			String certificado = options.get("certificate").toString();
-			File file = new File(certificado);
+			File file = new File(PATH + '/' + certificado);
 			resultado += " - " + file.exists();
 			resultados.add(resultado);
 		}

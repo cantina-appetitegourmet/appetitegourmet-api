@@ -1,0 +1,1 @@
+ALTER TABLE public.pagamento ADD COLUMN dados_retorno TEXT;
