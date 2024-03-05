@@ -94,7 +94,7 @@ public class PagamentoService {
 			resultado = empresa.getId().toString();
 			JSONObject options = new JSONObject(empresa.getDadosIntegracaoPix());
 			String certificado = options.get("certificate").toString();
-			File file = new File(PATH + '/' + certificado);
+			File file = new File(certificado);
 			resultado += " - " + file.exists();
 			resultados.add(resultado);
 		}
