@@ -87,10 +87,10 @@ public class PagamentoService {
 		List<Empresa> listaEmpresas = empresaRepository.findAll();
 		List<String> resultados = new ArrayList<String>();
 
-		System.out.println(PATH);
+		resultados.add(PATH);
 
 		for(Empresa empresa: listaEmpresas ) {
-			String resultado;
+			String resultado = PATH + '/';
 			resultado = empresa.getId().toString();
 			JSONObject options = new JSONObject(empresa.getDadosIntegracaoPix());
 			String certificado = options.get("certificate").toString();
