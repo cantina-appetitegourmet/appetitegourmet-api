@@ -90,11 +90,11 @@ public class PagamentoService {
 		resultados.add(PATH);
 
 		for(Empresa empresa: listaEmpresas ) {
-			String resultado = PATH + '/';
+			String resultado;
 			resultado = empresa.getId().toString();
 			JSONObject options = new JSONObject(empresa.getDadosIntegracaoPix());
 			String certificado = options.get("certificate").toString();
-			File file = new File(certificado);
+			File file = new File(PATH  + certificado);
 			resultado += " - " + file.exists();
 			resultados.add(resultado);
 		}

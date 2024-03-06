@@ -13,6 +13,7 @@ import utils.Retorno;
 public class OperacoesBoleto {
 	
 	private String erro;
+	private final String PATH = System.getProperty("user.dir");
 	
 	public OperacoesBoleto() {
 		erro = "";
@@ -161,11 +162,8 @@ public class OperacoesBoleto {
 		JSONObject jBoletoBancario = new JSONObject();
 		JSONObject jPayment = new JSONObject();
 		JSONObject jBody = new JSONObject();
-
+		dadosIntegracaoBoleto = dadosIntegracaoBoleto.replace("\"certificate\": \"", "\"certificate\": \"" + PATH);
 		JSONObject options = new JSONObject(dadosIntegracaoBoleto);
-		//options.put("client_id", credentials.getClientId());
-		//options.put("client_secret", credentials.getClientSecret());
-		//options.put("sandbox", credentials.isSandbox());
 
 		// items
 		adicionarItens(jItems, itens);
