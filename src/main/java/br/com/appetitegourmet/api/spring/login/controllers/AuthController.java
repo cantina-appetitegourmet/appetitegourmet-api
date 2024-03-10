@@ -167,6 +167,10 @@ public class AuthController {
 	String password;
 	Boolean falhou = false;
 	
+	if(!userRepository.existsByEmail(loginRequest.getUsername())) {
+		return ResponseEntity.badRequest().body(new MessageResponse("Usuario inexistente!"));
+	}
+	
 	password = gs.GeradorSenha();
 	userService.removeLink(loginRequest.getUsername());
 	userService.salvarHashSenha(loginRequest.getUsername(), password);
