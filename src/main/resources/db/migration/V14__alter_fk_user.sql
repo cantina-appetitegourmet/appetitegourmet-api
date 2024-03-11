@@ -1,0 +1,14 @@
+ALTER TABLE public.users DROP CONSTRAINT users_pessoa_id_fkey;
+ALTER TABLE public.users ADD CONSTRAINT users_pessoa_id_fkey FOREIGN KEY (pessoa_id) REFERENCES public.pessoa(id) ON DELETE CASCADE;
+ALTER TABLE public.user_roles DROP CONSTRAINT user_roles_user_id_fkey;
+ALTER TABLE public.user_roles ADD CONSTRAINT user_roles_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(id) ON DELETE CASCADE;
+ALTER TABLE public.pessoa DROP CONSTRAINT pessoa_endereco_id_fkey;
+ALTER TABLE public.pessoa ADD CONSTRAINT pessoa_endereco_id_fkey FOREIGN KEY (endereco_id) REFERENCES public.enderecos(id) ON DELETE CASCADE;
+ALTER TABLE public.responsavel DROP CONSTRAINT responsavel_pessoa_id_fkey;
+ALTER TABLE public.responsavel ADD CONSTRAINT responsavel_pessoa_id_fkey FOREIGN KEY (pessoa_id) REFERENCES public.pessoa(id) ON DELETE CASCADE;
+ALTER TABLE public.responsavel_aluno DROP CONSTRAINT responsavel_aluno_responsavel_id_fkey;
+ALTER TABLE public.responsavel_aluno ADD CONSTRAINT responsavel_aluno_responsavel_id_fkey FOREIGN KEY (responsavel_id) REFERENCES public.responsavel(id) ON DELETE CASCADE;
+ALTER TABLE public.responsavel_aluno DROP CONSTRAINT responsavel_aluno_aluno_id_fkey;
+ALTER TABLE public.responsavel_aluno ADD CONSTRAINT responsavel_aluno_aluno_id_fkey FOREIGN KEY (aluno_id) REFERENCES public.aluno(id) ON DELETE CASCADE;
+ALTER TABLE public.aluno DROP CONSTRAINT aluno_pessoa_id_fkey;
+ALTER TABLE public.aluno ADD CONSTRAINT aluno_pessoa_id_fkey FOREIGN KEY (pessoa_id) REFERENCES public.pessoa(id) ON DELETE CASCADE;

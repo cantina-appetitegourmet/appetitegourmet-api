@@ -1,16 +1,15 @@
 package br.com.appetitegourmet.api.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,11 +21,12 @@ public class ResponsavelAluno {
 	
 	@ManyToOne
     @JoinColumn(name = "aluno_id", nullable = false)
+	@JsonManagedReference
 	private Aluno aluno;
 	
 	@ManyToOne
     @JoinColumn(name = "responsavel_id", nullable = false)
-	@JsonIgnore
+	@JsonBackReference
 	private Responsavel responsavel;
 	
 	@ManyToOne
@@ -34,7 +34,6 @@ public class ResponsavelAluno {
 	private Parentesco parentesco;
 
 	@OneToMany(mappedBy="responsavelAluno")
-	@JsonIgnore
 	private List<Contrato> contratos;
 	
 	@Builder.Default

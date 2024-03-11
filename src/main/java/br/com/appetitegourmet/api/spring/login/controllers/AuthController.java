@@ -1,14 +1,14 @@
 package br.com.appetitegourmet.api.spring.login.controllers;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
+import br.com.appetitegourmet.api.spring.login.mapper.UserDetailsMapper;
+import br.com.appetitegourmet.api.spring.login.models.User;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import utils.GeracaoSenha;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,64 +41,36 @@ import br.com.appetitegourmet.api.spring.login.security.services.UserService;
 @RestController
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = "http://localhost:4200,https://nice-beach-01dafa610.3.azurestaticapps.net,https://menukids.appetitegourmet.com.br", maxAge = 3600, allowCredentials="true")
+@AllArgsConstructor
 public class AuthController {
-  @Autowired
   AuthenticationManager authenticationManager;
-
-  @Autowired
-  UserRepository userRepository;
-
-  @Autowired
-  RoleRepository roleRepository;
-
-  @Autowired
-  PasswordEncoder encoder;
-
-  @Autowired
+  private final UserDetailsMapper userDetailsMapper;
   JwtUtils jwtUtils;
-  
-  @Autowired
   UserService userService;
-  
-  @Autowired 
   Environment env;
-  
-  @Autowired
   EmailService emailService;
 
   @PostMapping("/signin")
-  public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+  public ResponseEntity<UserInfoResponse> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
     Authentication authentication = authenticationManager
         .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-
-    System.out.println("Passo1");
     SecurityContextHolder.getContext().setAuthentication(authentication);
-
-    System.out.println("Passo2");
     UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
     System.out.println("userDetails=" + userDetails.toString());
-    System.out.println("Passo3");
     ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
-
-    System.out.println("Passo4");
     List<String> roles = userDetails.getAuthorities().stream()
         .map(item -> item.getAuthority())
         .collect(Collectors.toList());
-
-    System.out.println("Passo5");
     return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
-        .body(new UserInfoResponse(userDetails.getId(),
-                                   userDetails.getUsername(),
-                                   userDetails.getEmail(),
-                                   roles));
+        .body(userDetailsMapper.INSTANCE.UserDetailsImplToUserInfoResponse(userDetails));
   }
 
-  @PostMapping("/signup")
+  /*@PostMapping("/signup")
   public ResponseEntity<?> registerUserResponsavel(@Valid @RequestBody SignupRequest signUpRequest) {
 	Set<String> roles = new HashSet<>(Arrays.asList("resp"));
-	  
+
 	signUpRequest.setRole(roles);
 	int resp = userService.registerUser(signUpRequest);
 	
@@ -147,7 +119,7 @@ public class AuthController {
     }
     
     return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
-  }
+  }*/
   
   @PostMapping("/alterPassword")
   public ResponseEntity<?> alterPassword(@Valid @RequestBody LoginRequest loginRequest) {

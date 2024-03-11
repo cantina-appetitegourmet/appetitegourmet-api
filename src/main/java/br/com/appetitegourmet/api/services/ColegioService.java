@@ -14,11 +14,9 @@ import br.com.appetitegourmet.api.repositories.EnderecoRepository;
 @Service
 public class ColegioService {
     private final ColegioRepository colegioRepository;
-    private final EnderecoRepository enderecoRepository;
 
-    public ColegioService(ColegioRepository colegioRepository, EnderecoRepository enderecoRepository) {
+    public ColegioService(ColegioRepository colegioRepository) {
         this.colegioRepository = colegioRepository;
-		this.enderecoRepository = enderecoRepository;
     }
 
     public List<Colegio> listarColegios() {
@@ -31,14 +29,6 @@ public class ColegioService {
     }
 
     public Colegio salvarColegio(Colegio colegio) {
-    	if(colegio.getEndereco() != null) {
-    		Endereco retorno;
-    		retorno = enderecoRepository.save(colegio.getEndereco());
-    		if(retorno == null) {
-    			new Exception("Falha ao inserir o endereço");
-    		}
-    		colegio.setEndereco(retorno);
-    	}
         return colegioRepository.save(colegio);
     }
 

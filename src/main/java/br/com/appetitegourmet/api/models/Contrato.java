@@ -3,15 +3,15 @@ package br.com.appetitegourmet.api.models;
 import java.sql.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
-@Data
+@Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -27,6 +27,7 @@ public class Contrato {
     
     @ManyToOne
     @JoinColumn(name = "responsavel_aluno_id", nullable = false)
+    @JsonIgnore
     private ResponsavelAluno responsavelAluno;
     
     @ManyToOne
@@ -37,11 +38,14 @@ public class Contrato {
     private Date dataAdesao;
 
     @OneToMany(mappedBy="contrato")
+    @JsonManagedReference
     private List<ContratoDesconto> contratoDescontos;
 
     @OneToMany(mappedBy="contrato")
+    @JsonManagedReference
     private List<ContratoPlano> contratoPlanos;
 
     @OneToMany(mappedBy="contrato")
+    @JsonManagedReference
     private List<Pagamento> pagamentos;
 }

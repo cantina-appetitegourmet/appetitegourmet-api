@@ -1,16 +1,22 @@
 package br.com.appetitegourmet.api.controllers;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
-import br.com.appetitegourmet.api.models.AssociacaoUsuario;
+import br.com.appetitegourmet.api.dto.ResponsavelRequest;
+import br.com.appetitegourmet.api.mapper.PessoaMapper;
+import br.com.appetitegourmet.api.spring.login.mapper.UserMapper;
+import br.com.appetitegourmet.api.spring.login.models.Role;
 import br.com.appetitegourmet.api.spring.login.models.User;
-import br.com.appetitegourmet.api.spring.login.payload.request.UserInfoRequest;
+import br.com.appetitegourmet.api.spring.login.payload.response.UserInfoResponse;
+import br.com.appetitegourmet.api.spring.login.repository.RoleRepository;
 import br.com.appetitegourmet.api.spring.login.repository.UserRepository;
 import br.com.appetitegourmet.api.spring.login.security.jwt.JwtUtils;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.AllArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -25,7 +31,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 
 import br.com.appetitegourmet.api.models.Responsavel;
-import br.com.appetitegourmet.api.services.AssociacaoUsuarioService;
 import br.com.appetitegourmet.api.services.EmailService;
 import br.com.appetitegourmet.api.services.ResponsavelService;
 import br.com.appetitegourmet.api.spring.login.models.ERole;
@@ -36,44 +41,27 @@ import utils.GeracaoSenha;
 
 @RestController
 @RequestMapping("/responsaveis")
+@AllArgsConstructor
 @CrossOrigin(origins = "http://localhost:4200,https://nice-beach-01dafa610.3.azurestaticapps.net,https://menukids.appetitegourmet.com.br", maxAge = 3600, allowCredentials="true")
 public class ResponsavelController {
-	@Autowired
 	private JwtUtils jwtUtils;
-	@Autowired
 	UserRepository userRepository;
-
-	@Autowired
-	AssociacaoUsuarioService associacaoUsuarioService;
-
+	RoleRepository roleRepository;
+	private final PessoaMapper pessoaMapper;
 	private final ResponsavelService responsavelService;
 	private final EmailService emailService;
 	private final UserService userService;
-	private final AssociacaoUsuarioService associacaoService;
+	private final UserMapper userMapper;
 	
 	@Autowired 
 	private Environment env;
-    
-    public ResponsavelController(ResponsavelService responsavelService, EmailService emailService, UserService userService, AssociacaoUsuarioService associacaoService) {
-        this.responsavelService = responsavelService;
-		this.emailService = emailService;
-		this.userService = userService;
-		this.associacaoService = associacaoService;
-    }
 
 	@GetMapping
 	@PreAuthorize("hasRole('ROLE_RESPONSAVEL')")
 	public Responsavel listarAlunosResponsavel(HttpServletRequest request) {
 		String username = jwtUtils.getUserNameFromJwtToken(jwtUtils.getJwtFromCookies(request));
 		Optional<User> user = userRepository.findByUsername(username);
-		System.out.println(username);
-		System.out.println(user.get().getId());
-		UserInfoRequest userInfo = new UserInfoRequest();
-		userInfo.setId(user.get().getId());
-		userInfo.setRole("ROLE_RESPONSAVEL");
-		AssociacaoUsuario associacaoUsuario = associacaoUsuarioService.pegaAssociacaoUsuario(userInfo);
-		System.out.println(associacaoUsuario.getAssociado_id());
-		return responsavelService.buscarResponsavelPorId(associacaoUsuario.getAssociado_id());
+		return user.get().getPessoa().getResponsavel();
 	}
 
 	@GetMapping("/admin")
@@ -108,46 +96,40 @@ public class ResponsavelController {
     }
     
     @PostMapping("/enviarEmail")
-    public Responsavel enviarEmail(@RequestBody Responsavel cadastro) throws MessagingException, IOException {
-    	Responsavel responsavel = new Responsavel();
-    	int resp;
-    	Set<String> strRoles = Set.of("resp");
+    public UserInfoResponse enviarEmail(@RequestBody @NotNull ResponsavelRequest cadastro) throws MessagingException, IOException {
+		if (userRepository.existsByUsername(cadastro.getPessoa().getEmail())) {
+			return null;
+		}
+		HashSet<Role> roles = new HashSet<>();
+		Role modRole = roleRepository.findByName(ERole.ROLE_RESPONSAVEL).orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+		roles.add(modRole);
     	GeracaoSenha gs = new GeracaoSenha();
     	String password;
     	
-    	SignupRequest signUpRequest = new SignupRequest(); 
-    	
-    	responsavel.setPessoa(cadastro.getPessoa());
+    	SignupRequest signUpRequest = new SignupRequest();
     	
     	password = gs.GeradorSenha();
     	signUpRequest.setUsername(cadastro.getPessoa().getEmail());
     	signUpRequest.setEmail(cadastro.getPessoa().getEmail());
     	signUpRequest.setPassword(password);
-    	signUpRequest.setRole(strRoles);
-    	resp = userService.registerUser(signUpRequest);
-    	
-    	if(resp == 0) {
-    		
-    		if(userService.salvarHashSenha(cadastro.getPessoa().getEmail(), password)) {
-    		
-		    	Responsavel cadastrado = responsavelService.salvarResponsavel(responsavel);
-		    	
-		    	associacaoService.associa(cadastro.getPessoa().getEmail(), 
-		    							  ERole.ROLE_RESPONSAVEL, 
-		    							  cadastrado.getId());
-		    	
-		    	String mensagem = "Sua conta foi criada com sucesso!\n"
-		    			+ "Usuario: " + cadastro.getPessoa().getEmail() + "\n" 
-		    			+ "Crie a senha para fazer login e adesão ao sistema!" + "\n"
-		    			+ "Link para criação da senha: " 
-		    			+ env.getProperty("appetitegourmet.app.linkPassword") + password 
-		    			+ "/" + cadastrado.getPessoa().getEmail() + "\n";
-		    	emailService.sendHtmlEmail(env.getProperty("spring.mail.username"), 
-		    							   cadastrado.getPessoa().getEmail(), 
-		    							   "Criação da conta Appetite Gourmet", mensagem, null);
-		        return cadastrado;
-    		}
-    	}
+		signUpRequest.setRoles(roles);
+		signUpRequest.setPessoa(pessoaMapper.INSTANCE.PessoaRequestToPessoa(cadastro.getPessoa()));
+    	User user = userService.registerUser(signUpRequest);
+		if(userService.salvarHashSenha(cadastro.getPessoa().getEmail(), password)) {
+			Responsavel responsavel = new Responsavel();
+			responsavel.setPessoa(user.getPessoa());
+			responsavelService.salvarResponsavel(responsavel);
+			String mensagem = "Sua conta foi criada com sucesso!\n"
+					+ "Usuario: " + cadastro.getPessoa().getEmail() + "\n"
+					+ "Crie a senha para fazer login e adesão ao sistema!" + "\n"
+					+ "Link para criação da senha: "
+					+ env.getProperty("appetitegourmet.app.linkPassword") + password
+					+ "/" + signUpRequest.getPessoa().getEmail() + "\n";
+			emailService.sendHtmlEmail(env.getProperty("spring.mail.username"),
+					signUpRequest.getPessoa().getEmail(),
+					"Criação da conta Appetite Gourmet", mensagem, null);
+			return userMapper.INSTANCE.userToUserInfoResponse(user);
+		}
     	return null;
     }
     

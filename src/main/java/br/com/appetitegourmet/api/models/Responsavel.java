@@ -1,5 +1,8 @@
 package br.com.appetitegourmet.api.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,15 +23,10 @@ public class Responsavel {
 
     @OneToOne
     @JoinColumn(name = "pessoa_id")
+    @JsonManagedReference
     private Pessoa pessoa;
 
-    @ManyToMany
-    @JoinTable(
-            name = "responsavel_aluno",
-            joinColumns = @JoinColumn(name = "responsavel_id"),
-            inverseJoinColumns = @JoinColumn(name = "aluno_id"))
-    List<Aluno> alunos;
-
     @OneToMany(mappedBy="responsavel")
+    @JsonManagedReference
     private List<ResponsavelAluno> responsavelAlunos;
 }
