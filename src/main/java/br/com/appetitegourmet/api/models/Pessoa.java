@@ -62,14 +62,14 @@ public class Pessoa {
     private Endereco endereco;
 
     @OneToOne(mappedBy = "pessoa")
-    @JsonIgnore
+    @JsonBackReference
     private User user;
 
     @OneToOne(mappedBy = "pessoa")
-    @JsonIgnore
+    @JsonBackReference
     private Responsavel responsavel;
 
     @OneToOne(mappedBy = "pessoa")
-    @JsonIgnore
+    @JsonBackReference
     private Aluno aluno;
 }

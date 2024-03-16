@@ -32,7 +32,7 @@ public class ContratoPlano {
     
     @ManyToOne
     @JoinColumn(name = "contrato_id", nullable = false)
-    @JsonBackReference
+    @JsonManagedReference
     private Contrato contrato;
     
     @ManyToOne

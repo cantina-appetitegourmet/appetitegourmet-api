@@ -5,7 +5,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import br.com.appetitegourmet.api.models.Pessoa;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import br.com.appetitegourmet.api.spring.login.models.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 @Data
+@AllArgsConstructor
 public class UserDetailsImpl implements UserDetails {
   private static final long serialVersionUID = 1L;
 
@@ -26,15 +31,7 @@ public class UserDetailsImpl implements UserDetails {
   private String password;
 
   private Collection<? extends GrantedAuthority> authorities;
-
-  public UserDetailsImpl(Long id, String username, String email, String password,
-      Collection<? extends GrantedAuthority> authorities) {
-    this.id = id;
-    this.username = username;
-    this.email = email;
-    this.password = password;
-    this.authorities = authorities;
-  }
+  private Pessoa pessoa;
 
   public static UserDetailsImpl build(User user) {
     List<GrantedAuthority> authorities = user.getRoles().stream()
@@ -46,12 +43,7 @@ public class UserDetailsImpl implements UserDetails {
         user.getUsername(),
         user.getEmail(),
         user.getPassword(),
-        authorities);
-  }
-
-  @Override
-  public Collection<? extends GrantedAuthority> getAuthorities() {
-    return authorities;
+        authorities, user.getPessoa());
   }
 
   @Override

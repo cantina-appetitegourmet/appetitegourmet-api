@@ -26,14 +26,15 @@ public class ResponsavelAluno {
 	
 	@ManyToOne
     @JoinColumn(name = "responsavel_id", nullable = false)
-	@JsonBackReference
+	@JsonManagedReference
 	private Responsavel responsavel;
 	
 	@ManyToOne
     @JoinColumn(name = "grau_parentesco_id", nullable = false)
 	private Parentesco parentesco;
 
-	@OneToMany(mappedBy="responsavelAluno")
+	@OneToMany(mappedBy="responsavelAluno", fetch = FetchType.EAGER)
+	@JsonBackReference
 	private List<Contrato> contratos;
 	
 	@Builder.Default

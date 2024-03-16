@@ -50,6 +50,6 @@ public class User {
 
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "pessoa_id", referencedColumnName = "id")
-  @JsonIgnore
+  @JsonManagedReference
   private Pessoa pessoa;
 }

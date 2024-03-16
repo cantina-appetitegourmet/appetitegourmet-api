@@ -27,7 +27,7 @@ public class Contrato {
     
     @ManyToOne
     @JoinColumn(name = "responsavel_aluno_id", nullable = false)
-    @JsonIgnore
+    @JsonManagedReference
     private ResponsavelAluno responsavelAluno;
     
     @ManyToOne
@@ -37,15 +37,15 @@ public class Contrato {
     @Column(name="data_adesao", nullable = false)
     private Date dataAdesao;
 
-    @OneToMany(mappedBy="contrato")
-    @JsonManagedReference
+    @OneToMany(mappedBy="contrato", fetch = FetchType.EAGER)
+    @JsonBackReference
     private List<ContratoDesconto> contratoDescontos;
 
-    @OneToMany(mappedBy="contrato")
-    @JsonManagedReference
+    @OneToMany(mappedBy="contrato", fetch = FetchType.EAGER)
+    @JsonBackReference
     private List<ContratoPlano> contratoPlanos;
 
-    @OneToMany(mappedBy="contrato")
+    @OneToMany(mappedBy="contrato", fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<Pagamento> pagamentos;
 }

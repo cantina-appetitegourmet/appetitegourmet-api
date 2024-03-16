@@ -60,9 +60,6 @@ public class AuthController {
 
     System.out.println("userDetails=" + userDetails.toString());
     ResponseCookie jwtCookie = jwtUtils.generateJwtCookie(userDetails);
-    List<String> roles = userDetails.getAuthorities().stream()
-        .map(item -> item.getAuthority())
-        .collect(Collectors.toList());
     return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
         .body(userDetailsMapper.INSTANCE.UserDetailsImplToUserInfoResponse(userDetails));
   }
