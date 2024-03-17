@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import br.com.appetitegourmet.api.spring.login.mapper.UserDetailsMapper;
 import br.com.appetitegourmet.api.spring.login.models.User;
+import br.com.appetitegourmet.api.spring.login.payload.request.LostPasswordRequest;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -43,12 +44,13 @@ import br.com.appetitegourmet.api.spring.login.security.services.UserService;
 @CrossOrigin(origins = "http://localhost:4200,https://nice-beach-01dafa610.3.azurestaticapps.net,https://menukids.appetitegourmet.com.br", maxAge = 3600, allowCredentials="true")
 @AllArgsConstructor
 public class AuthController {
-  AuthenticationManager authenticationManager;
-  private final UserDetailsMapper userDetailsMapper;
-  JwtUtils jwtUtils;
-  UserService userService;
-  Environment env;
-  EmailService emailService;
+    private final AuthenticationManager authenticationManager;
+    private final UserRepository userRepository;
+    private final UserDetailsMapper userDetailsMapper;
+    private final JwtUtils jwtUtils;
+    private final UserService userService;
+    private final Environment env;
+    private final EmailService emailService;
 
   @PostMapping("/signin")
   public ResponseEntity<UserInfoResponse> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -130,29 +132,28 @@ public class AuthController {
   }
   
   @PostMapping("/lostPassword")
-  public ResponseEntity<?> lostPassword(@Valid @RequestBody LoginRequest loginRequest) {
+  public ResponseEntity<?> lostPassword(@Valid @RequestBody LostPasswordRequest lostPasswordRequest) {
 	  
 	GeracaoSenha gs = new GeracaoSenha();
 	String password;
 	Boolean falhou = false;
 	
-	if(!userRepository.existsByEmail(loginRequest.getUsername())) {
-		return ResponseEntity.badRequest().body(new MessageResponse("Usuario inexistente!"));
+	if(!userRepository.existsByEmail(lostPasswordRequest.getUsername())) {
+		return ResponseEntity.badRequest().body(new MessageResponse("Usuário inexistente!"));
 	}
 	
 	password = gs.GeradorSenha();
-	userService.removeLink(loginRequest.getUsername());
-	userService.salvarHashSenha(loginRequest.getUsername(), password);
+	userService.removeLink(lostPasswordRequest.getUsername());
+	userService.salvarHashSenha(lostPasswordRequest.getUsername(), password);
 	
 	String mensagem = "A alteração de senha da sua conta foi solicitada com sucesso!\n"
-			+ "Usuario: " + loginRequest.getUsername() + "\n" 
+			+ "Usuario: " + lostPasswordRequest.getUsername() + "\n"
 			+ "Altere a senha para voltar a fazer login no sistema!" + "\n"
 			+ "Link para alteração da senha: " 
 			+ env.getProperty("appetitegourmet.app.linkPassword") + password 
-			+ "/" + loginRequest.getUsername() + "\n";
+			+ "/" + lostPasswordRequest.getUsername() + "\n";
 	try {
-		emailService.sendHtmlEmail(env.getProperty("spring.mail.username"), 
-								   loginRequest.getUsername(), 
+		emailService.sendHtmlEmail(env.getProperty("spring.mail.username"), lostPasswordRequest.getUsername(),
 								   "Alteração de senha da conta Appetite Gourmet", mensagem, null);
 	} catch (MessagingException e) {
 		// TODO Auto-generated catch block
