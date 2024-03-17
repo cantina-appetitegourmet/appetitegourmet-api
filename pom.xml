@@ -86,6 +86,11 @@
 			<version>${org.projectlombok.mapstruct.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok-mapstruct-binding</artifactId>
+			<version>${org.projectlombok.mapstruct.version}</version>
+		</dependency>
+		<dependency>
     		<groupId>br.com.gerencianet.gnsdk</groupId>
     		<artifactId>gn-api-sdk-java</artifactId>
     		<version>2.0.0</version>

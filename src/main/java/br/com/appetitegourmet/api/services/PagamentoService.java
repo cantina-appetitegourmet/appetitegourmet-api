@@ -82,26 +82,6 @@ public class PagamentoService {
 		return pag;
 	}
 	
-	public String listarChaves() {
-		
-		List<Empresa> listaEmpresas = empresaRepository.findAll();
-		List<String> resultados = new ArrayList<String>();
-
-		resultados.add(PATH);
-
-		for(Empresa empresa: listaEmpresas ) {
-			String resultado;
-			resultado = empresa.getId().toString();
-			JSONObject options = new JSONObject(empresa.getDadosIntegracaoPix());
-			String certificado = options.get("certificate").toString();
-			File file = new File(PATH  + certificado);
-			resultado += " - " + file.exists();
-			resultados.add(resultado);
-		}
-		
-		return resultados.toString();
-	}
-	
 	public List<Pagamento> buscarPagamentoPorContratoId(Long id) {
 		return pagamentoRepository.findByContratoId(id);
 	}
