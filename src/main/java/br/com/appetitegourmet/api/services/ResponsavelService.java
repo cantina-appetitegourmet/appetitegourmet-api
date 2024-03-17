@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import br.com.appetitegourmet.api.models.Responsavel;
@@ -15,16 +16,10 @@ import br.com.appetitegourmet.api.repositories.PessoaRepository;
 import br.com.appetitegourmet.api.repositories.ResponsavelRepository;
 
 @Service
+@AllArgsConstructor
 public class ResponsavelService {
     private final ResponsavelRepository responsavelRepository;
     private final PessoaRepository pessoaRepository;
-    private final EnderecoRepository enderecoRepository;
-    
-    public ResponsavelService(ResponsavelRepository responsavelRepository, PessoaRepository pessoaRepository, EnderecoRepository enderecoRepository) {
-        this.responsavelRepository = responsavelRepository;
-		this.pessoaRepository = pessoaRepository;
-		this.enderecoRepository = enderecoRepository;
-    }
     
     public List<Responsavel> listarResponsaveis() {
         return responsavelRepository.findAll();
@@ -53,19 +48,6 @@ public class ResponsavelService {
     }
     
     public Responsavel salvarResponsavel(Responsavel responsavel) {
-    	if(responsavel.getPessoa() != null) {
-    		if(responsavel.getPessoa().getId() == null) {
-    			if(responsavel.getPessoa().getEndereco() != null) {
-    				if(responsavel.getPessoa().getEndereco().getId() == null) {
-    					Endereco novoEndereco = enderecoRepository.save(responsavel.getPessoa().getEndereco());
-    					responsavel.getPessoa().setEndereco(novoEndereco);
-    				}
-    			}
-    			Pessoa novaPessoa = pessoaRepository.save(responsavel.getPessoa());
-				responsavel.setPessoa(novaPessoa);
-    		}
-		}
-    	
         return responsavelRepository.save(responsavel);
     }
     

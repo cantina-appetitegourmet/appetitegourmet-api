@@ -2,7 +2,9 @@ package br.com.appetitegourmet.api.models;
 
 import java.sql.Date;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,7 +30,7 @@ public class ContratoDesconto {
     
     @ManyToOne
     @JoinColumn(name = "contrato_id", nullable = false)
-    @JsonIgnore
+    @JsonManagedReference
     private Contrato contrato;
     
     @ManyToOne

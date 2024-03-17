@@ -28,10 +28,6 @@ public class Colegio {
     @Column(nullable = false, length=Colunas.NOME)
     private String nome;
     
-    @OneToOne
-    @JoinColumn(name = "endereco_id")
-    private Endereco endereco;
-    
     @Builder.Default
     @Column(nullable = false)
     private Boolean ativo = true;

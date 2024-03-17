@@ -2,6 +2,12 @@ package br.com.appetitegourmet.api.models;
 
 import java.sql.Date;
 
+import br.com.appetitegourmet.api.spring.login.models.User;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.br.CPF;
 
 import jakarta.persistence.CascadeType;
@@ -18,7 +24,8 @@ import lombok.Data;
 import utils.ValidacaoConstantes;
 
 @Entity
-@Data
+@Getter
+@Setter
 public class Pessoa {
     
     public static final boolean SEXO_MASCULINO = true;
@@ -53,4 +60,16 @@ public class Pessoa {
     @OneToOne(cascade=CascadeType.PERSIST)
     @JoinColumn(name = "endereco_id")
     private Endereco endereco;
+
+    @OneToOne(mappedBy = "pessoa")
+    @JsonBackReference
+    private User user;
+
+    @OneToOne(mappedBy = "pessoa")
+    @JsonBackReference
+    private Responsavel responsavel;
+
+    @OneToOne(mappedBy = "pessoa")
+    @JsonBackReference
+    private Aluno aluno;
 }

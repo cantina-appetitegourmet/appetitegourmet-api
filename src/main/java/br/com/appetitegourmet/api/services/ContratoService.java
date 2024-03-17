@@ -1,50 +1,45 @@
 package br.com.appetitegourmet.api.services;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import br.com.appetitegourmet.api.dto.ContratoPlanoRequest;
+import br.com.appetitegourmet.api.dto.ContratoRequest;
+import br.com.appetitegourmet.api.mapper.ContratoMappler;
+import br.com.appetitegourmet.api.mapper.ContratoPlanoMapper;
 import br.com.appetitegourmet.api.models.*;
+import br.com.appetitegourmet.api.repositories.*;
 import br.com.appetitegourmet.api.spring.login.models.User;
 import br.com.appetitegourmet.api.spring.login.payload.request.UserInfoRequest;
 import br.com.appetitegourmet.api.spring.login.repository.UserRepository;
 import br.com.appetitegourmet.api.spring.login.security.jwt.JwtUtils;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.appetitegourmet.api.repositories.ContratoDescontoRepository;
-import br.com.appetitegourmet.api.repositories.ContratoRepository;
-import br.com.appetitegourmet.api.repositories.DescontoRepository;
-import br.com.appetitegourmet.api.repositories.ResponsavelAlunoRepository;
-import br.com.appetitegourmet.api.repositories.TurmaAnoLetivoRepository;
 import utils.ValidacaoConstantes;
 
 @Service
+@AllArgsConstructor
 public class ContratoService {
 	@Autowired
 	private JwtUtils jwtUtils;
 	@Autowired
 	UserRepository userRepository;
 
-	@Autowired
-	AssociacaoUsuarioService associacaoUsuarioService;
-
 	private final ContratoRepository contratoRepository;
 	private final ResponsavelAlunoRepository responsavelAlunoRepository;
 	private final TurmaAnoLetivoRepository turmaAnoLetivoRepository;
 	private final ContratoDescontoRepository contratoDescontoRepository;
 	private final DescontoRepository descontoRepository;
-	
-	public ContratoService(TurmaAnoLetivoRepository turmaAnoLetivoRepository, ResponsavelAlunoRepository responsavelAlunoRepository, ContratoRepository contratoRepository, ContratoDescontoRepository contratoDescontoRepository, DescontoRepository descontoRepository) {
-		this.contratoRepository = contratoRepository;
-		this.responsavelAlunoRepository = responsavelAlunoRepository;
-		this.turmaAnoLetivoRepository = turmaAnoLetivoRepository;
-		this.contratoDescontoRepository = contratoDescontoRepository;
-		this.descontoRepository = descontoRepository;
-		
-	}
+	private final ContratoMappler contratoMappler;
+	private	final ContratoPlanoMapper contratoPlanoMapper;
+	private final ContratoPlanoRepository contratoPlanoRepository;
 	
 	public List<Contrato> listarContratos() {
         return contratoRepository.findAll();
@@ -61,9 +56,10 @@ public class ContratoService {
 		UserInfoRequest userInfo = new UserInfoRequest();
 		userInfo.setId(user.get().getId());
 		userInfo.setRole("ROLE_RESPONSAVEL");
-		AssociacaoUsuario associacaoUsuario = associacaoUsuarioService.pegaAssociacaoUsuario(userInfo);
+		//TODO
 
-		return contratoRepository.findAllByResponsavelId(associacaoUsuario.getAssociado_id());
+		//return contratoRepository.findAllByResponsavelId(associacaoUsuario.getAssociado_id());
+		return null;
 	}
 
     public Contrato buscarContratoPorId(Long id) {
@@ -71,9 +67,10 @@ public class ContratoService {
                 .orElseThrow(() -> new NoSuchElementException("Contrato não encontrado"));
     }
 
-    public Contrato salvarContrato(HttpServletRequest request, Contrato contrato) {
+    public Contrato salvarContrato(HttpServletRequest request, ContratoRequest contratoRequest) {
     	Contrato retContrato;
     	List<Contrato> contratos;
+		Contrato contrato = contratoMappler.INSTANCE.contratoRequestToContrato(contratoRequest);
     	
     	if(contrato.getResponsavelAluno() != null) {
     		ResponsavelAluno retorno;
@@ -98,6 +95,7 @@ public class ContratoService {
     	contrato.setDataAdesao(new Date(System.currentTimeMillis()));
     	retContrato = contratoRepository.save(contrato);
     	contratos = contratoRepository.findAllByResponsavelId(retContrato.getResponsavelAluno().getResponsavel().getId());
+
     	if(contratos != null && contratos.size() > 1) {
     		for(Contrato contratoBD : contratos) {
 	    		Boolean encontrou = false;
@@ -124,7 +122,14 @@ public class ContratoService {
 	    		}
     		}
     	}
-        return retContrato;
+
+		//Cria os planos
+		List<ContratoPlanoRequest> contratoPlanosRequest = contratoRequest.getContratoPlanos();
+		List<ContratoPlano> contratoPlanos = contratoPlanoMapper.INSTANCE.contratoPlanosRequestToContratosPlano(contratoPlanosRequest);
+		contratoPlanos = contratoPlanos.stream().peek(contratoPlano -> contratoPlano.setContrato(retContrato)).toList();
+		contratoPlanoRepository.saveAll(contratoPlanos);
+		Optional<Contrato> resContrato = contratoRepository.findById(contrato.getId());
+        return resContrato.get();
     }
 
     public void excluirContrato(Long id) {

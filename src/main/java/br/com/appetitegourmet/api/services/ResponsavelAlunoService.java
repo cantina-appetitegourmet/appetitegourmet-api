@@ -4,9 +4,16 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import br.com.appetitegourmet.api.dto.ResponsavelAlunoRequest;
+import br.com.appetitegourmet.api.mapper.ResponsavelAlunoMapper;
 import br.com.appetitegourmet.api.models.*;
+import br.com.appetitegourmet.api.spring.login.models.User;
+import br.com.appetitegourmet.api.spring.login.repository.UserRepository;
+import br.com.appetitegourmet.api.spring.login.security.jwt.JwtUtils;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import br.com.appetitegourmet.api.exception.EntidadeObrigatoriaException;
@@ -18,24 +25,16 @@ import br.com.appetitegourmet.api.repositories.ResponsavelAlunoRepository;
 import br.com.appetitegourmet.api.repositories.ResponsavelRepository;
 
 @Service
+@AllArgsConstructor
 public class ResponsavelAlunoService {
-
-	@Autowired
-	AssociacaoUsuarioService associacaoUsuarioService;
+	private JwtUtils jwtUtils;
+	UserRepository userRepository;
+	ResponsavelAlunoMapper responsavelAlunoMapper;
 	private final ResponsavelAlunoRepository responsavelAlunoRepository;
 	private final ResponsavelRepository responsavelRepository;
 	private final AlunoRepository alunoRepository;
 	private final PessoaRepository pessoaRepository;
 	private final ParentescoRepository parentescoRepository;
-
-	public ResponsavelAlunoService(ResponsavelAlunoRepository responsavelAlunoRepository, ResponsavelRepository responsavelRepository, AlunoRepository alunoRepository, ParentescoRepository parentescoRepository, PessoaRepository pessoaRepository) {
-		this.responsavelAlunoRepository = responsavelAlunoRepository;
-		this.responsavelRepository = responsavelRepository;
-		this.alunoRepository = alunoRepository;
-		this.pessoaRepository = pessoaRepository;
-		this.parentescoRepository = parentescoRepository;
-		
-	}
 	
 	public List<ResponsavelAluno> listarResponsavelAlunos() {
         return responsavelAlunoRepository.findAll();
@@ -46,10 +45,12 @@ public class ResponsavelAlunoService {
                 .orElseThrow(() -> new NoSuchElementException("Responsavel Aluno não encontrado"));
     }
 	
-	public ResponsavelAluno salvarResponsavelAluno(HttpServletRequest request, ResponsavelAluno responsavelAluno) {
-		AssociacaoUsuario associacaoUsuario = associacaoUsuarioService.pegaAssociacaoUsuarioResponsavelJWT(request);
-		Optional<Responsavel> responsavel = responsavelRepository.findById(associacaoUsuario.getAssociado_id());
-		responsavelAluno.setResponsavel(responsavel.get());
+	public ResponsavelAluno salvarResponsavelAluno(HttpServletRequest request, ResponsavelAlunoRequest responsavelAlunoRequest) throws UsernameNotFoundException {
+		String username = jwtUtils.getUserNameFromJwtToken(jwtUtils.getJwtFromCookies(request));
+		User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));;
+		Responsavel responsavel = user.getPessoa().getResponsavel();
+		ResponsavelAluno responsavelAluno = responsavelAlunoMapper.INSTANCE.responsavelAlunoRequestToResponsavel(responsavelAlunoRequest);
+		responsavelAluno.setResponsavel(responsavel);
 		if(responsavelAluno.getAluno() == null) {
 			throw new EntidadeObrigatoriaException("Obrigatório ter o aluno na relação");
 		} else {
