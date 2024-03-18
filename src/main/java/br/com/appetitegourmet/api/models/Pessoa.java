@@ -1,11 +1,9 @@
 package br.com.appetitegourmet.api.models;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 import br.com.appetitegourmet.api.spring.login.models.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.br.CPF;
@@ -20,7 +18,6 @@ import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
 import utils.ValidacaoConstantes;
 
 @Entity
@@ -41,7 +38,7 @@ public class Pessoa {
 
     private boolean sexo;
 
-    private Date nascimento;
+    private LocalDate nascimento;
 
     @CPF
     private String cpf;

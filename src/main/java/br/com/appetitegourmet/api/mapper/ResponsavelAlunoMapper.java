@@ -1,5 +1,6 @@
 package br.com.appetitegourmet.api.mapper;
 
+import br.com.appetitegourmet.api.dto.ResponsavelAlunoEditReq;
 import br.com.appetitegourmet.api.dto.ResponsavelAlunoRequest;
 import br.com.appetitegourmet.api.dto.ResponsavelAlunoResponse;
 import br.com.appetitegourmet.api.models.ResponsavelAluno;
@@ -12,6 +13,7 @@ import java.util.List;
 public interface ResponsavelAlunoMapper {
     ResponsavelAlunoMapper INSTANCE = Mappers.getMapper(ResponsavelAlunoMapper.class);
 
-    ResponsavelAluno responsavelAlunoRequestToResponsavel(ResponsavelAlunoRequest responsavelAlunoRequest);
+    ResponsavelAluno responsavelAlunoRequestToResponsavelAluno(ResponsavelAlunoRequest responsavelAlunoRequest);
+    ResponsavelAluno ResponsavelAlunoEditReqToResponsavelAluno(ResponsavelAlunoEditReq ResponsavelAlunoEditReq);
     List<ResponsavelAlunoResponse> responsavelAlunosToResponsavelAlunosResponse(List<ResponsavelAluno> responsavelAlunos);
 }

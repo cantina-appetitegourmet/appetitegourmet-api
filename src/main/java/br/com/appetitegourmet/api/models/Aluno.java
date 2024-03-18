@@ -18,7 +18,7 @@ public class Aluno {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @OneToOne(cascade=CascadeType.ALL)
     @JoinColumn(name = "pessoa_id")
     @JsonManagedReference
     private Pessoa pessoa;

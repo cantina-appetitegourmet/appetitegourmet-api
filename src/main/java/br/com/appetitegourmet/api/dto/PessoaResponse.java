@@ -3,10 +3,11 @@ package br.com.appetitegourmet.api.dto;
 import java.time.LocalDate;
 
 import br.com.appetitegourmet.api.models.Endereco;
-import br.com.appetitegourmet.api.spring.login.models.User;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class PessoaResponse {
     private Long id;
     private String nomeCompleto;

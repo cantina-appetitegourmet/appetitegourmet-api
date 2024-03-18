@@ -3,9 +3,11 @@ package br.com.appetitegourmet.api.dto;
 import java.time.LocalDate;
 
 import br.com.appetitegourmet.api.models.Endereco;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class PessoaRequest {
     private String nomeCompleto;
     private Boolean sexo;

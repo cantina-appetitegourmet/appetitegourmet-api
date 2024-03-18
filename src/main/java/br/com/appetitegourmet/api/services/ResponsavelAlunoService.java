@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import br.com.appetitegourmet.api.dto.ResponsavelAlunoEditReq;
 import br.com.appetitegourmet.api.dto.ResponsavelAlunoRequest;
 import br.com.appetitegourmet.api.mapper.ResponsavelAlunoMapper;
 import br.com.appetitegourmet.api.models.*;
@@ -28,8 +29,8 @@ import br.com.appetitegourmet.api.repositories.ResponsavelRepository;
 @AllArgsConstructor
 public class ResponsavelAlunoService {
 	private JwtUtils jwtUtils;
-	UserRepository userRepository;
-	ResponsavelAlunoMapper responsavelAlunoMapper;
+	private final UserRepository userRepository;
+	private final ResponsavelAlunoMapper responsavelAlunoMapper;
 	private final ResponsavelAlunoRepository responsavelAlunoRepository;
 	private final ResponsavelRepository responsavelRepository;
 	private final AlunoRepository alunoRepository;
@@ -49,7 +50,7 @@ public class ResponsavelAlunoService {
 		String username = jwtUtils.getUserNameFromJwtToken(jwtUtils.getJwtFromCookies(request));
 		User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));;
 		Responsavel responsavel = user.getPessoa().getResponsavel();
-		ResponsavelAluno responsavelAluno = responsavelAlunoMapper.INSTANCE.responsavelAlunoRequestToResponsavel(responsavelAlunoRequest);
+		ResponsavelAluno responsavelAluno = responsavelAlunoMapper.INSTANCE.responsavelAlunoRequestToResponsavelAluno(responsavelAlunoRequest);
 		responsavelAluno.setResponsavel(responsavel);
 		if(responsavelAluno.getAluno() == null) {
 			throw new EntidadeObrigatoriaException("Obrigatório ter o aluno na relação");
@@ -105,6 +106,15 @@ public class ResponsavelAlunoService {
 			}
 		}
 		
+		return responsavelAlunoRepository.save(responsavelAluno);
+	}
+
+	public ResponsavelAluno editarResponsavelAluno(HttpServletRequest request, ResponsavelAlunoEditReq responsavelAlunoEditReq) {
+		String username = jwtUtils.getUserNameFromJwtToken(jwtUtils.getJwtFromCookies(request));
+		User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + username));;
+		Responsavel responsavel = user.getPessoa().getResponsavel();
+		ResponsavelAluno responsavelAluno = responsavelAlunoMapper.INSTANCE.ResponsavelAlunoEditReqToResponsavelAluno(responsavelAlunoEditReq);
+		responsavelAluno.setResponsavel(responsavel);
 		return responsavelAlunoRepository.save(responsavelAluno);
 	}
 
