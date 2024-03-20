@@ -180,8 +180,10 @@ public class PagamentoService {
 				solicitacao += cd.getDesconto().getMotivo();
 			}
 		}
-		
-		total = ValidacaoConstantes.totalizaContratoPlano(listaContratoPlano);
+		total = BigDecimal.ZERO;
+		for (ContratoPlano contratoPlano : listaContratoPlano) {
+			total = total.add(contratoPlano.getPreco());
+		}
 		
 		totalDescontos =  totalDescontos.divide(new BigDecimal("100.00"));
 		totalDescontos = totalDescontos.multiply(total);
@@ -353,8 +355,10 @@ public class PagamentoService {
 				mensagem += cd.getDesconto().getMotivo();
 			}
 		}
-		
-		total = ValidacaoConstantes.totalizaContratoPlano(listaContratoPlano);
+		total = BigDecimal.ZERO;
+		for (ContratoPlano contratoPlano : listaContratoPlano) {
+			total = total.add(contratoPlano.getPreco());
+		}
 		
 		totalDescontos =  totalDescontos.divide(new BigDecimal("100.00"));
 		totalDescontos = totalDescontos.multiply(total);

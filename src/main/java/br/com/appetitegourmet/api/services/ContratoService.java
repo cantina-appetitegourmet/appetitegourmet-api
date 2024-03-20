@@ -1,5 +1,6 @@
 package br.com.appetitegourmet.api.services;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +41,7 @@ public class ContratoService {
 	private final ContratoMappler contratoMappler;
 	private	final ContratoPlanoMapper contratoPlanoMapper;
 	private final ContratoPlanoRepository contratoPlanoRepository;
+	private final CalendarioService calendarioService;
 	
 	public List<Contrato> listarContratos() {
         return contratoRepository.findAll();
@@ -93,6 +95,7 @@ public class ContratoService {
     		contrato.setTurmaAnoLetivo(retorno);
     	}
     	contrato.setDataAdesao(new Date(System.currentTimeMillis()));
+
     	retContrato = contratoRepository.save(contrato);
     	contratos = contratoRepository.findAllByResponsavelId(retContrato.getResponsavelAluno().getResponsavel().getId());
 
@@ -124,9 +127,16 @@ public class ContratoService {
     	}
 
 		//Cria os planos
-		List<ContratoPlanoRequest> contratoPlanosRequest = contratoRequest.getContratoPlanos();
+			List<ContratoPlanoRequest> contratoPlanosRequest = contratoRequest.getContratoPlanos();
 		List<ContratoPlano> contratoPlanos = contratoPlanoMapper.INSTANCE.contratoPlanosRequestToContratosPlano(contratoPlanosRequest);
-		contratoPlanos = contratoPlanos.stream().peek(contratoPlano -> contratoPlano.setContrato(retContrato)).toList();
+		contratoPlanos = contratoPlanos.stream().peek(contratoPlano -> {
+			contratoPlano.setContrato(retContrato);
+			BigDecimal valor = calendarioService.calculaTotalMes2("N", "N",
+					contratoPlano.getSegunda(), contratoPlano.getTerca(), contratoPlano.getQuarta(),
+					contratoPlano.getQuinta(), contratoPlano.getSexta(), contratoPlano.getSabado(),
+					contratoPlano.getDomingo(), contratoPlano.getPlanoAlimentarPreco().getId());
+			contratoPlano.setPreco(valor);
+		}).toList();
 		contratoPlanoRepository.saveAll(contratoPlanos);
 		Optional<Contrato> resContrato = contratoRepository.findById(contrato.getId());
         return resContrato.get();

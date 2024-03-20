@@ -49,6 +49,9 @@ public class ContratoPlano {
 
     @Column(name = "preco_dia", nullable = true)
     private BigDecimal precoDia;
+
+    @Column(name = "preco", nullable = true)
+    private BigDecimal preco;
     
     @Column(name="data_inicio", nullable = true)
     private Date dataInicio;

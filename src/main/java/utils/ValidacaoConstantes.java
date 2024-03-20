@@ -34,39 +34,6 @@ public final class ValidacaoConstantes {
     private ValidacaoConstantes() {
     }
     
-    static public BigDecimal totalizaContratoPlano(List<ContratoPlano> listaContratoPlano) {
-		
-		BigDecimal total = BigDecimal.ZERO;
-		
-		for(ContratoPlano cp : listaContratoPlano) {
-			BigDecimal dias = BigDecimal.ZERO;
-			if(cp.getSegunda()) {
-				dias = dias.add(BigDecimal.ONE);
-			}
-			if(cp.getTerca()) {
-				dias = dias.add(BigDecimal.ONE);
-			}
-			if(cp.getQuarta()) {
-				dias = dias.add(BigDecimal.ONE);
-			}
-			if(cp.getQuinta()) {
-				dias = dias.add(BigDecimal.ONE);
-			}
-			if(cp.getSexta()) {
-				dias = dias.add(BigDecimal.ONE);
-			}
-			if(cp.getSabado()) {
-				dias = dias.add(BigDecimal.ONE);
-			}
-			if(cp.getDomingo()) {
-				dias = dias.add(BigDecimal.ONE);
-			}
-			total = total.add(dias.multiply(cp.getPrecoDia())); 
-		}
-		
-		return total;
-	}
-    
     static public int getTipoFeriado(Feriado feriado) {
     	int tipo = FERIADO_NACIONAL;
     	
